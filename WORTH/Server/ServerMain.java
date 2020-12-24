@@ -1,47 +1,48 @@
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import Rmi.*;
 
 public class ServerMain {
 
-     static String MAIN_DIR_PATH =  "../MainDir";
+     static String MAIN_DIR_PATH =  "./MainDir";
 
-    public static void main (String [] args)
+    public static void main (String [] args) 
     {
-        FirstSetup();
-
-
-        HashMap <String,Utente> UserBase = new HashMap<String,Utente>();
-
-        Utente u1 = new Utente ("Alessandro","1234");
-        UserBase.putIfAbsent("Alessandro",u1);
-       // System.out.println(UserBase);
-       
-        try
+        try 
         {
-         HashMap <String,Utente> b2 = new HashMap<String,Utente>(UserBase);
-        // System.out.println(b2);
+        ArrayList <Progetto> LisProject= new ArrayList<Progetto>();
+        FirstSetup(LisProject);
 
+        //Servizio RMI
+        //Creazione del servizio 
+        RegisterImpl register = new RegisterImpl();
+        //Esportazione dell'oggetto
+        RegisterInterface stub = (RegisterInterface) UnicastRemoteObject.exportObject(register,0);
+        //Creazione di un registry sulla porta prestabilita
+        LocateRegistry.createRegistry(8080);
+        Registry r = LocateRegistry.getRegistry(8080);
+        //Pubblicazione del registry 
+        r.rebind("EGISTER", stub);
+      
         
-         UserBase.get("Alessandro").SetOnline(true);
-         /*
-         System.out.println(UserBase.get("Alessandro").GetOnlineState());
-         System.out.println(b2.get("Alessandro").GetOnlineState());
-         System.out.println(b2.get("Alessandro").GetPasword());
-         */
-         Progetto p = new Progetto("RESISTO");
-         p.insertScheda("Splash_screen", "Creare una spashscreen con 3 bottoni e una label");
-         
-         p.insertScheda("ArtWork", "Ciaone_Proprio");
-         p.insertScheda("ArtHome","Descrizione");
+      
+        
 
-         //MOve from one to another
-         p.Move_ToDo_InProgress("Splash_screen");
-         p.Move_InProgress_Done("Splash_screen");
-         
 
-         p.iterate();
-
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
         catch(Exception e)
         {
@@ -50,13 +51,22 @@ public class ServerMain {
 
     }
     
-    public static void FirstSetup()
+    //FUNZIONE PER IL SETUP INIZIALE DEL SERVER 
+    public static void FirstSetup(ArrayList <Progetto> listp) throws IOException,ClassNotFoundException
     {
         File mainDir = new File(MAIN_DIR_PATH);
         if(mainDir.exists()==false)
         {
             mainDir.mkdir();
+           
         }
+
+       String [] list = mainDir.list();
+       for (String str : list) {
+            
+            listp.add(new Progetto(str));
+            
+       }
     }
 }
 

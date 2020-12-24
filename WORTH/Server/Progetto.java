@@ -1,6 +1,10 @@
 import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
+import Serializer.Serializer;
+
+
 
 /**
 *The Utente class that specify the class Utente For the project WORTH 
@@ -10,42 +14,64 @@ import java.util.Iterator;
 * @since   2020-12-19
 */
 
-public class Progetto {
+public class Progetto implements Serializable {
 
-        private String MAIN_DIR_PATH = "../MainDir";
+    private static final long serialVersionUID = 1L;
 
+        private String MAIN_DIR_PATH = "./MainDir";
+
+      
         private String NomeProgetto;
         private ArrayList <Scheda> ToDo;
         private ArrayList <Scheda> InProgeress;
         private ArrayList <Scheda> ToBeRevised;
         private ArrayList <Scheda> Done;
- n
+       
 
-        public Progetto (String name) throws NullPointerException, IllegalArgumentException
+        
+
+        public  Progetto (String name) throws NullPointerException, IllegalArgumentException,IOException,ClassNotFoundException
         {
-            File mainDir = new File(MAIN_DIR_PATH);
-
-            String dirpath = MAIN_DIR_PATH+"/"+name;
-            File progdir = new File(dirpath);
-            //CONTROLLARE SE ESISTE E CREARLA
-            if(progdir.exists()==false)
-            {
-                progdir.mkdir();
-            }
-            else
-            {
-                throw new IllegalArgumentException();
-            }
-
-
             if(name==null)
-                throw new NullPointerException();
-            
+            throw new NullPointerException();
+        
+
             this.NomeProgetto=name;
             this.ToDo = new ArrayList<Scheda>();
             this.InProgeress = new ArrayList<Scheda>();
             this.ToBeRevised = new ArrayList<Scheda>();
             this.Done= new ArrayList<Scheda>();
+
+            File mainDir = new File(MAIN_DIR_PATH);
+            String dirpath = this.MAIN_DIR_PATH+"/"+name;
+
+
+            File progdir = new File(dirpath);
+            //Controllare se esiste e crearla in caso negativo 
+            if(progdir.exists()==false)
+                progdir.mkdir();
+            else{
+                //SIGNIFICA CHE GIA ESISTE E QUINDI MI PRENDO I FILE DA DENTRO
+                String [] list = progdir.list();
+               
+                for (String str : list) {
+                     String path = dirpath+"/"+str;
+                     
+                   Scheda s = (Scheda) Serializer.read(path);
+                   String cases = s.GetHistory().peek();
+
+                   if(cases.equals("TODO"))
+                        ToDo.add(s);
+                   else if(cases.equals("INPROGRESS"))
+                        InProgeress.add(s);
+                   else if (cases.equals("TOBEREVISED"))
+                        ToBeRevised.add(s);
+                   else if (cases.equals("DONE"))
+                        Done.add(s);
+                    else throw new IllegalArgumentException();       
+
+                }       
+            }
         }
 
 
@@ -55,10 +81,14 @@ public class Progetto {
         }
 
 
-        public synchronized void insertScheda (String Nome, String Descrizione)
+        public synchronized void insertScheda (String Nome, String Descrizione) throws IOException
         {
+
             Scheda newScheda = new Scheda (Nome,Descrizione);
             newScheda.AddHistory("TODO");
+            String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+Nome;
+            System.out.println(schedapath);
+            Serializer.write(newScheda,schedapath);
             this.ToDo.add(newScheda);
         }
 
@@ -66,7 +96,7 @@ public class Progetto {
        
        
         //Move from ToDo to InProgress
-        public synchronized void Move_ToDo_InProgress (String s) throws IllegalArgumentException, NullPointerException
+        public synchronized void Move_ToDo_InProgress (String s) throws IllegalArgumentException, NullPointerException,IOException
         {
             if(s==null)
                 throw new NullPointerException();
@@ -77,6 +107,8 @@ public class Progetto {
             { 
             Scheda current = ToDo.remove(ToDo.indexOf(scheda));
             current.AddHistory("INPROGRESS");
+            String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
+            Serializer.write(current,schedapath);
             InProgeress.add(current);
             }
             else
@@ -84,7 +116,7 @@ public class Progetto {
         }
 
         //Move from InProgre to Done
-        public synchronized void Move_InProgress_Done(String s) throws IllegalArgumentException, NullPointerException
+        public synchronized void Move_InProgress_Done(String s) throws IllegalArgumentException, NullPointerException,IOException
         {
             if(s==null)
             throw new NullPointerException();
@@ -94,13 +126,15 @@ public class Progetto {
             { 
             Scheda current = InProgeress.remove(InProgeress.indexOf(scheda));
             current.AddHistory("DONE");
+            String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
+            Serializer.write(current,schedapath);
             Done.add(current);
             }
             else
             throw new IllegalArgumentException();
         }
         //Move from inprogress toberevised
-        public void Move_InProgress_ToBeRevised(String s) throws NullPointerException,IllegalArgumentException
+        public synchronized void Move_InProgress_ToBeRevised(String s) throws NullPointerException,IllegalArgumentException,IOException
         {
             if(s==null)
             throw new NullPointerException();
@@ -111,6 +145,8 @@ public class Progetto {
             { 
             Scheda current = InProgeress.remove(InProgeress.indexOf(scheda));
             current.AddHistory("TOBEREVISED");
+            String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
+            Serializer.write(current,schedapath);
             ToBeRevised.add(current);
             }
             else
@@ -121,7 +157,7 @@ public class Progetto {
 
 
         //move from to be revised to done
-        public void Move_ToBeRevised_Done(String s) throws NullPointerException,IllegalArgumentException
+        public synchronized  void Move_ToBeRevised_Done(String s) throws NullPointerException,IllegalArgumentException,IOException
         {
             if(s==null)
             throw new NullPointerException();
@@ -131,24 +167,22 @@ public class Progetto {
             if(ToBeRevised.contains(scheda))
             { 
             Scheda current = ToBeRevised.remove(ToBeRevised.indexOf(scheda));
-            current.AddHistory("TOBEREVISED");
+            current.AddHistory("DONE");
+            String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
+            Serializer.write(current,schedapath);
             Done.add(current);
             }
             else
             throw new IllegalArgumentException();
-
         }
 
+        
+       
 
 
-       public void  iterate ()
-       {
-         for (Scheda s : Done) {
-             System.out.println(s.GetName());
-             
-       }
+     
     }
 
     
 
-}
+

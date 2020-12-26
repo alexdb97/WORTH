@@ -49,7 +49,7 @@ public class Progetto implements Serializable {
             this.ToBeRevised = new ArrayList<Scheda>();
             this.Done= new ArrayList<Scheda>();
 
-            File mainDir = new File(MAIN_DIR_PATH);
+      
             String dirpath = this.MAIN_DIR_PATH+"/"+name;
 
 
@@ -93,7 +93,8 @@ public class Progetto implements Serializable {
 
         
            /**
-   * Method for inserting a new istance of Scheda inside the TODO list, it's a syncronized method for garantee security
+   * Method for inserting a new istance of Scheda inside the TODO list, it's a 
+   * syncronized method for garantee security
    * in multithread case
    * @throws IOException.
    * 

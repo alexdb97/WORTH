@@ -2,7 +2,7 @@
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
+
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,14 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import Serializers.Serializers;
 
 
-public class RegisterImpl extends RemoteServer implements RegisterInterface, Serializable {
+public class RegisterImpl extends RemoteServer implements RegisterInterface{
 
     /**
      *
      */
     private static final long serialVersionUID = 1234567L;
     private ConcurrentHashMap<String, Utente> UserBase;
-
+/*
     public RegisterImpl () 
     {
         try 
@@ -47,9 +47,12 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface, Ser
             ex.printStackTrace();
         }
     }
+    */
 
     public int register(String Nickname, String Password) throws RemoteException, NullPointerException
     {
+        System.out.println(Nickname+" "+Password);
+        /*
         if(Nickname==null|| Password==null)
             throw new NullPointerException();
         if(UserBase.contains(Nickname)==false)
@@ -68,6 +71,8 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface, Ser
         }
         else 
             return 400;
+             */
+  return 1;  
     }
-    
+   
 }

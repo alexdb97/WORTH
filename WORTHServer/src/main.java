@@ -1,16 +1,13 @@
-import java.io.ByteArrayInputStream;
+
 import java.io.File;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import Serializers.*;
+
 
 
 
@@ -18,9 +15,9 @@ import Serializers.*;
 public class main {
 
      static String MAIN_DIR_PATH =  "./MainDir";
-     
 
-    public static void main (String [] args) 
+
+    public static void main (String [] args ) 
     {
         try 
         {

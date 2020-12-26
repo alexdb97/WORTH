@@ -216,6 +216,31 @@ public class Progetto implements Serializable {
             throw new IllegalArgumentException();
         }
 
+        public int RemoveProgetto()
+        {
+            String path = this.MAIN_DIR_PATH+"/"+this.NomeProgetto;
+            File progfile = new File(path);
+            System.out.println(progfile.getAbsolutePath());
+            deleteFolder(progfile);
+
+            return 1;
+
+
+        }
+
+        private static void deleteFolder(File file){
+
+            for (File subFile : file.listFiles()) {
+                System.out.println("Delete of :"+subFile.getName());
+               if(subFile.isDirectory()) {
+                  deleteFolder(subFile);
+               } else {
+                  subFile.delete();
+               }
+            }
+            file.delete();
+         }
+
         
        
 

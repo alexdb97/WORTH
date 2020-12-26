@@ -7,6 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 
@@ -21,7 +22,8 @@ public class main {
     {
         try 
         {
-        ArrayList <Progetto> LisProject= new ArrayList<Progetto>();
+        HashMap <String,Progetto> LisProject = new HashMap<String,Progetto>();
+
         FirstSetup(LisProject);
 
         //Servizio RMI
@@ -34,7 +36,14 @@ public class main {
         Registry r = LocateRegistry.getRegistry(8080);
         //Pubblicazione del registry 
         r.rebind("REGISTER", stub);
-        System.out.println("REsto in attesa di nuove connessioni");
+        System.out.println("Servizio di registrazione Attivo!");
+        
+       
+           
+        
+
+
+
       
         
 
@@ -52,7 +61,7 @@ public class main {
     }
     
     //FUNZIONE PER IL SETUP INIZIALE DEL SERVER 
-    public static void FirstSetup(ArrayList <Progetto> listp) throws IOException,ClassNotFoundException
+    public static void FirstSetup(HashMap <String,Progetto> listp) throws IOException,ClassNotFoundException
     {
         File mainDir = new File(MAIN_DIR_PATH);
         if(mainDir.exists()==false)
@@ -64,7 +73,7 @@ public class main {
        String [] list = mainDir.list();
        for (String str : list) {
             System.out.println(str);
-            listp.add(new Progetto(str));
+            listp.put(str, new Progetto(str));
             
        }
     }

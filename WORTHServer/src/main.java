@@ -10,11 +10,15 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import Rmi.*;
+import Serializers.*;
 
-public class ServerMain {
+
+
+
+public class main {
 
      static String MAIN_DIR_PATH =  "./MainDir";
+     
 
     public static void main (String [] args) 
     {
@@ -32,9 +36,8 @@ public class ServerMain {
         LocateRegistry.createRegistry(8080);
         Registry r = LocateRegistry.getRegistry(8080);
         //Pubblicazione del registry 
-        r.rebind("EGISTER", stub);
-      
-        
+        r.rebind("REGISTER", stub);
+        System.out.println("REsto in attesa di nuove connessioni");
       
         
 
@@ -63,7 +66,7 @@ public class ServerMain {
 
        String [] list = mainDir.list();
        for (String str : list) {
-            
+            System.out.println(str);
             listp.add(new Progetto(str));
             
        }

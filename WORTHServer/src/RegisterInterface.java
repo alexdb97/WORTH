@@ -1,4 +1,3 @@
-package Rmi;
 
 import java.io.IOException;
 import java.rmi.Remote;

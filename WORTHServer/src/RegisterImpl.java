@@ -1,4 +1,4 @@
-package Rmi;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.util.concurrent.ConcurrentHashMap;
 
-import Serializer.Serializer;
+import Serializers.Serializers;
 
 
 public class RegisterImpl extends RemoteServer implements RegisterInterface, Serializable {
@@ -27,15 +27,15 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface, Ser
             {
             
             this.UserBase= new ConcurrentHashMap<String,Utente>();
-            Serializer.write(UserBase, "./Userbase");  
+            Serializers.write(UserBase, "./Userbase");  
 
             }
         else
         {
             //VEDERE ATTENTAMENTE
-            Object obj = Serializer.read("./Userbase");
+            Object obj = Serializers.read("./Userbase");
             System.out.println(obj.getClass());
-            this.UserBase = (ConcurrentHashMap <String,Utente>) Serializer.read("./Userbase");  
+            this.UserBase = (ConcurrentHashMap <String,Utente>) Serializers.read("./Userbase");  
         }
         }
         catch (IOException ex)
@@ -58,7 +58,7 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface, Ser
             UserBase.putIfAbsent(Nickname, new Utente(Nickname, Password));
             try
             {
-            Serializer.write(this.UserBase, "./Userbase");  
+            Serializers.write(this.UserBase, "./Userbase");  
             }
             catch (IOException ex)
             {

@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import Serializer.Serializer;
+import Serializers.Serializers;
 
 
 
@@ -64,7 +64,7 @@ public class Progetto implements Serializable {
                 for (String str : list) {
                      String path = dirpath+"/"+str;
                      
-                   Scheda s = (Scheda) Serializer.read(path);
+                   Scheda s = (Scheda) Serializers.read(path);
                    String cases = s.GetHistory().peek();
 
                    if(cases.equals("TODO"))
@@ -105,7 +105,7 @@ public class Progetto implements Serializable {
             newScheda.AddHistory("TODO");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+Nome;
             System.out.println(schedapath);
-            Serializer.write(newScheda,schedapath);
+            Serializers.write(newScheda,schedapath);
             this.ToDo.add(newScheda);
         }
 
@@ -131,7 +131,7 @@ public class Progetto implements Serializable {
             Scheda current = ToDo.remove(ToDo.indexOf(scheda));
             current.AddHistory("INPROGRESS");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializer.write(current,schedapath);
+            Serializers.write(current,schedapath);
             InProgeress.add(current);
             }
             else
@@ -155,7 +155,7 @@ public class Progetto implements Serializable {
             Scheda current = InProgeress.remove(InProgeress.indexOf(scheda));
             current.AddHistory("DONE");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializer.write(current,schedapath);
+            Serializers.write(current,schedapath);
             Done.add(current);
             }
             else
@@ -180,7 +180,7 @@ public class Progetto implements Serializable {
             Scheda current = InProgeress.remove(InProgeress.indexOf(scheda));
             current.AddHistory("TOBEREVISED");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializer.write(current,schedapath);
+            Serializers.write(current,schedapath);
             ToBeRevised.add(current);
             }
             else
@@ -208,7 +208,7 @@ public class Progetto implements Serializable {
             Scheda current = ToBeRevised.remove(ToBeRevised.indexOf(scheda));
             current.AddHistory("DONE");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializer.write(current,schedapath);
+            Serializers.write(current,schedapath);
             Done.add(current);
             }
             else

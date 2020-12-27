@@ -102,7 +102,7 @@ public class main {
         else
         {
             Ubase = new ConcurrentHashMap<String,String>();
-            Ubase.put("Franca", "1234");
+            
             Serializers.write(Ubase, path);
             return Ubase;
         }

@@ -28,12 +28,14 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface{
     }
     
 
-    public int register(String Nickname, String Password) throws RemoteException, NullPointerException
+    public int register(String Nickname, String Password) throws RemoteException, NullPointerException, IOException
     {
         System.out.println(Nickname+" "+Password);
         if(this.Ubase.containsKey(Nickname)==false)
             {
+            String path = "./UserBase";
             this.Ubase.putIfAbsent(Nickname, Password);
+            Serializers.write(Ubase,path);
             return 200;
             }
         else

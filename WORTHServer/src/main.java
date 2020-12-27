@@ -8,6 +8,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 
 
@@ -39,7 +41,7 @@ public class main {
         System.out.println("Servizio di registrazione Attivo!");
         
        
-           
+        listProjects(LisProject); 
         
 
 
@@ -76,6 +78,13 @@ public class main {
             listp.put(str, new Progetto(str));
             
        }
+   
+
     }
+
+    public static void listProjects (HashMap <String,Progetto> list)
+       {
+          
+       }
 }
 

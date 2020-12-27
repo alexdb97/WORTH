@@ -27,8 +27,8 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface{
     public int register(String Nickname, String Password) throws RemoteException, NullPointerException
     {
         System.out.println(Nickname+" "+Password);
-     
-   
-}
+	return 3;
+    }
+
 
 }

@@ -94,10 +94,11 @@ public class main {
                 else if(key.isReadable())
                 {
                     //operazioni di lettura
-
-                    ByteBuffer buff =(ByteBuffer)  key.attachment();
-                    
-
+                    SocketChannel client = (SocketChannel) key.channel();
+                    ByteBuffer buffer =  (ByteBuffer) key.attachment();
+                    client.read(buffer);
+                    String output = new String(buffer.array()).trim();
+                    System.out.println(output);
 
 
                 }

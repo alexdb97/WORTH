@@ -6,15 +6,26 @@ public  class Client {
 
     public static void main (String [] args)
     {
+       
+
+        
         RegisterInterface serverObject;
         Remote RemoteObject;
 
+   
+
         try
         {
+            //RMI inizialization
             Registry r = LocateRegistry.getRegistry(8080);
             RemoteObject = r.lookup("REGISTER");
             serverObject = (RegisterInterface) RemoteObject;
-            serverObject.register("Alessandro", "1234");
+            
+            
+            InitialView nview = new InitialView();
+            Model mod = new Model(serverObject);
+            Controller ctr = new Controller(nview, mod);
+            
             
 
         }

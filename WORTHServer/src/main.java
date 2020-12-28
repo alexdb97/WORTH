@@ -47,8 +47,6 @@ public class main {
         System.out.println("Servizio di registrazione Attivo!");
 
        
-        System.out.println(Userbase.get("Alessandro"));
-       
      
 
        

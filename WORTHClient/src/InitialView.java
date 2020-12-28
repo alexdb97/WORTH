@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
+     
 
 
 
@@ -27,12 +27,15 @@ public class InitialView {
     //worthmenu
     private JLabel welcome = new JLabel("Welcome");
     private JButton createproject = new JButton("Create a new Project");
-    private JButton showProjects = new JButton("Show menu of a single project");
+    private JButton listUsers = new JButton("Get list of Users");
+    private JButton listOnlineUsers = new JButton("Get list of Users (online)");
+    private JButton listProjects = new JButton("Get list of projects");
     JPanel panel2 = new JPanel();
 
 
     public InitialView ()
     {
+        
         frame.setResizable(false);
         frame.setSize(300,300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,7 +45,7 @@ public class InitialView {
        
 
         panel.setVisible(true);
-        panel2.setVisible(false);
+       
 
         
 
@@ -62,14 +65,7 @@ public class InitialView {
         panel.add(ps);
 
 
-        //Setting WorthMenu
-        welcome.setBounds(0,20,100,20);
-        createproject.setBounds(20,100,100,50);
-        showProjects.setBounds(20,150,100,50);
-        panel2.add(welcome);
-        panel2.add(createproject);
-        panel2.add(showProjects);
-
+      
 
 
 
@@ -94,8 +90,25 @@ public class InitialView {
    }
    public void setvisiblepanel2 (boolean value)
    {
-       frame.setSize(300,300);
-       frame.add(this.panel2);
+    
+       
+         //Setting WorthMenu
+         frame.setTitle("WORTH MENU");
+         //set layout to null
+         panel2.setLayout(null);
+         frame.add(this.panel2);
+         welcome.setBounds( 100,0,100,100);
+        panel2.add(welcome);
+        createproject.setBounds(40, 70, 220, 20);
+        listUsers.setBounds(40,100,220, 20);
+        listOnlineUsers.setBounds(40, 130, 220,20);
+        listProjects.setBounds(40,160,220,20);
+        panel2.add(listProjects);
+        panel2.add(listOnlineUsers);
+        panel2.add(createproject);
+        panel2.add(listUsers);
+ 
+      
        this.panel2.setVisible(value);
 
    }
@@ -115,9 +128,9 @@ public class InitialView {
         JOptionPane.showMessageDialog(frame, err, "ErrorMessage",JOptionPane.ERROR_MESSAGE);
     }
 
-    void setlabel(int i)
+    void setlabel(String name)
     {
-        String text = "Welcome"+i;
+        String text = "Welcome"+name;
         welcome.setText(text);
     }
     

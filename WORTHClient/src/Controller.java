@@ -69,11 +69,13 @@ public class Controller {
                 name = theview.getUsername();
                 pass = theview.getPassword();
                 if(name!=null || pass!=null)
+                    themodel.setName(name);
                
 
                 theview.setvisiblepanel1(false);
                 theview.setvisiblepanel2(true);
 
+                theview.setlabel(themodel.getName());
 
                 t = new Thread(new ConnectionTask(theview));
                 t.start();

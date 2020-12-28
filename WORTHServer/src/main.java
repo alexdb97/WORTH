@@ -3,6 +3,14 @@ import java.io.File;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -47,6 +55,61 @@ public class main {
         System.out.println("Servizio di registrazione Attivo!");
 
        
+
+        //Punto di accesso del server Selettore con
+
+        ServerSocketChannel ss = ServerSocketChannel.open();
+        SocketAddress socadd = new InetSocketAddress(6060);
+        ss.bind(socadd);
+        ss.configureBlocking(false);
+
+        Selector selector = Selector.open();
+        selector.open();
+        ss.register(selector, SelectionKey.OP_ACCEPT);
+
+        while(true)
+        {
+            selector.select();
+            Set <SelectionKey> readyKeys = selector.selectedKeys();
+            Iterator <SelectionKey> iterator = readyKeys.iterator();
+
+            while (iterator.hasNext())
+            {
+                SelectionKey key = iterator.next();
+                iterator.remove();
+                //rimuovi la chiave dal selected set, ma non dal registered set
+                //si accettano nuove connessioni e si registrano sul selettore
+                if(key.isAcceptable())
+                {
+                    ServerSocketChannel server = (ServerSocketChannel) key.channel();
+                    SocketChannel client = server.accept();
+                    System.out.println("Accepted connection from"+client);
+                    client.configureBlocking(false);
+                    SelectionKey key2 = client.register(selector,SelectionKey.OP_READ|SelectionKey.OP_WRITE);
+                    //Attach the bytebuffer ma io faro una classe apposita Attachment
+                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                    key2.attach(buffer);
+
+                }
+                else if(key.isReadable())
+                {
+                    //operazioni di lettura
+
+                    ByteBuffer buff =(ByteBuffer)  key.attachment();
+                    
+
+
+
+                }
+                else if(key.isWritable())
+                {
+                    //operazioni di scrittura
+                }
+            }
+
+        }
+
+        
      
 
        

@@ -20,9 +20,7 @@ public class ConnectionTask  implements Runnable{
             try
             {
             Thread.currentThread().sleep(4000);
-            view.setlabel(i);
-           
-            i++;
+          
 
             }
             catch(InterruptedException ex)

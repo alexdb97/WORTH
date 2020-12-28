@@ -21,9 +21,14 @@ public class Model {
 
     }
 
-    public void  setNumber (int i)
+    public void  setName (String name)
     {
-        this.num = i;
+        this.Name = name;
+    }
+
+    public String getName ()
+    {
+        return this.Name;
     }
 
     

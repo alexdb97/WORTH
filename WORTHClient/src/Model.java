@@ -6,6 +6,8 @@ public class Model {
     private RegisterInterface serverobj;
     private String Name;
 
+    private int  num ;
+
     public Model(RegisterInterface so) {
         this.serverobj = so;
     }
@@ -17,6 +19,11 @@ public class Model {
         return serverobj.register(name, Password);
         
 
+    }
+
+    public void  setNumber (int i)
+    {
+        this.num = i;
     }
 
     

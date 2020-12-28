@@ -1,4 +1,9 @@
 import java.awt.event.ActionListener; // seems to be missing.
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
+import java.util.Stack;
 
 import javax.lang.model.util.ElementScanner14;
 
@@ -8,6 +13,9 @@ public class Controller {
 
     private InitialView theview;
     private Model themodel;
+    Thread t;
+    
+
 
     public Controller (InitialView view, Model mod)
     {
@@ -17,6 +25,9 @@ public class Controller {
         this.theview.RegisterListner(new RegisterLis());
         this.theview.LoginListener(new LoginListener());
     }
+
+
+
 
     //Evento che interagisce con la registrazione
     class RegisterLis implements ActionListener {
@@ -62,6 +73,13 @@ public class Controller {
 
                 theview.setvisiblepanel1(false);
                 theview.setvisiblepanel2(true);
+
+
+                t = new Thread(new ConnectionTask(theview));
+                t.start();
+
+
+
             }
             catch(Exception ex)
             {ex.printStackTrace();}

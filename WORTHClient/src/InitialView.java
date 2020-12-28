@@ -114,6 +114,12 @@ public class InitialView {
     {
         JOptionPane.showMessageDialog(frame, err, "ErrorMessage",JOptionPane.ERROR_MESSAGE);
     }
+
+    void setlabel(int i)
+    {
+        String text = "Welcome"+i;
+        welcome.setText(text);
+    }
     
 
 

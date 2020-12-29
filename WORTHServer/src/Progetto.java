@@ -26,6 +26,7 @@ public class Progetto implements Serializable {
         private ArrayList <Scheda> InProgeress;
         private ArrayList <Scheda> ToBeRevised;
         private ArrayList <Scheda> Done;
+        private ArrayList <String> Members;
        
 
          /**
@@ -216,6 +217,7 @@ public class Progetto implements Serializable {
             throw new IllegalArgumentException();
         }
 
+        
         public int RemoveProgetto()
         {
             String path = this.MAIN_DIR_PATH+"/"+this.NomeProgetto;
@@ -224,9 +226,21 @@ public class Progetto implements Serializable {
             deleteFolder(progfile);
 
             return 1;
+        }
 
+        
+        public  synchronized int AddMember (String Name) throws NullPointerException, IllegalArgumentException
+        {
+            if(Name==null)
+                throw new NullPointerException();
+            if(this.Members.contains(Name))
+                throw new IllegalArgumentException("Utente gia registrato");
+            
+            this.Members.add(Name);
+            return 1;
 
         }
+
 
         private static void deleteFolder(File file){
 

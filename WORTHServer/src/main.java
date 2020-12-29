@@ -2,8 +2,6 @@
 import java.io.File;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -14,15 +12,13 @@ import java.nio.channels.SocketChannel;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Serializers.Serializers;
-import jdk.nashorn.internal.parser.Token;
+
 
 
 
@@ -39,7 +35,7 @@ public class main {
         {
         
         ConcurrentHashMap <String,String> Userbase= null;
-        HashMap <String,Progetto> LisProject = new HashMap<String,Progetto>();
+        ConcurrentHashMap <String,Progetto> LisProject = new ConcurrentHashMap<String,Progetto>();
 
         Userbase = FirstSetup(LisProject,Userbase);
         
@@ -90,7 +86,7 @@ public class main {
                     
                     ServerSocketChannel server = (ServerSocketChannel) key.channel();
                     SocketChannel client = server.accept();
-                    System.out.println("Accepted connection from"+client);
+                    System.out.println("Accepted connection from");
                     client.configureBlocking(false);
                     SelectionKey key2 = client.register(selector,SelectionKey.OP_READ|SelectionKey.OP_WRITE);
                     //Attach the bytebuffer ma io faro una classe apposita Attachment
@@ -117,11 +113,15 @@ public class main {
                             if(strtok.hasMoreTokens())
                                 nextok = strtok.nextToken();
                             
+
+
+                            //logout()
                             if(nextok.equals("LOGOUT"))
                             {
                                 //chiudo la connessione TCP aperta
                                 key.channel().close();
                             }
+                            //login(nickname,password)
                             else if(nextok.equals("LOGIN"))
                             {
                                 if(strtok.countTokens()!=2)
@@ -135,8 +135,13 @@ public class main {
 
                                 String name = strtok.nextToken();
                                 String password = strtok.nextToken();
-                                System.out.println(name+" "+password);
-                                 if(Userbase.get(name).equals(password))
+                                System.out.println(name+" "+password+"  "+Userbase.containsKey(name));
+
+                                if(Userbase.containsKey(name))
+                                {
+                                    System.out.println(Userbase.get(name));
+
+                                if(Userbase.get(name).equals(password))
                                     {
                                         //LOGIN AVVENUTO CON SUCCESSO 
                                         System.out.println("SEI DENTRO AMICO");
@@ -146,17 +151,64 @@ public class main {
                                         //ERRORE NEL LOGIN 
                                         key.channel().close();
                                         break;
-                                    }          
+                                    }
+                                }
+                                else 
+                                {
+                                    //UTENTE NON ESISTE
+                                    key.channel().close();;
+                                }       
 
                             }
+                            //listprojects()
                             else if (nextok.equals("LISTPROJECTS"))
                             {
                                 Set<String> listprog = LisProject.keySet();
+                                System.out.println(listprog.toString());
                                 buffer.put((listprog.toString()).getBytes());
+                                key.attach(buffer);
+                            }
+                            //createProject()
+                            else if(nextok.equals("CREATEPROJECT"))
+                            {
+                                if(strtok.countTokens()!=1)
+                                {
+                                    //errore nel passaggio dei parametri errore
+                                    // non chiudo la connessione però
+                                    break;
+                                }
+
+                                String projectname = strtok.nextToken();
+                          
+                              
+
+                                if(LisProject.containsKey(projectname)==false)
+                                    {
+                                    Progetto p = new Progetto(projectname);
+                                    LisProject.put(projectname, p);
+
+                                    ByteBuffer buf = ByteBuffer.allocate(1024);
+                                    String str = " 200 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
+                                    buf.put(str.getBytes());
+                                    key.attach(buf);
+                                    }
+                                else 
+                                    {
+                                        //ERRORE PROGETTO GIA ESISTENTE
+                                        ByteBuffer buf = ByteBuffer.allocate(1024);
+                                        String str = " 401 ERR PROGETTO GIA ESISTENTE";
+                                        buf.put(str.getBytes());
+                                        key.attach(buf);
+
+                                        break;
+                                    }
+                            }
+                            else if(nextok.equals("SHOWMEMBERS"))
+                            {
+                                
                             }
 
-                            //listProjects
-                            //createProject
+                            
                             //addMember member
                             //addScheda scheda descrizione
                             //changeScheda from to
@@ -176,7 +228,7 @@ public class main {
                     
                     
 
-
+                    
 
                 }
                 else if(key.isWritable())
@@ -190,6 +242,7 @@ public class main {
                         client.write(buffer);
                     
                     key.attach(ByteBuffer.allocate(1024));
+
 
                 }
             }
@@ -222,7 +275,7 @@ public class main {
     }
     
     //FUNZIONE PER IL SETUP INIZIALE DEL SERVER 
-    public static ConcurrentHashMap <String,String>  FirstSetup(HashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase) throws IOException,ClassNotFoundException
+    public static ConcurrentHashMap <String,String>  FirstSetup(ConcurrentHashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase) throws IOException,ClassNotFoundException
     {
         File mainDir = new File(MAIN_DIR_PATH);
         if(mainDir.exists()==false)

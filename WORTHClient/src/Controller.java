@@ -15,18 +15,19 @@ public class Controller {
     private InitialView theview;
     private Model themodel;
     Thread t;
-    private ArrayList <Event> eventlist = new ArrayList<Event>();
-    
+    private ArrayList <Event> eventlist;
+     
     
 
 
-    public Controller (InitialView view, Model mod)
+    public Controller (InitialView view, Model mod,ArrayList <Event> list )
     {
         this.themodel = mod;
         this.theview = view;
-
+        this.eventlist = list;
         this.theview.RegisterListner(new RegisterLis());
         this.theview.LoginListener(new LoginListener());
+        this.theview.ListProjects(new ListProjects());
     }
 
 
@@ -80,7 +81,7 @@ public class Controller {
 
                 theview.setlabel(themodel.getName());
 
-                t = new Thread(new ConnectionTask(theview));
+                t = new Thread(new ConnectionTask(theview,eventlist));
                 t.start();
 
 
@@ -90,6 +91,18 @@ public class Controller {
             {ex.printStackTrace();}
 
             
+        }
+
+    }
+
+
+    //evento lista progetti
+    class ListProjects implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+           Event event = new Event("LISTPROJECTS");
+           eventlist.add(event);   
         }
 
     }

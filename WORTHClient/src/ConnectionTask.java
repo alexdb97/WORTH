@@ -2,19 +2,23 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
 public class ConnectionTask  implements Runnable{
 
     InitialView  view;
+    ArrayList <Event> evlist;
 
-    public ConnectionTask (InitialView v)
+    public ConnectionTask (InitialView v, ArrayList <Event> list)
     {
         view = v;
+        evlist = list;
     }
     
     
@@ -27,32 +31,46 @@ public class ConnectionTask  implements Runnable{
             SocketAddress address = new InetSocketAddress("localhost", 6060);
             SocketChannel client = SocketChannel.open(address);
             client.configureBlocking(false);
-            Selector selector = Selector.open();
-            client.register(selector, SelectionKey.OP_CONNECT);
-
-            while(selector.isOpen())
+            
+            while(true)
             {
-                selector.select();
-                Set <SelectionKey> readyKeys = selector.selectedKeys();
-                Iterator <SelectionKey> iterator = readyKeys.iterator();
-                while(iterator.hasNext())
+               
+               
+                if(evlist.isEmpty()==false)
                 {
-                    SelectionKey key = iterator.next();
-                    iterator.remove();
-                    if(key.isConnectable())
-                    {
 
-                    }
-                    else if(key.isReadable())
-                    {
+                    Event ev = evlist.remove(0);
+                    String operation = ev.getOperation();
+                    System.out.println(operation);
+                    ByteBuffer buffer = ByteBuffer.allocate(1024);
+                    buffer.put(operation.getBytes());
+                    buffer.flip();
 
-                    }
-                    else if(key.isWritable());
-                    {
-                        
-                    }
+                    while(buffer.hasRemaining())
+                        client.write(buffer);
+                    
+                    buffer = ByteBuffer.allocate(1024);
+                    while(client.read(buffer)>0)
+                        {
+                            String str = new String(buffer.array()).trim();
+                            System.out.println(str);
+                        }
+                    
+                    
+                    
                 }
+                try
+                {
+                Thread.sleep(10);
+                }
+                catch(InterruptedException ex)
+                {
+                    
+                }
+                
             }
+            
+
 
             
             

@@ -1,6 +1,7 @@
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 
 public  class Client {
 
@@ -11,7 +12,8 @@ public  class Client {
         
         RegisterInterface serverObject;
         Remote RemoteObject;
-
+        ArrayList<Event> list = new ArrayList<Event>();
+        
    
 
         try
@@ -22,9 +24,9 @@ public  class Client {
             serverObject = (RegisterInterface) RemoteObject;
             
             
-            InitialView nview = new InitialView();
+            InitialView nview = new InitialView(list);
             Model mod = new Model(serverObject);
-            Controller ctr = new Controller(nview, mod);
+            Controller ctr = new Controller(nview, mod,list);
             
             
 

@@ -106,7 +106,8 @@ public class main {
                     if(len>=0)
                     {
                             String command = new String(buffer.array()).trim();
-                        
+                            System.out.println(command);
+
                             StringTokenizer strtok = new StringTokenizer(command," ");
                             String nextok="";
                             

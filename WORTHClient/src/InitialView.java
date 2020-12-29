@@ -1,15 +1,16 @@
 import java.awt.event.ActionListener; // seems to be missing.
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.event.*;
 
      
-
-
-
 
 
 
@@ -32,13 +33,56 @@ public class InitialView {
     private JButton listProjects = new JButton("Get list of projects");
     JPanel panel2 = new JPanel();
 
+    private ArrayList <Event> eventlist;
 
-    public InitialView ()
+
+
+
+    public InitialView (ArrayList <Event> lis)
     {
         
         frame.setResizable(false);
         frame.setSize(300,300);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+     
+        
+     //Routine per chiudere bene la connessione
+     frame.addWindowListener( new WindowAdapter()
+     {
+             public void windowClosing(WindowEvent e)
+             {
+                 Event ev = new Event("LOGOUT");
+                 lis.add(ev);
+                 System.out.println(lis);
+
+                 JFrame frame = (JFrame)e.getSource();
+
+                     int result = JOptionPane.showConfirmDialog(
+                                         frame,
+                         "Are you sure you want to exit the application?",
+                         "Exit Application",
+                             JOptionPane.YES_NO_OPTION);
+                     
+                    
+
+                     if (result == JOptionPane.YES_OPTION)
+                     {
+                     try
+                     {
+                     Thread.currentThread().sleep(50);
+                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                     }
+                     catch(InterruptedException ex)
+                     {
+
+                     }
+                     }
+             }
+         });
+
+
+        
+
         frame.setTitle("WORTH");
         frame.add(panel);
       

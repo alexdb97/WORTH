@@ -123,6 +123,11 @@ public class InitialView {
         this.Login.addActionListener(lis);
     }
 
+    void ListProjects (ActionListener lis)
+    {
+        this.listProjects.addActionListener(lis);
+    }
+
     void error (String err)
     {
         JOptionPane.showMessageDialog(frame, err, "ErrorMessage",JOptionPane.ERROR_MESSAGE);

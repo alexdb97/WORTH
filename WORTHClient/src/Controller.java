@@ -3,6 +3,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.lang.model.util.ElementScanner14;
@@ -14,6 +15,8 @@ public class Controller {
     private InitialView theview;
     private Model themodel;
     Thread t;
+    private ArrayList <Event> eventlist = new ArrayList<Event>();
+    
     
 
 

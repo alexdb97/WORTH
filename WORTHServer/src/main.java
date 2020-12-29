@@ -18,9 +18,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Serializers.Serializers;
+import jdk.nashorn.internal.parser.Token;
 
 
 
@@ -48,13 +50,14 @@ public class main {
         //Esportazione dell'oggetto
         RegisterInterface stub = (RegisterInterface) UnicastRemoteObject.exportObject(register,0);
         //Creazione di un registry sulla porta prestabilita
-        LocateRegistry.createRegistry(8080);
-        Registry r = LocateRegistry.getRegistry(8080);
+        LocateRegistry.createRegistry(7070);
+        Registry r = LocateRegistry.getRegistry(7070);
         //Pubblicazione del registry 
         r.rebind("REGISTER", stub);
         System.out.println("Servizio di registrazione Attivo!");
 
-       
+     
+
 
         //Punto di accesso del server Selettore con
 
@@ -67,10 +70,13 @@ public class main {
         selector.open();
         ss.register(selector, SelectionKey.OP_ACCEPT);
 
+        
+
         while(true)
         {
             selector.select();
             Set <SelectionKey> readyKeys = selector.selectedKeys();
+           
             Iterator <SelectionKey> iterator = readyKeys.iterator();
 
             while (iterator.hasNext())
@@ -81,6 +87,7 @@ public class main {
                 //si accettano nuove connessioni e si registrano sul selettore
                 if(key.isAcceptable())
                 {
+                    
                     ServerSocketChannel server = (ServerSocketChannel) key.channel();
                     SocketChannel client = server.accept();
                     System.out.println("Accepted connection from"+client);
@@ -93,18 +100,97 @@ public class main {
                 }
                 else if(key.isReadable())
                 {
+                    
                     //operazioni di lettura
                     SocketChannel client = (SocketChannel) key.channel();
                     ByteBuffer buffer =  (ByteBuffer) key.attachment();
-                    client.read(buffer);
-                    String output = new String(buffer.array()).trim();
-                    System.out.println(output);
+                   
+                    int len = client.read(buffer);
+
+                    if(len>=0)
+                    {
+                            String command = new String(buffer.array()).trim();
+                        
+                            StringTokenizer strtok = new StringTokenizer(command," ");
+                            String nextok="";
+                            
+                            if(strtok.hasMoreTokens())
+                                nextok = strtok.nextToken();
+                            
+                            if(nextok.equals("LOGOUT"))
+                            {
+                                //chiudo la connessione TCP aperta
+                                key.channel().close();
+                            }
+                            else if(nextok.equals("LOGIN"))
+                            {
+                                if(strtok.countTokens()!=2)
+                                {
+                                    //ERRORE NEL PASSAGGIO DEI PARAMETRI dei parametri
+                                    // definire che codive di errore 
+                                    key.channel().close();
+                                    break;
+                                    
+                                }
+
+                                String name = strtok.nextToken();
+                                String password = strtok.nextToken();
+                                System.out.println(name+" "+password);
+                                 if(Userbase.get(name).equals(password))
+                                    {
+                                        //LOGIN AVVENUTO CON SUCCESSO 
+                                        System.out.println("SEI DENTRO AMICO");
+                                    }
+                                else
+                                    {
+                                        //ERRORE NEL LOGIN 
+                                        key.channel().close();
+                                        break;
+                                    }          
+
+                            }
+                            else if (nextok.equals("LISTPROJECTS"))
+                            {
+                                Set<String> listprog = LisProject.keySet();
+                                buffer.put((listprog.toString()).getBytes());
+                            }
+
+                            //listProjects
+                            //createProject
+                            //addMember member
+                            //addScheda scheda descrizione
+                            //changeScheda from to
+                            //shocards 
+                            //cardhistory projectname card
+                            //cancelproject name
+                            
+                                
+                            
+
+                    }
+                    //Chiusura improvvisa della connessione nella read restituisce -1
+                    else 
+                    {
+                        key.channel().close();
+                    }
+                    
+                    
+
 
 
                 }
                 else if(key.isWritable())
                 {
                     //operazioni di scrittura
+                    SocketChannel client = (SocketChannel) key.channel();
+                    ByteBuffer buffer =  (ByteBuffer) key.attachment();
+                    buffer.flip();
+
+                    if(buffer.hasRemaining())  
+                        client.write(buffer);
+                    
+                    key.attach(ByteBuffer.allocate(1024));
+
                 }
             }
 

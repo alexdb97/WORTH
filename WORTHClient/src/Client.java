@@ -17,7 +17,7 @@ public  class Client {
         try
         {
             //RMI inizialization
-            Registry r = LocateRegistry.getRegistry(8080);
+            Registry r = LocateRegistry.getRegistry(7070);
             RemoteObject = r.lookup("REGISTER");
             serverObject = (RegisterInterface) RemoteObject;
             

@@ -71,14 +71,12 @@ public class Controller {
                     themodel.setName(name);
                
 
-                theview.setvisiblepanel1(false);
-                theview.setvisiblepanel2(true);
+               
 
-                theview.setlabel(themodel.getName());
+                //Inserisco nella coda degli eventi il LOGIN 
                 Event evento = new Event ("LOGIN",theview.getUsername(),theview.getPassword());
                 eventlist.add(evento);
-            
-                
+                //spawno un thread per gestire la connessione
                 t = new Thread(new ConnectionTask(theview,eventlist));
                 t.start();
                 

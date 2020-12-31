@@ -66,7 +66,6 @@ public class ConnectionTask  implements Runnable{
                     }
                  
 
-                 
                        
                     //RISPOSTA
                     buffer = ByteBuffer.allocate(1024);
@@ -79,11 +78,13 @@ public class ConnectionTask  implements Runnable{
                             System.out.println(len);
                             response = new String(buffer.array()).trim();
                             System.out.println(response);
+                            int code = GestioneRisposta.ResponseHandler(response, view, client);
+                            // se il codice restituito è -1 
+                            //significa che si è chiusa una connessione e quindi si esce dal thread    
+                            if(code == -1)
+                                    return;
                         }
-                    
-               
-                  
-                    
+                   
                     
                 }
               try 

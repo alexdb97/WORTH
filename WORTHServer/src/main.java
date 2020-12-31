@@ -128,9 +128,24 @@ public class main {
                                 if(strtok.countTokens()!=2)
                                 {
                                     //ERRORE NEL PASSAGGIO DEI PARAMETRI dei parametri
-                                    // definire che codive di errore 
-                                    key.channel().close();
-                                    break;
+                                    // definire che codive di errore
+                            
+        
+                                        System.out.println("ERR");
+                                         //ERRORE NEL LOGIN 
+                                         ByteBuffer buff = ByteBuffer.allocate(1024);
+                                         buff.put("401 Errore Login".getBytes());
+                                        
+                                         /*
+                                         buff.flip();
+                                        
+                                        while(buff.hasRemaining())
+                                            client.write(buff);
+                                        */
+                                        key.attach(buffer);
+                                            
+                                     
+                                        break;           
                                     
                                 }
 
@@ -146,18 +161,30 @@ public class main {
                                     {
                                         //LOGIN AVVENUTO CON SUCCESSO 
                                         System.out.println("SEI DENTRO AMICO");
+               
+
                                     }
                                 else
                                     {
                                         //ERRORE NEL LOGIN 
-                                        key.channel().close();
+                                        ByteBuffer buff = ByteBuffer.allocate(1024);
+                                        buff.put("401 Errore Login".getBytes());
+                                      
+                                        key.attach(buff);
                                         break;
                                     }
                                 }
                                 else 
                                 {
                                     //UTENTE NON ESISTE
-                                    key.channel().close();;
+                                    //ERRORE NEL LOGIN 
+                                    ByteBuffer buff = ByteBuffer.allocate(1024);
+                                    buff.put("401 Errore Login".getBytes());
+                                
+
+                                   key.attach(buff);
+                                   break;
+                                
                                 }       
 
                             }
@@ -191,7 +218,7 @@ public class main {
                                     LisProject.put(projectname, p);
 
                                     ByteBuffer buf = ByteBuffer.allocate(1024);
-                                    String str = " 200 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
+                                    String str = " 202 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
                                     buf.put(str.getBytes());
                                     key.attach(buf);
                                     }

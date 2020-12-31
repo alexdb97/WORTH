@@ -21,6 +21,7 @@ public class InitialView {
     private JPanel panel = new JPanel();
     private JLabel UserName = new JLabel("UserName");
     private JLabel Password = new JLabel("Password");
+
     private JTextField un = new JTextField();
     private JTextField ps = new JTextField();
     private JButton Register = new JButton("Register");

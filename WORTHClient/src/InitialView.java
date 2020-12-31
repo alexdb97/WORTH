@@ -1,5 +1,5 @@
 import java.awt.event.ActionListener; // seems to be missing.
-import java.io.IOException;
+
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -51,9 +51,7 @@ public class InitialView {
      {
              public void windowClosing(WindowEvent e)
              {
-                 Event ev = new Event("LOGOUT");
-                 lis.add(ev);
-                 System.out.println(lis);
+              
 
                  JFrame frame = (JFrame)e.getSource();
 
@@ -67,6 +65,9 @@ public class InitialView {
 
                      if (result == JOptionPane.YES_OPTION)
                      {
+                        Event ev = new Event("LOGOUT",null,null);
+                        lis.add(ev);
+                        System.out.println(lis);
                      try
                      {
                      Thread.currentThread().sleep(50);

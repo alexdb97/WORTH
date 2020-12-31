@@ -1,12 +1,7 @@
 import java.awt.event.ActionListener; // seems to be missing.
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import java.util.Stack;
 
-import javax.lang.model.util.ElementScanner14;
+
 
 import java.awt.event.*;
 
@@ -80,10 +75,13 @@ public class Controller {
                 theview.setvisiblepanel2(true);
 
                 theview.setlabel(themodel.getName());
-
+                Event evento = new Event ("LOGIN",theview.getUsername(),theview.getPassword());
+                eventlist.add(evento);
+            
+                
                 t = new Thread(new ConnectionTask(theview,eventlist));
                 t.start();
-
+                
 
 
             }
@@ -101,7 +99,7 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt)
         {
-           Event event = new Event("LISTPROJECTS");
+           Event event = new Event("LISTPROJECTS",null,null);
            eventlist.add(event);   
         }
 

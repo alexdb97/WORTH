@@ -1,14 +1,13 @@
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
+
+
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
+
 
 public class ConnectionTask  implements Runnable{
 
@@ -31,6 +30,7 @@ public class ConnectionTask  implements Runnable{
             SocketAddress address = new InetSocketAddress("localhost", 6060);
             SocketChannel client = SocketChannel.open(address);
             client.configureBlocking(false);
+
             
             while(true)
             {
@@ -44,30 +44,56 @@ public class ConnectionTask  implements Runnable{
                     System.out.println(operation);
                     ByteBuffer buffer = ByteBuffer.allocate(1024);
                     buffer.put(operation.getBytes());
+                    if(ev.getParam1()!=null)
+                        buffer.put((" "+ev.getParam1()).getBytes());
+                    if(ev.getParam2()!=null)
+                        buffer.put((" "+ev.getParam2()).getBytes());
+                    
+                
                     buffer.flip();
 
+                    //RICHIESTA
                     while(buffer.hasRemaining())
                         client.write(buffer);
                     
+                    try
+                    {
+                        Thread.currentThread().sleep(50);
+                    }
+                    catch(InterruptedException ex)
+                    {
+                        ex.printStackTrace();
+                    }
+                 
+
+                 
+                       
+                    //RISPOSTA
                     buffer = ByteBuffer.allocate(1024);
-                    while(client.read(buffer)>0)
+                    String response="";
+                    int len;
+                 
+                   
+                    while((len =client.read(buffer))>0)
                         {
-                            String str = new String(buffer.array()).trim();
-                            System.out.println(str);
+                            System.out.println(len);
+                            response = new String(buffer.array()).trim();
+                            System.out.println(response);
                         }
                     
+               
+                  
                     
                     
                 }
-                try
-                {
-                Thread.sleep(10);
-                }
-                catch(InterruptedException ex)
-                {
-                    
-                }
-                
+              try 
+              {
+                Thread.currentThread().sleep(40);
+              }
+              catch(InterruptedException ex)
+              {
+                  ex.printStackTrace();
+              }
             }
             
 

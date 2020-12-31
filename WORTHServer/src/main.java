@@ -166,8 +166,10 @@ public class main {
                             {
                                 Set<String> listprog = LisProject.keySet();
                                 System.out.println(listprog.toString());
+                            
                                 buffer.put((listprog.toString()).getBytes());
-                                key.attach(buffer);
+                           
+                               key.attach(buffer);
                             }
                             //createProject()
                             else if(nextok.equals("CREATEPROJECT"))
@@ -228,8 +230,8 @@ public class main {
                     }
                     
                     
-
-                    
+                   
+                                    
 
                 }
                 else if(key.isWritable())

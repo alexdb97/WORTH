@@ -3,15 +3,16 @@ import java.util.ArrayList;
 public class Event {
     
     private String Operation;
-    private ArrayList <String> paramaters;
+    private String arg1;
+    private String arg2;
+    
 
-    public Event (String Op, String ... values)
+    public Event (String Op, String arg1, String arg2)
     {
         this.Operation = Op;
-        for(String  si:values )
-        {
-            paramaters.add(si);
-        }
+        this.arg1 = arg1 ;
+        this.arg2 = arg2;
+      
     }
 
     public String getOperation ()
@@ -19,9 +20,14 @@ public class Event {
         return this.Operation;
     }
 
-    public ArrayList <String> getParam ()
+    public String getParam1 ()
     {
-        return this.paramaters;
+        return this.arg1;
+    }
+
+    public String getParam2 ()
+    {
+        return this.arg2;
     }
 
     

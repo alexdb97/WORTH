@@ -8,6 +8,7 @@ public class Model {
     private String Name;
     private ConcurrentHashMap <String,Boolean> LoginMap;
 
+
     private int  num ;
 
     public Model(RegisterInterface so) {
@@ -34,30 +35,10 @@ public class Model {
         return this.Name;
     }
 
-    
-    public ConcurrentHashMap <String,Boolean> getList ()
-    {
-        return this.LoginMap;
-    }
-    
+   
 
-    /*
-    //da implementare
-    //qualcosa che riguarda solo il model ovviamente
-    public ConcurrentHashMap<String,Boolean>  listOnlineUser ()
-    {
 
-    }
-    */
 
-    /*
-    Qualcosa che riguarda solo il model ovviamente
-    //da implementare 
-    public ConcurrentHashMap <String,Boolean> listUsers()
-    {
-
-    }
-    */
-
+   
     
 }

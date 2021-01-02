@@ -40,6 +40,7 @@ public class InitialView {
     JScrollPane panescroll = new JScrollPane();
     
 
+
     private ArrayList <Event> eventlist;
 
 
@@ -64,8 +65,8 @@ public class InitialView {
 
                      int result = JOptionPane.showConfirmDialog(
                                          frame,
-                         "Are you sure you want to exit the application?",
-                         "Exit Application",
+                         "Sei sicuro di voler uscire?",
+                         "Uscita",
                              JOptionPane.YES_NO_OPTION);
                      
                     
@@ -140,16 +141,18 @@ public class InitialView {
        this.panel.setVisible(value);
 
    }
+
+   //WORTHMENU
    public void setvisiblepanel2 (boolean value)
    {
     
        
          //Setting WorthMenu
          frame.setTitle("WORTH MENU");
-         //set layout to null
-         panel2.setLayout(null);
-         frame.add(this.panel2);
-         welcome.setBounds( 100,0,100,100);
+        //set layout to null
+        panel2.setLayout(null);
+        frame.add(this.panel2);
+        welcome.setBounds(50,0,200,100);
         panel2.add(welcome);
         createproject.setBounds(40, 70, 220, 20);
         listUsers.setBounds(40,100,220, 20);
@@ -163,6 +166,16 @@ public class InitialView {
       
        this.panel2.setVisible(value);
 
+   }
+
+   //LISTPROJECTS
+   public void setvisiblepanel3 ()
+   {
+       panel2.setVisible(false);
+       panel3.setVisible(true);
+       frame.setTitle("LISTPROJECTS");
+       panel3.setLayout(null);
+       frame.add(panel3);
    }
 
 

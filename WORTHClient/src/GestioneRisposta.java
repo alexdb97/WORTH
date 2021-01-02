@@ -28,7 +28,7 @@ public class GestioneRisposta {
                     }
                     else if(code.equals("202"))
                     {
-                        //lista dei progetti
+                        view.setvisiblepanel3();
                         
                     }
                 }

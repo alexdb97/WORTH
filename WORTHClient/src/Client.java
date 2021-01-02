@@ -29,6 +29,7 @@ public  class Client {
             Controller ctr = new Controller(nview, mod,list);
             
             
+            
 
         }
         catch(Exception e)

@@ -30,6 +30,7 @@ public class ConnectionTask implements Runnable {
 
         try {
 
+            
             //Ci siamo registrati al servizio di Callback
             System.out.println("Cerco il server");
             Registry registry = LocateRegistry.getRegistry(7070);
@@ -37,7 +38,8 @@ public class ConnectionTask implements Runnable {
             ServerInterface server = (ServerInterface) registry.lookup(name1);
             // si registra la callback
             System.out.println("Registering For Callback");
-            NotifyEventInterface callbackObj = new NotifyImpl(model.getList());
+            NotifyEventInterface callbackObj = new NotifyImpl();
+          
             NotifyEventInterface stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj,0);
             server.registerForCallback(stub);
 
@@ -93,6 +95,11 @@ public class ConnectionTask implements Runnable {
                             }
                     }
 
+                 System.out.println(callbackObj.listUsers().toString());
+                   
+
+
+
                 }
                 try {
                     Thread.currentThread().sleep(40);
@@ -103,7 +110,8 @@ public class ConnectionTask implements Runnable {
 
         } catch (IOException ex) {
             ex.printStackTrace();
-        } catch (NotBoundException e) {
+        }
+        catch (NotBoundException e) {
          
             e.printStackTrace();
         }

@@ -221,10 +221,12 @@ public class main {
                             {
                                 Set<String> listprog = LisProject.keySet();
                                 System.out.println(listprog.toString());
-                            
-                                buffer.put(("202 "+listprog.toString()).getBytes());
+                                ByteBuffer buff = ByteBuffer.allocate(1024);
+                                buff.put(("202 "+listprog.toString()).getBytes());
+
+                                
                            
-                               key.attach(buffer);
+                               key.attach(buff);
                             }
                             //createProject()
                             else if(nextok.equals("CREATEPROJECT"))

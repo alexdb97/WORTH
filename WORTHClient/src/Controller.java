@@ -1,4 +1,5 @@
 import java.awt.event.ActionListener; // seems to be missing.
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
 
@@ -11,7 +12,7 @@ public class Controller {
     private Model themodel;
     Thread t;
     private ArrayList <Event> eventlist;
-     
+  
     
 
 
@@ -77,9 +78,11 @@ public class Controller {
                 Event evento = new Event ("LOGIN",theview.getUsername(),theview.getPassword());
                 eventlist.add(evento);
                 //spawno un thread per gestire la connessione
+                themodel.setName(theview.getUsername());
+                theview.setlabel(theview.getUsername());
                 t = new Thread(new ConnectionTask(theview,eventlist,themodel));
                 t.start();
-                
+             
 
 
             }

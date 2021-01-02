@@ -116,12 +116,13 @@ public class main {
                             
 
 
-                            //logout()
+                            //logout() LOGOUT FUNZIONA
                             if(nextok.equals("LOGOUT"))
                             {
                                 //chiudo la connessione TCP aperta
                                 key.channel().close();
                             }
+                            //LA LOGIN DOVREBBE FUNZIONARE IL PROBLEMA E CHE DOBBIAMO  FARE RMI
                             //login(nickname,password)
                             else if(nextok.equals("LOGIN"))
                             {
@@ -131,23 +132,17 @@ public class main {
                                     // definire che codive di errore
                             
         
-                                        System.out.println("ERR");
+                                        
                                          //ERRORE NEL LOGIN 
                                          ByteBuffer buff = ByteBuffer.allocate(1024);
-                                         buff.put("401 Errore Login".getBytes());
-                                        
-                                         /*
-                                         buff.flip();
-                                        
-                                        while(buff.hasRemaining())
-                                            client.write(buff);
-                                        */
-                                        key.attach(buffer);
-                                            
-                                     
-                                        break;           
+                                         buff.put("401 Errore ".getBytes());
+                                         System.out.println("401 Errore Parametri");
+                                         key.attach(buff);
+                                         break;
                                     
                                 }
+                                else
+                                {
 
                                 String name = strtok.nextToken();
                                 String password = strtok.nextToken();
@@ -161,6 +156,10 @@ public class main {
                                     {
                                         //LOGIN AVVENUTO CON SUCCESSO 
                                         System.out.println("SEI DENTRO AMICO");
+                                         //ERRORE NEL LOGIN 
+                                         ByteBuffer buff = ByteBuffer.allocate(1024);
+                                         buff.put("201 Login".getBytes());
+                                         key.attach(buff);
                
 
                                     }
@@ -168,8 +167,8 @@ public class main {
                                     {
                                         //ERRORE NEL LOGIN 
                                         ByteBuffer buff = ByteBuffer.allocate(1024);
-                                        buff.put("401 Errore Login".getBytes());
-                                      
+                                        buff.put("401 Errore Login Sbaglato password".getBytes());
+                                        System.out.println("401 Errore Login Sbaglato password");
                                         key.attach(buff);
                                         break;
                                     }
@@ -179,22 +178,24 @@ public class main {
                                     //UTENTE NON ESISTE
                                     //ERRORE NEL LOGIN 
                                     ByteBuffer buff = ByteBuffer.allocate(1024);
-                                    buff.put("401 Errore Login".getBytes());
-                                
-
-                                   key.attach(buff);
+                                    buff.put("401 Errore Login non esisti".getBytes());
+                                    System.out.println("401 Errore Login non esisti");
+                                    key.attach(buff);
                                    break;
                                 
-                                }       
+                                } 
+                            }      
 
                             }
+
+                            //LISTPROJECTS
                             //listprojects()
                             else if (nextok.equals("LISTPROJECTS"))
                             {
                                 Set<String> listprog = LisProject.keySet();
                                 System.out.println(listprog.toString());
                             
-                                buffer.put((listprog.toString()).getBytes());
+                                buffer.put(("202 "+listprog.toString()).getBytes());
                            
                                key.attach(buffer);
                             }

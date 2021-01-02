@@ -11,13 +11,25 @@ public class GestioneRisposta {
            
                  if(strtok.hasMoreElements())
                  {
-                    String errcode = strtok.nextToken();
-                    if(errcode.equals("401"))
+                    String code = strtok.nextToken();
+                    if(code.equals("401"))
                     {
                         //errore nel login e nel passaggio dei parameti
                         view.error(str);
                         so.close();
                         return -1;
+                    }
+                    else if (code.equals("201"))
+                    {
+                        //login effettuata con sucesso
+                        view.setvisiblepanel1(false);
+                        view.setvisiblepanel2(true);
+                        
+                    }
+                    else if(code.equals("202"))
+                    {
+                        //lista dei progetti
+                        
                     }
                 }
             

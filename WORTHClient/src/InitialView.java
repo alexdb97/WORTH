@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.event.*;
 
@@ -33,6 +35,10 @@ public class InitialView {
     private JButton listOnlineUsers = new JButton("Get list of Users (online)");
     private JButton listProjects = new JButton("Get list of projects");
     JPanel panel2 = new JPanel();
+    //Pannello lista progetti
+    private JPanel panel3 = new JPanel();
+    JScrollPane panescroll = new JScrollPane();
+    
 
     private ArrayList <Event> eventlist;
 
@@ -158,6 +164,7 @@ public class InitialView {
        this.panel2.setVisible(value);
 
    }
+
 
     void RegisterListner(ActionListener lis)
     {

@@ -59,13 +59,15 @@ public class main {
         ServerInterface stub2 = (ServerInterface) UnicastRemoteObject.exportObject(server1,39000);
         String namereg = "Server";
         LocateRegistry.createRegistry(5000);
+        
        
 
         //dovro metterlo anche qua il servizio di callback
-        
+
         //Servizio RMI
         //Creazione del servizio 
-        RegisterImpl register = new RegisterImpl(Userbase);
+        //passo anche la loginmap e il servizio di Callback
+        RegisterImpl register = new RegisterImpl(Userbase,LoginMap,server1);
         //Esportazione dell'oggetto
         RegisterInterface stub = (RegisterInterface) UnicastRemoteObject.exportObject(register,0);
         //Creazione di un registry sulla porta prestabilita

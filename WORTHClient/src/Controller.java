@@ -77,7 +77,7 @@ public class Controller {
                 Event evento = new Event ("LOGIN",theview.getUsername(),theview.getPassword());
                 eventlist.add(evento);
                 //spawno un thread per gestire la connessione
-                t = new Thread(new ConnectionTask(theview,eventlist));
+                t = new Thread(new ConnectionTask(theview,eventlist,themodel));
                 t.start();
                 
 

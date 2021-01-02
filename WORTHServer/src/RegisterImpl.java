@@ -1,6 +1,6 @@
 
 
-import java.io.File;
+
 import java.io.IOException;
 
 import java.rmi.RemoteException;
@@ -17,11 +17,14 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface{
      */
     private static final long serialVersionUID = 1234567L;
     private ConcurrentHashMap <String,String> Ubase;
+    ConcurrentHashMap <String,Boolean> Logmap;
+    ServerImpl server1 ;
 
-    public RegisterImpl (ConcurrentHashMap <String,String>Userbase) 
+    public RegisterImpl (ConcurrentHashMap <String,String>Userbase,ConcurrentHashMap <String,Boolean> logmap, ServerImpl serv1 ) 
     {
         
-     
+       this.server1 = serv1;
+       this.Logmap = logmap;
        this.Ubase = Userbase;
         
 
@@ -35,6 +38,8 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface{
             {
             String path = "./UserBase";
             this.Ubase.putIfAbsent(Nickname, Password);
+            Logmap.putIfAbsent(Nickname, false);
+            server1.update(Logmap);
             Serializers.write(Ubase,path);
             return 200;
             }

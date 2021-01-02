@@ -2,6 +2,7 @@ import java.awt.event.ActionListener; // seems to be missing.
 
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,6 +39,8 @@ public class InitialView {
     //Pannello lista progetti
     private JPanel panel3 = new JPanel();
     JScrollPane panescroll = new JScrollPane();
+   
+   
     
 
 
@@ -169,13 +172,20 @@ public class InitialView {
    }
 
    //LISTPROJECTS
-   public void setvisiblepanel3 ()
+   public void setvisiblepanel3 (String rest)
    {
        panel2.setVisible(false);
        panel3.setVisible(true);
        frame.setTitle("LISTPROJECTS");
        panel3.setLayout(null);
        frame.add(panel3);
+       System.out.println(rest);
+       //creo la lista
+      
+       
+    
+     
+   
    }
 
 

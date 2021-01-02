@@ -28,7 +28,8 @@ public class GestioneRisposta {
                     }
                     else if(code.equals("202"))
                     {
-                        view.setvisiblepanel3();
+                        String rest = strtok.nextToken("");
+                        view.setvisiblepanel3(rest);
                         
                     }
                 }

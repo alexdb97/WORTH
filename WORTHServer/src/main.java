@@ -39,6 +39,29 @@ public class main {
 
         Userbase = FirstSetup(LisProject,Userbase);
         
+
+        //Servizio di callback per client
+        ConcurrentHashMap <String,Boolean> LoginMap = new ConcurrentHashMap<String,Boolean>();
+        //mi prendo i nomi che sono gia presenti nella base di dati
+         Set <String> names = Userbase.keySet();
+         for (String objt : names) {
+             LoginMap.put(objt, false);    
+         }
+        //faccio una semplice stampa per vedere se l'ho caricato
+
+        //DA ELIMINARE 
+        System.out.println(LoginMap.toString());
+
+
+
+        //registrazione presso il registry
+        ServerImpl server1 = new ServerImpl ();
+        ServerInterface stub2 = (ServerInterface) UnicastRemoteObject.exportObject(server1,39000);
+        String namereg = "Server";
+        LocateRegistry.createRegistry(5000);
+       
+
+        //dovro metterlo anche qua il servizio di callback
         
         //Servizio RMI
         //Creazione del servizio 
@@ -50,6 +73,8 @@ public class main {
         Registry r = LocateRegistry.getRegistry(7070);
         //Pubblicazione del registry 
         r.rebind("REGISTER", stub);
+        r.bind(namereg,stub2);
+
         System.out.println("Servizio di registrazione Attivo!");
 
      
@@ -328,6 +353,7 @@ public class main {
         if(filebase.exists())
         {
             Ubase = (ConcurrentHashMap <String,String> ) Serializers.read(path);
+            //DA ELIINARE
             System.out.println("CArico in memoria"+Ubase.toString());
             return Ubase;
         }

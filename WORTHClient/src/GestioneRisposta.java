@@ -33,7 +33,7 @@ public class GestioneRisposta {
                         String rest = strtok.nextToken("");
                         Gson gson = new Gson();
                         System.out.println(gson.fromJson(rest, String[].class));
-                        view.setvisiblepanel3(gson.fromJson(rest,String[].class));
+                        view.listProjects(gson.fromJson(rest,String[].class));
                         return 1;
 
                         

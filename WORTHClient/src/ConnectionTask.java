@@ -50,8 +50,16 @@ public class ConnectionTask implements Runnable {
             client.configureBlocking(false);
 
             while (true) {
+ 
+                try
+                {
+                Thread.sleep(10);
+                }
+                catch(InterruptedException ex)
+                {
+                    ex.printStackTrace();
+                }
 
-                System.out.println("Ecco");
                 if (evlist.isEmpty() == false) {
 
                     Event ev = evlist.remove(0);

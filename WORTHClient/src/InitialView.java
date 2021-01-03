@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import java.awt.Color;
 import java.awt.event.*;
 
 
@@ -36,10 +38,13 @@ public class InitialView {
     private JButton listUsers = new JButton("Get list of Users");
     private JButton listOnlineUsers = new JButton("Get list of Users (online)");
     private JButton listProjects = new JButton("Get list of projects");
+    private JButton logout = new JButton("logout");
+     
     JPanel panel2 = new JPanel();
     //Pannello lista progetti
     private JPanel panel3 = new JPanel();
-    JScrollPane panescroll = new JScrollPane();
+    private JButton goBack_prog = new JButton ("Go Back");
+    //
    
    
     
@@ -69,8 +74,8 @@ public class InitialView {
 
                      int result = JOptionPane.showConfirmDialog(
                                          frame,
-                         "Sei sicuro di voler uscire?",
-                         "Uscita",
+                         "Do you want to exit?",
+                         "Exit",
                              JOptionPane.YES_NO_OPTION);
                      
                     
@@ -129,6 +134,8 @@ public class InitialView {
         frame.setVisible(true);
     }
 
+//GETTING FROM TEXTFIELDS
+
     public String getUsername ()
     {
         return un.getText();
@@ -140,11 +147,14 @@ public class InitialView {
 
     }
 
+
+//NAVIGATION
    public void setvisiblepanel1 (boolean value)
    {
        this.panel.setVisible(value);
 
    }
+
 
    //WORTHMENU
    public void setvisiblepanel2 (boolean value)
@@ -152,49 +162,55 @@ public class InitialView {
     
        
          //Setting WorthMenu
-         frame.setTitle("WORTH MENU");
+        frame.setTitle("WORTH MENU");
         //set layout to null
         panel2.setLayout(null);
         frame.add(this.panel2);
-        welcome.setBounds(50,0,200,100);
+        welcome.setBounds(50,20,200,100);
         panel2.add(welcome);
-        createproject.setBounds(40, 70, 220, 20);
-        listUsers.setBounds(40,100,220, 20);
-        listOnlineUsers.setBounds(40, 130, 220,20);
-        listProjects.setBounds(40,160,220,20);
+        createproject.setBounds(40, 90, 220, 20);
+        listUsers.setBounds(40,120,220, 20);
+        listOnlineUsers.setBounds(40, 160, 220,20);
+        listProjects.setBounds(40,200,220,20);
+        logout.setBackground(Color.BLUE);
+        logout.setForeground(Color.WHITE);
+        logout.setBounds(40,10,220,20);
+        panel2.add(logout);
         panel2.add(listProjects);
         panel2.add(listOnlineUsers);
         panel2.add(createproject);
         panel2.add(listUsers);
  
-      
        this.panel2.setVisible(value);
 
    }
 
    //LISTPROJECTS
-   public void setvisiblepanel3 (String [] rest)
+   public void listProjects (String [] rest)
    {
        panel2.setVisible(false);
-       frame.add(panel3);
        frame.setTitle("LISTPROJECTS");
        panel3.setLayout(null);
+       JList list = new JList(rest);
+       JScrollPane scrollPane = new JScrollPane(list);
+       
+       scrollPane.setBounds(0, 50, 300, 300);
+       goBack_prog.setBounds(0, 0,300,50);
+       panel3.add(goBack_prog);
+       panel3.add(scrollPane);
        panel3.setVisible(true);
-       
-     
-       
-        
-      
-     
-      
-
-       //creo la lista
-      
-       
-    
-     
+       frame.add(panel3);
+       frame.setVisible(true);
    
    }
+
+   public void setvisiblepanel3( boolean value)
+   {
+       this.panel3.setVisible(value);
+   }
+
+
+//ACTIONS HANDLER
 
 
     void RegisterListner(ActionListener lis)
@@ -207,9 +223,19 @@ public class InitialView {
         this.Login.addActionListener(lis);
     }
 
+    void logout (ActionListener lis)
+    {
+        this.logout.addActionListener(lis);
+    }
+
     void ListProjects (ActionListener lis)
     {
         this.listProjects.addActionListener(lis);
+    }
+
+    void GoBack (ActionListener lis)
+    {
+        this.goBack_prog.addActionListener(lis);
     }
 
     void error (String err)
@@ -219,7 +245,7 @@ public class InitialView {
 
     void setlabel(String name)
     {
-        String text = "Welcome"+name;
+        String text = "Welcome   "+name;
         welcome.setText(text);
     }
     

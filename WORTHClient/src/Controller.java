@@ -24,6 +24,9 @@ public class Controller {
         this.theview.RegisterListner(new RegisterLis());
         this.theview.LoginListener(new LoginListener());
         this.theview.ListProjects(new ListProjects());
+        this.theview.GoBack(new goBack_prog());
+        this.theview.logout(new Logout());
+
     }
 
 
@@ -94,6 +97,23 @@ public class Controller {
 
     }
 
+    //evento logout
+     //evento lista progetti
+     class Logout implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+           Event event = new Event("LOGOUT",null,null);
+           eventlist.add(event);   
+
+           theview.setvisiblepanel2(false);
+           theview.setvisiblepanel1(true);
+
+        }
+
+    }
+
+
 
     //evento lista progetti
     class ListProjects implements ActionListener {
@@ -102,6 +122,20 @@ public class Controller {
         {
            Event event = new Event("LISTPROJECTS",null,null);
            eventlist.add(event);   
+        }
+
+    }
+
+
+    //evento vai indietro
+    class goBack_prog implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+           
+            theview.setvisiblepanel3(false);
+            theview.setvisiblepanel2(true);
+
         }
 
     }

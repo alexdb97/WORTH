@@ -11,7 +11,7 @@ public class NotifyImpl extends RemoteObject implements NotifyEventInterface{
 
 
   
-    ConcurrentHashMap<String, Boolean> usermap;
+    ConcurrentHashMap<String,Boolean> usermap;
 
 
     // crea una nuova callback client

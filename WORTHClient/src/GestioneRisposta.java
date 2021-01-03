@@ -38,6 +38,13 @@ public class GestioneRisposta {
 
                         
                     }
+                    else if(code.equals("300"))
+                    {
+                        view.setvisiblepanel1(true);
+                        view.setvisiblepanel2(false);
+                        so.close();
+                        return -1;
+                    }
                 }
             
            return 0;

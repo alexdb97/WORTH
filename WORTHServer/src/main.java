@@ -36,8 +36,11 @@ public class main {
         try 
         {
         
+        //Strutture dati che danno supporto al Server
+        ConcurrentHashMap <String,String> KeysUserMap = new ConcurrentHashMap<String,String>();
         ConcurrentHashMap <String,String> Userbase= null;
         ConcurrentHashMap <String,Progetto> LisProject = new ConcurrentHashMap<String,Progetto>();
+
 
         Userbase = FirstSetup(LisProject,Userbase);
         
@@ -47,7 +50,8 @@ public class main {
         //mi prendo i nomi che sono gia presenti nella base di dati
          Set <String> names = Userbase.keySet();
          for (String objt : names) {
-             LoginMap.put(objt, false);    
+             LoginMap.put(objt,false);
+                
          }
         //faccio una semplice stampa per vedere se l'ho caricato
 
@@ -148,8 +152,14 @@ public class main {
                             //logout() LOGOUT FUNZIONA
                             if(nextok.equals("LOGOUT"))
                             {
-                                //chiudo la connessione TCP aperta
-                                key.channel().close();
+                                ByteBuffer buff = ByteBuffer.allocate(1024);
+                                buff.put("300 Logout".getBytes());
+                                String name = KeysUserMap.get(key.toString());
+                                LoginMap.replace(name,true,false);
+                                server1.update(LoginMap);
+                                key.attach(buff);
+                                key.interestOps(SelectionKey.OP_WRITE);
+
                             }
                             //LA LOGIN DOVREBBE FUNZIONARE IL PROBLEMA E CHE DOBBIAMO  FARE RMI
                             //login(nickname,password)
@@ -182,11 +192,14 @@ public class main {
                                 {
                                     System.out.println(Userbase.get(name));
 
-                                if(Userbase.get(name).equals(password))
+                                if(Userbase.get(name).equals(password)&&(LoginMap.get(name).equals(false)))
                                     {
                                         //LOGIN AVVENUTO CON SUCCESSO 
                                         System.out.println("SEI DENTRO AMICO");
-                                         //ERRORE NEL LOGIN 
+                                        LoginMap.replace(name,false,true);
+                                        KeysUserMap.putIfAbsent(key.toString(),name);
+                                        server1.update(LoginMap);
+                                        //SEGNALO IL CORRETTO LOGIN
                                          ByteBuffer buff = ByteBuffer.allocate(1024);
                                          buff.put("201 Login".getBytes());
                                          key.attach(buff);
@@ -198,7 +211,7 @@ public class main {
                                         //ERRORE NEL LOGIN 
                                         ByteBuffer buff = ByteBuffer.allocate(1024);
                                         buff.put("401 Errore Login Sbaglato password".getBytes());
-                                        System.out.println("401 Errore Login Sbaglato password");
+                                        System.out.println("401 Errore Login Password o Utente gia' loggato");
                                         key.attach(buff);
                                         key.interestOps(SelectionKey.OP_WRITE);
                                         

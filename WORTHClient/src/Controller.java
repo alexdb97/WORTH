@@ -106,9 +106,6 @@ public class Controller {
            Event event = new Event("LOGOUT",null,null);
            eventlist.add(event);   
 
-           theview.setvisiblepanel2(false);
-           theview.setvisiblepanel1(true);
-
         }
 
     }

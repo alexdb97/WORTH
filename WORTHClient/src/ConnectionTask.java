@@ -87,10 +87,10 @@ public class ConnectionTask implements Runnable {
                     // RISPOSTA
                     ByteBuffer bufferrisposta = ByteBuffer.allocate(1024);
                     String response = "";
-                    int len;
+                   
 
-                    while ((len = client.read(bufferrisposta))>=0) {
-                        System.out.println(len);
+                    while (( client.read(bufferrisposta))>=0) {
+                   
                         response = new String(bufferrisposta.array()).trim();
                         System.out.println(response);
                         int code = GestioneRisposta.ResponseHandler(response, view, client);
@@ -114,10 +114,10 @@ public class ConnectionTask implements Runnable {
 
                     }
 
-                 System.out.println("SONO USCITO");
                 
                 }
-               //qua c'era na sleep
+           
+
             }
 
         } catch (IOException ex) {

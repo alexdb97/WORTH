@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.event.*;
 
+
      
 
 
@@ -172,14 +173,21 @@ public class InitialView {
    }
 
    //LISTPROJECTS
-   public void setvisiblepanel3 (String rest)
+   public void setvisiblepanel3 (String [] rest)
    {
        panel2.setVisible(false);
-       panel3.setVisible(true);
+       frame.add(panel3);
        frame.setTitle("LISTPROJECTS");
        panel3.setLayout(null);
-       frame.add(panel3);
-       System.out.println(rest);
+       panel3.setVisible(true);
+       
+     
+       
+        
+      
+     
+      
+
        //creo la lista
       
        

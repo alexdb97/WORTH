@@ -51,11 +51,11 @@ public class ConnectionTask implements Runnable {
 
             while (true) {
 
+                System.out.println("Ecco");
                 if (evlist.isEmpty() == false) {
 
                     Event ev = evlist.remove(0);
                     String operation = ev.getOperation();
-                    System.out.println(operation);
                     ByteBuffer buffer = ByteBuffer.allocate(1024);
                     buffer.put(operation.getBytes());
                     if (ev.getParam1() != null)
@@ -63,49 +63,53 @@ public class ConnectionTask implements Runnable {
                     if (ev.getParam2() != null)
                         buffer.put((" " + ev.getParam2()).getBytes());
 
+                        System.out.println(operation);
                     buffer.flip();
 
                     // RICHIESTA
                     while (buffer.hasRemaining())
                         client.write(buffer);
+                    
 
-                    try {
-                        Thread.currentThread().sleep(50);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
+                    buffer.clear();
+                 
+                   
+
 
                     // RISPOSTA
-                    buffer = ByteBuffer.allocate(1024);
+                    ByteBuffer bufferrisposta = ByteBuffer.allocate(1024);
                     String response = "";
                     int len;
 
-                    while ((len = client.read(buffer)) > 0) {
+                    while ((len = client.read(bufferrisposta))>=0) {
                         System.out.println(len);
-                        response = new String(buffer.array()).trim();
+                        response = new String(bufferrisposta.array()).trim();
                         System.out.println(response);
                         int code = GestioneRisposta.ResponseHandler(response, view, client);
                         // se il codice restituito è -1
                         // significa che si è chiusa una connessione e quindi si esce dal thread
                         // Mi devo anche deregistrare dalla RMI callback
+
                         if (code == -1)
                             {
                                 server.unregisterForCallback(stub);
                                 return;
                             }
+                        else if(code==1)
+                        {
+                            break;
+                        }
+                        else
+                        {
+
+                        }
+
                     }
 
-                 System.out.println(callbackObj.listUsers().toString());
-                   
-
-
-
+                 System.out.println("SONO USCITO");
+                
                 }
-                try {
-                    Thread.currentThread().sleep(40);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+               //qua c'era na sleep
             }
 
         } catch (IOException ex) {

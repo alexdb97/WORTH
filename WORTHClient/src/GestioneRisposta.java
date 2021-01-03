@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.StringTokenizer;
+import com.google.gson.*;
 
 public class GestioneRisposta {
 
@@ -24,12 +25,17 @@ public class GestioneRisposta {
                         //login effettuata con sucesso
                         view.setvisiblepanel1(false);
                         view.setvisiblepanel2(true);
+                        return 1;
                         
                     }
                     else if(code.equals("202"))
                     {
                         String rest = strtok.nextToken("");
-                        view.setvisiblepanel3(rest);
+                        Gson gson = new Gson();
+                        System.out.println(gson.fromJson(rest, String[].class));
+                        view.setvisiblepanel3(gson.fromJson(rest,String[].class));
+                        return 1;
+
                         
                     }
                 }

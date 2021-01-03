@@ -5,6 +5,7 @@ import java.util.Stack;
 
 
 
+
 public class Scheda  implements Serializable{
     
     private static final long serialVersionUID = 1L;
@@ -12,6 +13,9 @@ public class Scheda  implements Serializable{
     private String Nome;
     private String Descrizione;
     private Stack <String> Storia;
+   
+
+
 
     
     public Scheda (String Nome)

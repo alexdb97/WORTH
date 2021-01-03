@@ -2,6 +2,7 @@
 import java.io.File;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -12,13 +13,14 @@ import java.nio.channels.SocketChannel;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Serializers.Serializers;
-
+import com.google.gson.*;
 
 
 
@@ -165,7 +167,8 @@ public class main {
                                          buff.put("401 Errore ".getBytes());
                                          System.out.println("401 Errore Parametri");
                                          key.attach(buff);
-                                         break;
+                                         key.interestOps(SelectionKey.OP_WRITE);
+                                        
                                     
                                 }
                                 else
@@ -187,7 +190,7 @@ public class main {
                                          ByteBuffer buff = ByteBuffer.allocate(1024);
                                          buff.put("201 Login".getBytes());
                                          key.attach(buff);
-               
+                                        key.interestOps(SelectionKey.OP_WRITE);
 
                                     }
                                 else
@@ -197,7 +200,8 @@ public class main {
                                         buff.put("401 Errore Login Sbaglato password".getBytes());
                                         System.out.println("401 Errore Login Sbaglato password");
                                         key.attach(buff);
-                                        break;
+                                        key.interestOps(SelectionKey.OP_WRITE);
+                                        
                                     }
                                 }
                                 else 
@@ -208,7 +212,8 @@ public class main {
                                     buff.put("401 Errore Login non esisti".getBytes());
                                     System.out.println("401 Errore Login non esisti");
                                     key.attach(buff);
-                                   break;
+                                    key.interestOps(SelectionKey.OP_WRITE);
+                                
                                 
                                 } 
                             }      
@@ -219,14 +224,13 @@ public class main {
                             //listprojects()
                             else if (nextok.equals("LISTPROJECTS"))
                             {
+                                Gson gson = new Gson();
                                 Set<String> listprog = LisProject.keySet();
-                                System.out.println(listprog.toString());
                                 ByteBuffer buff = ByteBuffer.allocate(1024);
-                                buff.put(("202 "+listprog.toString()).getBytes());
-
-                                
-                           
-                               key.attach(buff);
+                                buff.put(("202 "+gson.toJson(listprog)).getBytes());
+                                key.attach(buff);
+                                key.interestOps(SelectionKey.OP_WRITE);
+                              
                             }
                             //createProject()
                             else if(nextok.equals("CREATEPROJECT"))
@@ -251,6 +255,7 @@ public class main {
                                     String str = " 202 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
                                     buf.put(str.getBytes());
                                     key.attach(buf);
+                                    key.interestOps(SelectionKey.OP_WRITE);
                                     }
                                 else 
                                     {
@@ -259,7 +264,7 @@ public class main {
                                         String str = " 401 ERR PROGETTO GIA ESISTENTE";
                                         buf.put(str.getBytes());
                                         key.attach(buf);
-
+                                        key.interestOps(SelectionKey.OP_WRITE);
                                         break;
                                     }
                             }
@@ -302,6 +307,7 @@ public class main {
                         client.write(buffer);
                     
                     key.attach(ByteBuffer.allocate(1024));
+                    key.interestOps(SelectionKey.OP_READ);
 
 
                 }

@@ -44,7 +44,8 @@ public class InitialView {
     //Pannello lista progetti
     private JPanel panel3 = new JPanel();
     private JButton goBack_prog = new JButton ("Go Back");
-    //
+    
+    
    
    
     
@@ -186,14 +187,13 @@ public class InitialView {
    }
 
    //LISTPROJECTS
-   public void listProjects (String [] rest)
+   public void listProjects (String [] rest, String kindlist )
    {
        panel2.setVisible(false);
-       frame.setTitle("LISTPROJECTS");
+       frame.setTitle(kindlist);
        panel3.setLayout(null);
        JList list = new JList(rest);
        JScrollPane scrollPane = new JScrollPane(list);
-       
        scrollPane.setBounds(0, 50, 300, 300);
        goBack_prog.setBounds(0, 0,300,50);
        panel3.add(goBack_prog);
@@ -208,6 +208,7 @@ public class InitialView {
    {
        this.panel3.setVisible(value);
    }
+
 
 
 //ACTIONS HANDLER
@@ -231,6 +232,11 @@ public class InitialView {
     void ListProjects (ActionListener lis)
     {
         this.listProjects.addActionListener(lis);
+    }
+
+    void ListUsers (ActionListener lis)
+    {
+        this.listUsers.addActionListener(lis);
     }
 
     void GoBack (ActionListener lis)

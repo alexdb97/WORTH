@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 
-
 import java.nio.channels.SocketChannel;
 import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
@@ -18,11 +17,13 @@ public class ConnectionTask implements Runnable {
     InitialView view;
     ArrayList<Event> evlist;
     Model model;
+  
 
     public ConnectionTask(InitialView v, ArrayList<Event> list, Model m) {
         model = m;
         view = v;
         evlist = list;
+     
     }
 
     @Override
@@ -31,17 +32,18 @@ public class ConnectionTask implements Runnable {
         try {
 
             
-            //Ci siamo registrati al servizio di Callback
-            System.out.println("Cerco il server");
-            Registry registry = LocateRegistry.getRegistry(7070);
-            String name1 = "Server";
-            ServerInterface server = (ServerInterface) registry.lookup(name1);
-            // si registra la callback
-            System.out.println("Registering For Callback");
-            NotifyEventInterface callbackObj = new NotifyImpl();
-          
-            NotifyEventInterface stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj,0);
-            server.registerForCallback(stub);
+            
+                // Ci siamo registrati al servizio di Callback
+                System.out.println("Cerco il server");
+                Registry registry = LocateRegistry.getRegistry(7070);
+                String name1 = "Server";
+                ServerInterface server = (ServerInterface) registry.lookup(name1);
+                // si registra la callback
+                System.out.println("Registering For Callback");
+                NotifyEventInterface callbackObj = new NotifyImpl();
+                model.setcallback(callbackObj);
+                NotifyEventInterface stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj, 0);
+                server.registerForCallback(stub);
 
 
 
@@ -71,7 +73,18 @@ public class ConnectionTask implements Runnable {
                     if (ev.getParam2() != null)
                         buffer.put((" " + ev.getParam2()).getBytes());
 
-                        System.out.println(operation);
+                    if(operation.equals("LISTUSERS"))
+                        {
+                            
+                            //Converto l'ArrayList in  Array 
+                            String [] rest = new String [callbackObj.listUsers().size()];
+                            rest = callbackObj.listUsers().toArray(rest);
+                            view.listProjects(rest, "LISTUSERS");   
+                        }
+                    else
+                    {
+
+                    System.out.println(operation);
                     buffer.flip();
 
                     // RICHIESTA
@@ -98,6 +111,8 @@ public class ConnectionTask implements Runnable {
                         // significa che si è chiusa una connessione e quindi si esce dal thread
                         // Mi devo anche deregistrare dalla RMI callback
 
+
+
                         if (code == -1)
                             {
                                 server.unregisterForCallback(stub);
@@ -113,20 +128,21 @@ public class ConnectionTask implements Runnable {
                         }
 
                     }
+                 }
 
                 
                 }
-           
-
+                
+               
             }
 
         } catch (IOException ex) {
             ex.printStackTrace();
-        }
-        catch (NotBoundException e) {
-         
+        } catch (NotBoundException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+       
 
 
 

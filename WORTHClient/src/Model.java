@@ -7,14 +7,19 @@ public class Model {
     private RegisterInterface serverobj;
     private String Name;
     private ConcurrentHashMap <String,Boolean> LoginMap;
-
-
-    private int  num ;
+    public NotifyEventInterface callbackob;
+    private int  num;
 
     public Model(RegisterInterface so) {
         this.serverobj = so;
         LoginMap = new ConcurrentHashMap<String,Boolean>();
+        
     }
+
+ public void setcallback (NotifyEventInterface callbackob)
+  {
+      this.callbackob= callbackob;
+  }
 
    public int sendData (String name, String Password) throws RemoteException, NullPointerException, IOException
     {

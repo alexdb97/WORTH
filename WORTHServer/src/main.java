@@ -133,7 +133,6 @@ public class main {
                     //operazioni di lettura
                     SocketChannel client = (SocketChannel) key.channel();
                     ByteBuffer buffer =  (ByteBuffer) key.attachment();
-                   
                     int len = client.read(buffer);
 
                     if(len>=0)

@@ -2,7 +2,7 @@ import java.awt.event.ActionListener; // seems to be missing.
 
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -44,6 +44,8 @@ public class InitialView {
     //Pannello lista progetti
     private JPanel panel3 = new JPanel();
     private JButton goBack_prog = new JButton ("Go Back");
+    JList list = new JList();
+    JScrollPane scrollPane = new JScrollPane(list);
     
     
    
@@ -192,8 +194,7 @@ public class InitialView {
        panel2.setVisible(false);
        frame.setTitle(kindlist);
        panel3.setLayout(null);
-       JList list = new JList(rest);
-       JScrollPane scrollPane = new JScrollPane(list);
+       list.setListData(rest);
        scrollPane.setBounds(0, 50, 300, 300);
        goBack_prog.setBounds(0, 0,300,50);
        panel3.add(goBack_prog);
@@ -239,9 +240,17 @@ public class InitialView {
         this.listUsers.addActionListener(lis);
     }
 
+
+    void ListOnlineUsers (ActionListener lis)
+    {
+        this.listOnlineUsers.addActionListener(lis);
+    }
+
     void GoBack (ActionListener lis)
     {
+        list.removeAll();
         this.goBack_prog.addActionListener(lis);
+        
     }
 
     void error (String err)

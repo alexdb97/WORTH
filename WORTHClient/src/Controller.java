@@ -26,6 +26,7 @@ public class Controller {
         this.theview.GoBack(new goBack_prog());
         this.theview.logout(new Logout());
         this.theview.ListUsers(new ListUsers());
+        this.theview.ListOnlineUsers(new ListOnlineUsers());
 
     }
 
@@ -107,13 +108,49 @@ public class Controller {
     }
 
     // evento list users
-    // evento lista progetti
     class ListUsers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
+         
+          
            
-            Event event = new Event("LISTUSERS",null,null);
-            eventlist.add(event);    
+            String[] rest={};
+           try {
+              
+            rest = new String[themodel.callbackob.listUsers().size()];
+            rest = themodel.callbackob.listUsers().toArray(rest);
+            } catch (RemoteException e) {
+                
+                e.printStackTrace();
+            }
+            theview.listProjects(rest, "LISTUSERS");
+            
+               
+            
+        }
+
+    }
+
+      // evento list users
+      class ListOnlineUsers implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt) {
+         
+          
+           
+            String[] rest={};
+           try {
+              
+            rest = new String[themodel.callbackob.listOnlineUsers().size()];
+            rest = themodel.callbackob.listOnlineUsers().toArray(rest);
+            } catch (RemoteException e) {
+                
+                e.printStackTrace();
+            }
+            theview.listProjects(rest, "LISTONLINEUSERS");
+            
+               
+            
         }
 
     }

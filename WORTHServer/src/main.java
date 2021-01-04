@@ -154,6 +154,8 @@ public class main {
                                 ByteBuffer buff = ByteBuffer.allocate(1024);
                                 buff.put("300 Logout".getBytes());
                                 String name = KeysUserMap.get(key.toString());
+                                System.out.println();
+                                System.out.println(name);
                                 LoginMap.replace(name,true,false);
                                 server1.update(LoginMap);
                                 key.attach(buff);
@@ -326,21 +328,7 @@ public class main {
             }
 
         }
-
-        
-     
-
-       
-       
-        
-
-
-
-      
-        
-
-
-        }
+    }
         catch (IOException e)
         {
             e.printStackTrace();

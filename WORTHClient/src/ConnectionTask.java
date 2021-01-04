@@ -73,16 +73,7 @@ public class ConnectionTask implements Runnable {
                     if (ev.getParam2() != null)
                         buffer.put((" " + ev.getParam2()).getBytes());
 
-                    if(operation.equals("LISTUSERS"))
-                        {
-                            
-                            //Converto l'ArrayList in  Array 
-                            String [] rest = new String [callbackObj.listUsers().size()];
-                            rest = callbackObj.listUsers().toArray(rest);
-                            view.listProjects(rest, "LISTUSERS");   
-                        }
-                    else
-                    {
+                   
 
                     System.out.println(operation);
                     buffer.flip();
@@ -131,7 +122,7 @@ public class ConnectionTask implements Runnable {
                  }
 
                 
-                }
+                
                 
                
             }
@@ -139,7 +130,7 @@ public class ConnectionTask implements Runnable {
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (NotBoundException e) {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
        

@@ -95,6 +95,7 @@ public class InitialView {
                         System.out.println(lis);
                      try
                      {
+                     //Aspetto 1/2 secondo per dare il tempo di mandare il messaggio di QUI
                      Thread.currentThread().sleep(500);
                      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                      }
@@ -215,16 +216,21 @@ public class InitialView {
        panel2.setVisible(false);
        frame.setTitle("CREATE PROJECT");
        panel4.setLayout(null);
-       progetto.setBounds(20,400,200,20);
-       create.setBounds(220, 400, 50, 50);
+       progetto.setBounds(20,100,100,20);
+       create.setBounds(150,100,80, 20);
        goBack_prog.setBounds(0, 0,300,50);
-       panel.add(goBack_prog);
+       panel4.add(goBack_prog);
        panel4.add(create);
        panel4.add(progetto);
        frame.add(panel4);
        panel4.setVisible(true);
        
        
+   }
+
+   public void setvisiblepanel4(boolean value)
+   {
+       this.panel4.setVisible(value);
    }
 
    public void setvisiblepanel3( boolean value)

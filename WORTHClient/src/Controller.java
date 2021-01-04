@@ -178,6 +178,7 @@ public class Controller {
         {
            
             theview.setvisiblepanel3(false);
+            theview.setvisiblepanel4(false);
             theview.setvisiblepanel2(true);
 
         }

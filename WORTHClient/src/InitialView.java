@@ -41,11 +41,16 @@ public class InitialView {
     private JButton logout = new JButton("logout");
      
     JPanel panel2 = new JPanel();
-    //Pannello lista progetti
+    //Pannello lista 
     private JPanel panel3 = new JPanel();
     private JButton goBack_prog = new JButton ("Go Back");
-    JList list = new JList();
-    JScrollPane scrollPane = new JScrollPane(list);
+    private JList list = new JList();
+    private JScrollPane scrollPane = new JScrollPane(list);
+
+    //Pannello crea Progetti
+    private JPanel panel4 = new JPanel();
+    private JTextField progetto = new JTextField ();
+    private JButton create = new JButton("create");
     
     
    
@@ -205,6 +210,23 @@ public class InitialView {
    
    }
 
+   public void CreateProject ()
+   {
+       panel2.setVisible(false);
+       frame.setTitle("CREATE PROJECT");
+       panel4.setLayout(null);
+       progetto.setBounds(20,400,200,20);
+       create.setBounds(220, 400, 50, 50);
+       goBack_prog.setBounds(0, 0,300,50);
+       panel.add(goBack_prog);
+       panel4.add(create);
+       panel4.add(progetto);
+       frame.add(panel4);
+       panel4.setVisible(true);
+       
+       
+   }
+
    public void setvisiblepanel3( boolean value)
    {
        this.panel3.setVisible(value);
@@ -246,9 +268,16 @@ public class InitialView {
         this.listOnlineUsers.addActionListener(lis);
     }
 
+    void PrepareProject (ActionListener lis)
+    {
+        this.createproject.addActionListener(lis);
+    }
+
+
     void GoBack (ActionListener lis)
     {
-        list.removeAll();
+
+        //list.removeAll();
         this.goBack_prog.addActionListener(lis);
         
     }

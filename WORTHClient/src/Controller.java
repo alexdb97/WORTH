@@ -27,6 +27,7 @@ public class Controller {
         this.theview.logout(new Logout());
         this.theview.ListUsers(new ListUsers());
         this.theview.ListOnlineUsers(new ListOnlineUsers());
+        this.theview.PrepareProject(new PrepareProject());
 
     }
 
@@ -151,6 +152,17 @@ public class Controller {
             
                
             
+        }
+
+    }
+
+    // evento lista progetti
+    class PrepareProject implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt) {
+           
+            theview.CreateProject();
+
         }
 
     }

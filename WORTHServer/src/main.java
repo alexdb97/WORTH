@@ -133,6 +133,7 @@ public class main {
                     //operazioni di lettura
                     SocketChannel client = (SocketChannel) key.channel();
                     ByteBuffer buffer =  (ByteBuffer) key.attachment();
+
                     int len = client.read(buffer);
 
                     if(len>=0)
@@ -154,6 +155,7 @@ public class main {
                                 ByteBuffer buff = ByteBuffer.allocate(1024);
                                 buff.put("300 Logout".getBytes());
                                 String name = KeysUserMap.get(key.toString());
+                                KeysUserMap.remove(key.toString());
                                 System.out.println();
                                 System.out.println(name);
                                 LoginMap.replace(name,true,false);
@@ -200,6 +202,7 @@ public class main {
                                         LoginMap.replace(name,false,true);
                                         KeysUserMap.putIfAbsent(key.toString(),name);
                                         server1.update(LoginMap);
+                                        System.out.println(KeysUserMap);
                                         //SEGNALO IL CORRETTO LOGIN
                                          ByteBuffer buff = ByteBuffer.allocate(1024);
                                          buff.put("201 Login".getBytes());
@@ -211,7 +214,7 @@ public class main {
                                     {
                                         //ERRORE NEL LOGIN 
                                         ByteBuffer buff = ByteBuffer.allocate(1024);
-                                        buff.put("401 Errore Login Sbaglato password".getBytes());
+                                        buff.put("401 Errore Login Password o Utente gia' loggato".getBytes());
                                         System.out.println("401 Errore Login Password o Utente gia' loggato");
                                         key.attach(buff);
                                         key.interestOps(SelectionKey.OP_WRITE);
@@ -275,7 +278,7 @@ public class main {
                                     {
                                         //ERRORE PROGETTO GIA ESISTENTE
                                         ByteBuffer buf = ByteBuffer.allocate(1024);
-                                        String str = " 401 ERR PROGETTO GIA ESISTENTE";
+                                        String str = " 402 ERR PROGETTO GIA' ESISTENTE";
                                         buf.put(str.getBytes());
                                         key.attach(buf);
                                         key.interestOps(SelectionKey.OP_WRITE);
@@ -293,16 +296,13 @@ public class main {
                             //changeScheda from to
                             //shocards 
                             //cardhistory projectname card
-                            //cancelproject name
-                            
-                                
-                            
+                            //cancelproject name  
 
                     }
                     //Chiusura improvvisa della connessione nella read restituisce -1
                     else 
                     {
-                        key.channel().close();
+                        //key.channel().close();
                     }
                     
                     

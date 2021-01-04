@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import com.google.gson.*;
 
@@ -32,8 +33,8 @@ public class GestioneRisposta {
                     {
                         String rest = strtok.nextToken("");
                         Gson gson = new Gson();
-                        System.out.println(gson.fromJson(rest, String[].class));
-                        view.listProjects(gson.fromJson(rest,String[].class),"LISTPROJECTS");
+                        System.out.println(rest);
+                        view.listProjects(gson.fromJson(rest, String[].class) , "LISTPROJECTS");
                         return 1;
 
                         
@@ -50,6 +51,15 @@ public class GestioneRisposta {
                         //Errore Progetto gia esistente
                         view.error(str);
                         return 1;
+                    }
+                    else if(code.equals("203"))
+                    {
+                        //Progetto creato con successo
+                        System.out.println(str);
+                        view.setvisiblepanel4(false);
+                        view.InsideAProject("CIAONE");
+                        return 1;
+
                     }
                 }
             

@@ -11,6 +11,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet.ColorAttribute;
+
+
 
 import java.awt.Color;
 import java.awt.event.*;
@@ -34,7 +37,7 @@ public class InitialView {
     private JButton Login = new JButton("Login");
     //worthmenu
     private JLabel welcome = new JLabel("Welcome");
-    private JButton createproject = new JButton("Create a new Project");
+    private JButton createproject = new JButton("Create/Enter Project");
     private JButton listUsers = new JButton("Get list of Users");
     private JButton listOnlineUsers = new JButton("Get list of Users (online)");
     private JButton listProjects = new JButton("Get list of projects");
@@ -51,6 +54,20 @@ public class InitialView {
     private JPanel panel4 = new JPanel();
     private JTextField progetto = new JTextField ();
     private JButton create = new JButton("create");
+    private JButton enter = new JButton("enter");
+    private JLabel desc = new JLabel("Insert project name");
+
+    //Pannello InsideProject Comand Bar
+    private JPanel panel5 = new JPanel ();
+    private JButton CancelProject = new JButton ("Cancel Project");
+    private JButton AddCard = new JButton("Add Card");
+    private JButton ShowCard = new JButton("Show Card");
+    private JButton MoveCard = new JButton("Move Card");
+    private JButton ShowCardHistory = new JButton ("Show Card History");
+
+
+    //Vediamo dopo i vari bottoni
+    private JPanel panel6 = new JPanel ();
     
     
    
@@ -135,11 +152,6 @@ public class InitialView {
         panel.add(un);
         panel.add(ps);
 
-
-      
-
-
-
         frame.setVisible(true);
     }
 
@@ -175,7 +187,6 @@ public class InitialView {
    public void setvisiblepanel2 (boolean value)
    {
     
-       
          //Setting WorthMenu
         frame.setTitle("WORTH MENU");
         //set layout to null
@@ -203,16 +214,23 @@ public class InitialView {
    //LISTPROJECTS
    public void listProjects (String [] rest, String kindlist )
    {
+     
+       for(int i=0;i<rest.length;i++)
+        System.out.println(rest[i]);
        panel2.setVisible(false);
        frame.setTitle(kindlist);
        panel3.setLayout(null);
+       panel3.setBounds(0, 0,300,300);
        list.setListData(rest);
-       scrollPane.setBounds(0, 50, 300, 300);
+       scrollPane.setBounds(0,50,285,210);
+       scrollPane.setVisible(true);
+    
        goBack_prog.setBounds(0, 0,300,50);
        panel3.add(goBack_prog);
        panel3.add(scrollPane);
        panel3.setVisible(true);
        frame.add(panel3);
+     
        frame.setVisible(true);
    
    }
@@ -220,18 +238,45 @@ public class InitialView {
    public void CreateProject ()
    {
        panel2.setVisible(false);
-       frame.setTitle("CREATE PROJECT");
+       frame.setTitle("CREATE/ENTER PROJECT");
        panel4.setLayout(null);
-       progetto.setBounds(20,100,100,20);
+       progetto.setBounds(20,120,100,20);
        create.setBounds(150,100,80, 20);
+       enter.setBounds(150,140,80,20);
+       desc.setBounds(100,70,150,20);
        goBack_prog.setBounds(0, 0,300,50);
+       panel4.add(desc);
+       panel4.add(enter);
        panel4.add(goBack_prog);
        panel4.add(create);
        panel4.add(progetto);
        frame.add(panel4);
-       panel4.setVisible(true);
-       
-       
+       panel4.setVisible(true);    
+   }
+
+   public void InsideAProject (String Title)
+   {
+        frame.setSize(890, 600);
+        frame.setTitle("Project Name");
+        panel5.setLayout(null);
+        panel5.setBounds(0,0,890,200);
+        goBack_prog.setBounds(0, 0, 890,70);
+        CancelProject.setBounds(20,100,150,50);
+        AddCard.setBounds(190,100,150,50);
+        ShowCard.setBounds(360,100,150,50);
+        MoveCard.setBounds(530,100,150,50);
+        ShowCardHistory.setBounds(700,100,150,50);
+        panel5.setBackground(Color.CYAN);
+        panel5.add(goBack_prog);
+        panel5.add(AddCard);
+        panel5.add(ShowCard);
+        panel5.add(MoveCard);
+        panel5.add(ShowCardHistory);
+        panel5.add(CancelProject);
+        panel5.setVisible(true);
+        frame.setVisible(true);
+        frame.add(panel5);
+
    }
 
    public void setvisiblepanel4(boolean value)

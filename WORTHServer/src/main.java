@@ -251,7 +251,9 @@ public class main {
                                 Gson gson = new Gson();
                                 Set<String> listprog = LisProject.keySet();
                                 ByteBuffer buff = ByteBuffer.allocate(1024);
-                                buff.put(("202 "+gson.toJson(listprog)).getBytes());
+                                String send = gson.toJson(listprog);
+                                buff.put( ("202 "+send).getBytes());
+                                System.out.println(("202 "+gson.toJson(listprog)));
                                 key.attach(buff);
                                 key.interestOps(SelectionKey.OP_WRITE);
                               
@@ -259,15 +261,10 @@ public class main {
                             //createProject()
                             else if(nextok.equals("CREATEPROJECT"))
                             {
-                                if(strtok.countTokens()!=1)
-                                {
-                                    //errore nel passaggio dei parametri errore
-                                    // non chiudo la connessione però
-                                    break;
-                                }
+                                
 
-                                String projectname = strtok.nextToken();
-                          
+                                String projectname = strtok.nextToken("");
+                                System.out.println(projectname);
                               
 
                                 if(LisProject.containsKey(projectname)==false)
@@ -276,7 +273,7 @@ public class main {
                                     LisProject.put(projectname, p);
 
                                     ByteBuffer buf = ByteBuffer.allocate(1024);
-                                    String str = " 202 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
+                                    String str = " 203 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
                                     buf.put(str.getBytes());
                                     key.attach(buf);
                                     key.interestOps(SelectionKey.OP_WRITE);

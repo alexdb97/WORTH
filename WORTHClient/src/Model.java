@@ -8,6 +8,7 @@ public class Model {
     private String Name;
     private ConcurrentHashMap <String,Boolean> LoginMap;
     public NotifyEventInterface callbackob;
+    private String CurrentProject;
     private int  num;
 
     public Model(RegisterInterface so) {

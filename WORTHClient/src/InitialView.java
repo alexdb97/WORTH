@@ -95,7 +95,7 @@ public class InitialView {
                         System.out.println(lis);
                      try
                      {
-                     Thread.currentThread().sleep(50);
+                     Thread.currentThread().sleep(500);
                      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                      }
                      catch(InterruptedException ex)

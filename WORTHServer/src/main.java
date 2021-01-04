@@ -13,6 +13,7 @@ import java.nio.channels.SocketChannel;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -154,12 +155,18 @@ public class main {
                             {
                                 ByteBuffer buff = ByteBuffer.allocate(1024);
                                 buff.put("300 Logout".getBytes());
-                                String name = KeysUserMap.get(key.toString());
-                                KeysUserMap.remove(key.toString());
+                                
+                                System.out.print(FilterKey.filter(key.toString()));
+                                String namelogout = KeysUserMap.get(FilterKey.filter(key.toString()));
+                                KeysUserMap.remove(FilterKey.filter(key.toString()));
+                                
                                 System.out.println();
-                                System.out.println(name);
-                                LoginMap.replace(name,true,false);
+                                System.out.println(KeysUserMap);
+                                //System.out.println(LoginMap);
+                                System.out.println(namelogout);
+                                LoginMap.replace(namelogout,true,false);
                                 server1.update(LoginMap);
+                               
                                 key.attach(buff);
                                 key.interestOps(SelectionKey.OP_WRITE);
 
@@ -200,7 +207,7 @@ public class main {
                                         //LOGIN AVVENUTO CON SUCCESSO 
                                         System.out.println("SEI DENTRO AMICO");
                                         LoginMap.replace(name,false,true);
-                                        KeysUserMap.putIfAbsent(key.toString(),name);
+                                        KeysUserMap.putIfAbsent(FilterKey.filter(key.toString()),name);
                                         server1.update(LoginMap);
                                         System.out.println(KeysUserMap);
                                         //SEGNALO IL CORRETTO LOGIN
@@ -302,7 +309,7 @@ public class main {
                     //Chiusura improvvisa della connessione nella read restituisce -1
                     else 
                     {
-                        //key.channel().close();
+                        key.channel().close();
                     }
                     
                     

@@ -152,8 +152,14 @@ public class InitialView {
 
     public String getPassword ()
     {
+
         return ps.getText();
 
+    }
+
+    public String getProgetto ()
+    {
+        return progetto.getText();
     }
 
 
@@ -179,8 +185,8 @@ public class InitialView {
         panel2.add(welcome);
         createproject.setBounds(40, 90, 220, 20);
         listUsers.setBounds(40,120,220, 20);
-        listOnlineUsers.setBounds(40, 160, 220,20);
-        listProjects.setBounds(40,200,220,20);
+        listOnlineUsers.setBounds(40, 150, 220,20);
+        listProjects.setBounds(40,180,220,20);
         logout.setBackground(Color.BLUE);
         logout.setForeground(Color.WHITE);
         logout.setBounds(40,10,220,20);
@@ -277,6 +283,11 @@ public class InitialView {
     void PrepareProject (ActionListener lis)
     {
         this.createproject.addActionListener(lis);
+    }
+
+    void EffectiveCreate (ActionListener lis)
+    {
+        this.create.addActionListener(lis);
     }
 
 

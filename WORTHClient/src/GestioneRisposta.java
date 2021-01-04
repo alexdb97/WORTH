@@ -45,6 +45,12 @@ public class GestioneRisposta {
                         so.close();
                         return -1;
                     }
+                    else if (code.equals("402"))
+                    {
+                        //Errore Progetto gia esistente
+                        view.error(str);
+                        return 1;
+                    }
                 }
             
            return 0;

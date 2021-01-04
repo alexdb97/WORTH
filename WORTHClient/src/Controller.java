@@ -28,6 +28,7 @@ public class Controller {
         this.theview.ListUsers(new ListUsers());
         this.theview.ListOnlineUsers(new ListOnlineUsers());
         this.theview.PrepareProject(new PrepareProject());
+        this.theview.EffectiveCreate(new EffectiveCreate());
 
     }
 
@@ -87,7 +88,7 @@ public class Controller {
     }
 
     // evento logout
-    // evento lista progetti
+  
     class Logout implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -132,7 +133,7 @@ public class Controller {
 
     }
 
-      // evento list users
+      // evento list online users
       class ListOnlineUsers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -156,7 +157,7 @@ public class Controller {
 
     }
 
-    // evento lista progetti
+    //Prepara alla creazione del Progetto
     class PrepareProject implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -167,6 +168,20 @@ public class Controller {
 
     }
 
+    //Evento creazione effettiva del progetto
+    class EffectiveCreate implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+           
+           String progetto;
+
+           progetto = theview.getProgetto();
+           Event evento = new Event("CREATEPROJECT", progetto, null);
+           eventlist.add(evento);
+        }
+
+    }
     
     
 

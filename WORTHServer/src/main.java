@@ -229,17 +229,10 @@ public class main {
                                 if(strtok.hasMoreTokens())
                                     projectname = projectname + strtok.nextToken("");
                                 }
-                                else
-                                {
+                                else{
                                      //ERRORE PARAMETRI
-                                     ByteBuffer buf = ByteBuffer.allocate(1024);
-                                     String str = " 402 ERRORE PASSAGGIO PARAMETRI";
-                                     buf.put(str.getBytes());
-                                     key.attach(buf);
-                                     key.interestOps(SelectionKey.OP_WRITE);
-                                     
+                                     sendtoclient(402,"Errore nel passaggio dei parametri", key);
                                      break;
-
                                 }
 
                                 System.out.println(projectname);
@@ -250,25 +243,21 @@ public class main {
                                     Progetto p = new Progetto(projectname);
                                     LisProject.put(projectname, p);
                                     //Aggiungo il proprietario come mebro
+                                    System.out.println(KeysUserMap);
+                                   
                                     String name = KeysUserMap.get(FilterKey.filter(key.toString()));
-                                    p.AddMember(name);
-                                    ByteBuffer buf = ByteBuffer.allocate(1024);
-                                    String str = " 203 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
-                                    buf.put(str.getBytes());
-                                    key.attach(buf);
-                                    key.interestOps(SelectionKey.OP_WRITE);
+                                    System.out.println(name);
+                                    p.AddMember(name,true);
+                                    sendtoclient(203,"Ok Operazione effettuata con successo", key);
                                     }
                                 else 
                                     {
                                         //ERRORE PROGETTO GIA ESISTENTE
-                                        ByteBuffer buf = ByteBuffer.allocate(1024);
-                                        String str = " 402 ERR PROGETTO GIA' ESISTENTE";
-                                        buf.put(str.getBytes());
-                                        key.attach(buf);
-                                        key.interestOps(SelectionKey.OP_WRITE);
+                                        sendtoclient(402,"Errore Progetto gia' esistente ", key);
                                         break;
                                     }
                             }
+                            //ShowMembers()
                             else if(nextok.equals("SHOWMEMBERS"))
                             {
                                 
@@ -293,30 +282,19 @@ public class main {
                                     if(p.ContainsMember(KeysUserMap.get(FilterKey.filter(key.toString()))))
                                     {
                                     p.RemoveProgetto();
-                                    ByteBuffer buf = ByteBuffer.allocate(1024);
-                                    String str = " 204 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
-                                    buf.put(str.getBytes());
-                                    key.attach(buf);
-                                    key.interestOps(SelectionKey.OP_WRITE);
+                                    sendtoclient(204,"OK operazione effettuata con successo", key);
                                     }
                                     else
                                     {
-                                        ByteBuffer buf = ByteBuffer.allocate(1024);
-                                        String str = " 407 NON MEMBERO";
-                                        buf.put(str.getBytes());
-                                        key.attach(buf);
-                                        key.interestOps(SelectionKey.OP_WRITE);
+                                        sendtoclient(407,"Non sei membro", key);
 
                                     }
                                 
                                 }
                                 else
                                 {
-                                    ByteBuffer buf = ByteBuffer.allocate(1024);
-                                    String str = " 440 PROGETTO GIA STATO ELIMINATO";
-                                    buf.put(str.getBytes());
-                                    key.attach(buf);
-                                    key.interestOps(SelectionKey.OP_WRITE);
+                                   
+                                    sendtoclient(440,"Il Progetto è stato eliminato", key);
 
                                 }
 

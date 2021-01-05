@@ -52,6 +52,7 @@ public class Progetto implements Serializable {
             this.InProgeress = new ArrayList<Scheda>();
             this.ToBeRevised = new ArrayList<Scheda>();
             this.Done= new ArrayList<Scheda>();
+            this.Members = new ArrayList <String> ();
 
       
             String dirpath = this.MAIN_DIR_PATH+"/"+name;
@@ -83,6 +84,8 @@ public class Progetto implements Serializable {
 
                 }       
             }
+
+          
         }
 
 
@@ -232,12 +235,14 @@ public class Progetto implements Serializable {
         }
 
         
-        public  synchronized int AddMember (String Name) throws NullPointerException, IllegalArgumentException
+        public  synchronized int AddMember (String Name,boolean fondatore) throws NullPointerException, IllegalArgumentException
         {
             if(Name==null)
                 throw new NullPointerException();
-            if(this.Members.contains(Name))
-                throw new IllegalArgumentException("Utente gia registrato");
+
+            if(fondatore==false)
+                if(this.Members.contains(Name))
+                    throw new IllegalArgumentException("Utente gia registrato");
             
             this.Members.add(Name);
             return 1;
@@ -255,6 +260,17 @@ public class Progetto implements Serializable {
                 return false;
         }
 
+        //funzione che serve per la delete del progetto ma la faro dopo
+        public synchronized boolean CheckCardsForDelete ()
+        {
+            if(ToDo.isEmpty()&&InProgeress.isEmpty()&&ToBeRevised.isEmpty())
+                return true;
+            else
+                return false;
+        }
+
+        
+
 
         private static void deleteFolder(File file){
 
@@ -268,6 +284,8 @@ public class Progetto implements Serializable {
             }
             file.delete();
          }
+
+         
 
         
        

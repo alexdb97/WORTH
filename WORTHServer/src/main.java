@@ -248,7 +248,7 @@ public class main {
                                     String name = KeysUserMap.get(FilterKey.filter(key.toString()));
                                     System.out.println(name);
                                     p.AddMember(name,true);
-                                    sendtoclient(203,"Ok Operazione effettuata con successo", key);
+                                    sendtoclient(203,projectname,key);
                                     }
                                 else 
                                     {
@@ -272,7 +272,7 @@ public class main {
                                     if(LisProject.containsKey(projectname)){
                                         Progetto pi = LisProject.get(projectname);
                                             if(pi.ContainsMember( KeysUserMap.get(FilterKey.filter(key.toString())))){
-                                                sendtoclient(205,"Entrato con successo", key);
+                                                sendtoclient(205,projectname,key);
                                             }
                                             else{
                                                 //NOTMEMBER
@@ -295,6 +295,22 @@ public class main {
                             //ShowMembers()
                             else if(nextok.equals("SHOWMEMBERS"))
                             {
+
+                                String projectname=""; 
+
+                                if(strtok.hasMoreElements())
+                                {   
+                                    projectname = strtok.nextToken();
+                                    if(strtok.hasMoreTokens())
+                                    projectname = projectname + strtok.nextToken("");
+                                }
+
+                                //Gia ho controllato che fosse membro e che il progetto esista quindi vado
+                                Gson gson = new Gson ();
+                                Progetto pi = LisProject.get(projectname);
+                                String response =gson.toJson(pi.GetMembers());
+                                System.out.println(response);
+                                sendtoclient(206, response, key);
                                 
                             }
                             else if(nextok.equals("CANCELPROJECT"))
@@ -317,6 +333,7 @@ public class main {
                                     if(p.ContainsMember(KeysUserMap.get(FilterKey.filter(key.toString()))))
                                     {
                                     p.RemoveProgetto();
+                                    LisProject.remove(projectname);
                                     sendtoclient(204,"OK operazione effettuata con successo", key);
                                     }
                                     else
@@ -329,7 +346,7 @@ public class main {
                                 else
                                 {
                                    
-                                    sendtoclient(440,"Il Progetto è stato eliminato", key);
+                                    sendtoclient(440,"Il Progetto non esiste", key);
 
                                 }
 

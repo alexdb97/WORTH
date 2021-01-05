@@ -10,7 +10,7 @@ public class Model {
     public NotifyEventInterface callbackob;
     private String CurrentProject;
     private String ProjectName;
-    private String [] ProjectBuffer=null;
+  
     
 
     public Model(RegisterInterface so) {
@@ -28,34 +28,6 @@ public class Model {
     public String getProjectName()
     {
         return this.ProjectName;
-    }
-
-
-    public int ContainsProject (String word)
-    {
-        if(ProjectBuffer!=null)
-        {
-        for (String str : ProjectBuffer) {
-            if(str.equals(word))
-            {
-                return 1;
-            }
-            
-        }
-        return 0;
-     }
-     else
-     {
-
-        return 0;
-     }
-
-    }
-
-
-    public void setProjectBuffer (String [] array)
-    {
-        this.ProjectBuffer = array;
     }
 
 

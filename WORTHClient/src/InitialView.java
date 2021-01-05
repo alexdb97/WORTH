@@ -298,20 +298,20 @@ public class InitialView {
    public void AddCard ()
    {
 
-    panel5.setBackground(Color.WHITE);
+    panel5.setBackground(Color.LIGHT_GRAY);
     panel8.setVisible(false);
     panel6.setVisible(false);
     panel7.setBounds(0,200,1500,400);
     panel7.setLayout(null);
     panel7.setBackground(Color.GRAY);
-    CardName.setBounds(100,220,200,50);
+    CardName.setBounds(480,220,200,50);
     CardName.setFont(new Font("Serif", Font.BOLD, 25));
-    DescriptionLabel.setBounds(100,300,200,50);
+    DescriptionLabel.setBounds(480,300,200,50);
     DescriptionLabel.setFont(new Font("Serif", Font.BOLD, 25));
-    NewScheda.setBounds(320,220,200,30);
-    Description.setBounds(320,300,200,200);
+    NewScheda.setBounds(700,220,200,30);
+    Description.setBounds(700,300,200,200);
     Description.setLineWrap(true);
-    AddEffectiveCard.setBounds(700,300,100,50);
+    AddEffectiveCard.setBounds(920,300,100,50);
     panel7.add(DescriptionLabel);
     panel7.add(Description);
     panel7.add(NewScheda);
@@ -324,14 +324,16 @@ public class InitialView {
   
     
    //panel8   ShowlIST
-   public void showList ()
+   public void showList (String [] lista)
    {
+      
        panel5.setBackground(Color.GRAY);
        panel6.setVisible(false);
        panel7.setVisible(false);
        panel8.setVisible(true);
        panel8.setLayout(null);
        panel8.setBounds(0,200,1500,400);
+       list3.setListData(lista);
        panel8.setBackground(Color.LIGHT_GRAY);
        pane2.setBounds(100,300,1000, 200);
        panel8.add(pane2);
@@ -349,13 +351,6 @@ public class InitialView {
    }
 
    
- 
-  
-
- 
-  
-   
-
 
    public void setProjectName(String name)
    {

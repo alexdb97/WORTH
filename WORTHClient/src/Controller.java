@@ -1,20 +1,19 @@
 import java.awt.event.ActionListener; // seems to be missing.
-import java.io.IOException;
+
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
+
 import java.nio.channels.SocketChannel;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import com.google.gson.Gson;
+
 
 import java.awt.event.*;
 
@@ -288,6 +287,7 @@ public class Controller {
            String progetto;
 
            progetto = theview.getProgetto();
+           themodel.SetProjectName(progetto);
            String request = "ENTER "+progetto;
            int code = RequestResponse.requestresponse(client, request, theview, themodel);
      
@@ -345,7 +345,8 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt)
         {
-          theview.showList();
+        
+          
 
         }
     }
@@ -355,7 +356,9 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt)
         {
-          theview.showList();
+            String request = "SHOWMEMBERS "+themodel.getProjectName();
+            RequestResponse.requestresponse(client,request, theview, themodel);
+           
 
         }
     }
@@ -365,7 +368,7 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt)
         {
-          theview.showList();
+        
 
         }
     }

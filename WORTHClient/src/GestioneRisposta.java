@@ -35,7 +35,7 @@ public class GestioneRisposta {
                         Gson gson = new Gson();
                         System.out.println(rest);
                         view.listProjects(gson.fromJson(rest, String[].class) , "LISTPROJECTS");
-                        model.setProjectBuffer(gson.fromJson(rest, String[].class));
+                   
                         return 1;
 
                         
@@ -58,7 +58,7 @@ public class GestioneRisposta {
                         //Progetto creato con successo
                         System.out.println(str);
                         view.setvisiblepanel4(false);
-                        view.InsideAProject("ProjectName");
+                        view.InsideAProject(strtok.nextToken(""));
                         return 1;
 
                     }
@@ -68,16 +68,26 @@ public class GestioneRisposta {
                         view.goback(false);
                         view.setFramedim(300, 300);
                         view.setvisiblepanel2(true);
-                        model.setProjectBuffer(null);
+                     
                         return 1;
                     }
                     else if (code.equals("205"))
                     {
                         //ENTRATO
                         view.setvisiblepanel4(false);
-                        view.InsideAProject("Successo");
+                        view.InsideAProject(strtok.nextToken(""));
                         return 1;
 
+                    }
+                    else if(code.equals("206"))
+                    {
+                        //Lista Membri
+                        String rest = strtok.nextToken("");
+                        Gson gson = new Gson();
+                        System.out.println(rest);
+                        view.showList(gson.fromJson(rest, String[].class));
+                        return 1;
+                       
                     }
                     else if(code.equals("440"))
                     {

@@ -29,6 +29,7 @@ public class Progetto implements Serializable {
         private ArrayList <Scheda> InProgeress;
         private ArrayList <Scheda> ToBeRevised;
         private ArrayList <Scheda> Done;
+
         private ArrayList <String> Members;
        
 
@@ -52,7 +53,7 @@ public class Progetto implements Serializable {
             this.InProgeress = new ArrayList<Scheda>();
             this.ToBeRevised = new ArrayList<Scheda>();
             this.Done= new ArrayList<Scheda>();
-            this.Members = new ArrayList <String> ();
+            
 
       
             String dirpath = this.MAIN_DIR_PATH+"/"+name;
@@ -61,13 +62,19 @@ public class Progetto implements Serializable {
             File progdir = new File(dirpath);
             //Controllare se esiste e crearla in caso negativo 
             if(progdir.exists()==false)
+            {
                 progdir.mkdir();
+                this.Members = new ArrayList<String>();
+            }
             else{
                 //SIGNIFICA CHE GIA ESISTE E QUINDI MI PRENDO I FILE DA DENTRO
                 String [] list = progdir.list();
                
                 for (String str : list) {
+
                      String path = dirpath+"/"+str;
+                     if(!path.equals(dirpath+"/Members"))
+                     {
                      
                    Scheda s = (Scheda) Serializers.read(path);
                    String cases = s.GetHistory().peek();
@@ -80,9 +87,15 @@ public class Progetto implements Serializable {
                         ToBeRevised.add(s);
                    else if (cases.equals("DONE"))
                         Done.add(s);
-                    else throw new IllegalArgumentException();       
+                    else throw new IllegalArgumentException(); 
+                     }
+                    
+            
 
-                }       
+                }
+
+            String path1 = this.MAIN_DIR_PATH+"/"+name+"/Members";
+            this.Members= (ArrayList <String>) Serializers.read(path1);     
             }
 
           
@@ -235,7 +248,8 @@ public class Progetto implements Serializable {
         }
 
         
-        public  synchronized int AddMember (String Name,boolean fondatore) throws NullPointerException, IllegalArgumentException
+        public  synchronized int AddMember (String Name,boolean fondatore) throws NullPointerException, IllegalArgumentException,
+                IOException
         {
             if(Name==null)
                 throw new NullPointerException();
@@ -245,6 +259,9 @@ public class Progetto implements Serializable {
                     throw new IllegalArgumentException("Utente gia registrato");
             
             this.Members.add(Name);
+            String path = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/Members";
+            Serializers.write(this.Members,path);
+
             return 1;
 
         }
@@ -267,6 +284,12 @@ public class Progetto implements Serializable {
                 return true;
             else
                 return false;
+        }
+
+        //funzione per prendere i membri di un progetto
+        public synchronized ArrayList <String>  GetMembers ()
+        {
+            return this.Members;
         }
 
         

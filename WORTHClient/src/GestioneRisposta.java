@@ -6,7 +6,7 @@ import com.google.gson.*;
 
 public class GestioneRisposta {
 
-    public static int ResponseHandler(String str, InitialView view, SocketChannel so) throws IOException
+    public static int ResponseHandler(String str, InitialView view, Model model,SocketChannel so) throws IOException
     {
         StringTokenizer strtok = new StringTokenizer(str," ");
         
@@ -35,6 +35,7 @@ public class GestioneRisposta {
                         Gson gson = new Gson();
                         System.out.println(rest);
                         view.listProjects(gson.fromJson(rest, String[].class) , "LISTPROJECTS");
+                        model.setProjectBuffer(gson.fromJson(rest, String[].class));
                         return 1;
 
                         

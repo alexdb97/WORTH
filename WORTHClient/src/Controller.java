@@ -1,11 +1,17 @@
 import java.awt.event.ActionListener; // seems to be missing.
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.SocketChannel;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-import com.google.gson.Gson;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+
 
 import java.awt.event.*;
 
@@ -13,13 +19,66 @@ public class Controller {
 
     private InitialView theview;
     private Model themodel;
-    Thread t;
-    private ArrayList<Event> eventlist;
+    // Thread t;
+    private SocketAddress address = new InetSocketAddress("localhost", 6060);
+    SocketChannel client;
+    ServerInterface server;
 
-    public Controller(InitialView view, Model mod, ArrayList<Event> list) {
+    // RMICALLBACK
+    Registry registry;
+    String name1 = "Server";
+    NotifyEventInterface callbackObj;
+    NotifyEventInterface stub;
+
+
+
+    public Controller(InitialView view, Model mod) {
         this.themodel = mod;
         this.theview = view;
-        this.eventlist = list;
+       
+
+
+
+
+        // Routine per chiudere bene la connessione
+        theview.frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+
+                JFrame frame = (JFrame) e.getSource();
+
+                int result = JOptionPane.showConfirmDialog(frame, "Do you want to exit?", "Exit",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (result == JOptionPane.YES_OPTION) {
+
+                if(client!=null)
+                    if (client.isConnected())
+                    {
+                       RequestResponse.requestresponse(client,"LOGOUT", theview, themodel);
+                            try {
+                                server.unregisterForCallback(stub);
+                            } catch (RemoteException e1) {
+                                // TODO Auto-generated catch block
+                                e1.printStackTrace();
+                            }
+                    }
+                            
+                      
+                     try
+                     {
+                     //Aspetto 1/2 secondo per dare il tempo di mandare il messaggio di QUI
+                     Thread.currentThread().sleep(1000);
+                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                     }
+                     catch(InterruptedException ex)
+                     {
+
+                     }
+                     }
+             }
+         });
+
+         
         this.theview.RegisterListner(new RegisterLis());
         this.theview.LoginListener(new LoginListener());
         this.theview.ListProjects(new ListProjects());
@@ -68,16 +127,31 @@ public class Controller {
                 if (name != null || pass != null)
                     themodel.setName(name);
 
-                // Inserisco nella coda degli eventi il LOGIN
-                Event evento = new Event("LOGIN", theview.getUsername(), theview.getPassword());
-                eventlist.add(evento);
+              
+                registry = LocateRegistry.getRegistry(7070);
+                server = (ServerInterface) registry.lookup(name1);
+                System.out.println("Registering For Callback");
+                client = SocketChannel.open(address);
+                client.configureBlocking(false);
+
+                callbackObj = new NotifyImpl();
+                themodel.setcallback(callbackObj);
+                stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj, 0);
+                server.registerForCallback(stub);
+
+                String request = "LOGIN "+name+" "+pass;
+                int code = RequestResponse.requestresponse(client, request, theview, themodel);
+                System.out.println(code);
+                if(code == -1)
+                {
+                    //Errore allora mi disconnetto e mi deregistro
+                    server.unregisterForCallback(stub);               
+                }
+                
                 // spawno un thread per gestire la connessione
                 themodel.setName(theview.getUsername());
                 theview.setlabel(theview.getUsername());
 
-
-                t = new Thread(new ConnectionTask(theview, eventlist, themodel));
-                t.start();
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -92,9 +166,15 @@ public class Controller {
     class Logout implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-            Event event = new Event("LOGOUT", null, null);
-            eventlist.add(event);
-
+           
+            int code = RequestResponse.requestresponse(client,"LOGOUT", theview, themodel);
+            try {
+                server.unregisterForCallback(stub);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+ 
         }
 
     }
@@ -103,8 +183,9 @@ public class Controller {
     class ListProjects implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-            Event event = new Event("LISTPROJECTS", null, null);
-            eventlist.add(event);
+          
+            int code = RequestResponse.requestresponse(client,"LISTPROJECTS", theview, themodel);
+            
         }
 
     }
@@ -177,11 +258,36 @@ public class Controller {
            String progetto;
 
            progetto = theview.getProgetto();
-           Event evento = new Event("CREATEPROJECT", progetto, null);
-           eventlist.add(evento);
+           String request= "CREATEPROJECT "+progetto;
+
+           int code = RequestResponse.requestresponse(client,request, theview, themodel);
+          
         }
 
     }
+
+      //Evento creazione effettiva del progetto
+      class EnterProject implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+           
+           String progetto;
+
+           progetto = theview.getProgetto();
+           if(themodel.ContainsProject(progetto)==1)
+           {
+                theview.InsideAProject(progetto);
+           }
+           else
+           {
+
+           }
+           
+        }
+
+    }
+    
     
     
 
@@ -194,7 +300,10 @@ public class Controller {
            
             theview.setvisiblepanel3(false);
             theview.setvisiblepanel4(false);
+            theview.setvisiblepanel5_6(false);
+            theview.setFramedim(300, 300);
             theview.setvisiblepanel2(true);
+
 
         }
 

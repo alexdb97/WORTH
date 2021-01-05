@@ -208,11 +208,12 @@ public class main {
                                         System.out.println("SEI DENTRO AMICO");
                                         LoginMap.replace(name,false,true);
                                         KeysUserMap.putIfAbsent(FilterKey.filter(key.toString()),name);
-                                        server1.update(LoginMap);
+                                        
                                         System.out.println(KeysUserMap);
                                         //SEGNALO IL CORRETTO LOGIN
                                          ByteBuffer buff = ByteBuffer.allocate(1024);
                                          buff.put("201 Login".getBytes());
+                                         server1.update(LoginMap);
                                          key.attach(buff);
                                         key.interestOps(SelectionKey.OP_WRITE);
 

@@ -11,10 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.text.AttributeSet.ColorAttribute;
-
-
-
 import java.awt.Color;
 import java.awt.event.*;
 
@@ -26,7 +22,7 @@ import java.awt.event.*;
 public class InitialView {
 
     //INITIALVIEW
-    private  JFrame frame = new JFrame();
+    public JFrame frame = new JFrame();
     private JPanel panel = new JPanel();
     private JLabel UserName = new JLabel("UserName");
     private JLabel Password = new JLabel("Password");
@@ -75,57 +71,19 @@ public class InitialView {
     
 
 
-    private ArrayList <Event> eventlist;
+    
 
 
 
 
-    public InitialView (ArrayList <Event> lis)
+    public InitialView ()
     {
         
         frame.setResizable(false);
         frame.setSize(300,300);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
      
-        
-     //Routine per chiudere bene la connessione
-     frame.addWindowListener( new WindowAdapter()
-     {
-             public void windowClosing(WindowEvent e)
-             {
-              
-
-                 JFrame frame = (JFrame)e.getSource();
-
-                     int result = JOptionPane.showConfirmDialog(
-                                         frame,
-                         "Do you want to exit?",
-                         "Exit",
-                             JOptionPane.YES_NO_OPTION);
-                     
-                    
-
-                     if (result == JOptionPane.YES_OPTION)
-                     {
-                        Event ev = new Event("LOGOUT",null,null);
-                        lis.add(ev);
-                        System.out.println(lis);
-                     try
-                     {
-                     //Aspetto 1/2 secondo per dare il tempo di mandare il messaggio di QUI
-                     Thread.currentThread().sleep(500);
-                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                     }
-                     catch(InterruptedException ex)
-                     {
-
-                     }
-                     }
-             }
-         });
-
-
-        
+    
 
         frame.setTitle("WORTH");
         frame.add(panel);
@@ -206,7 +164,6 @@ public class InitialView {
         panel2.add(listOnlineUsers);
         panel2.add(createproject);
         panel2.add(listUsers);
- 
        this.panel2.setVisible(value);
 
    }
@@ -215,23 +172,23 @@ public class InitialView {
    public void listProjects (String [] rest, String kindlist )
    {
      
-       for(int i=0;i<rest.length;i++)
-        System.out.println(rest[i]);
-       panel2.setVisible(false);
-       frame.setTitle(kindlist);
-       panel3.setLayout(null);
-       panel3.setBounds(0, 0,300,300);
-       list.setListData(rest);
-       scrollPane.setBounds(0,50,285,210);
-       scrollPane.setVisible(true);
-    
-       goBack_prog.setBounds(0, 0,300,50);
-       panel3.add(goBack_prog);
-       panel3.add(scrollPane);
-       panel3.setVisible(true);
-       frame.add(panel3);
-     
-       frame.setVisible(true);
+    for(int i=0;i<rest.length;i++)
+    System.out.println(rest[i]);
+   panel2.setVisible(false);
+   frame.setTitle(kindlist);
+   panel3.setLayout(null);
+   panel3.setBounds(0, 0,300,300);
+   list.setListData(rest);
+   scrollPane.setBounds(0,50,285,210);
+   scrollPane.setVisible(true);
+  
+   goBack_prog.setBounds(0, 0,300,50);
+   panel3.add(goBack_prog);
+   panel3.add(scrollPane);
+   panel3.setVisible(true);
+   frame.add(panel3);
+ 
+   frame.setVisible(true);
    
    }
 
@@ -273,10 +230,29 @@ public class InitialView {
         panel5.add(MoveCard);
         panel5.add(ShowCardHistory);
         panel5.add(CancelProject);
+        panel6.setBounds(0,200,890,400);
+      
+        panel6.setVisible(true);
         panel5.setVisible(true);
         frame.setVisible(true);
         frame.add(panel5);
+        frame.add(panel6);
 
+   }
+
+
+
+
+
+   public void  setFramedim(int x,int y)
+   {
+       this.frame.setSize(x,y);
+   }
+
+   public void setvisiblepanel5_6(boolean value)
+   {
+       this.panel5.setVisible(value);
+       this.panel6.setVisible(value);
    }
 
    public void setvisiblepanel4(boolean value)
@@ -333,6 +309,11 @@ public class InitialView {
     void EffectiveCreate (ActionListener lis)
     {
         this.create.addActionListener(lis);
+    }
+
+    void EnterProject (ActionListener lis)
+    {
+        this.enter.addActionListener(lis);
     }
 
 

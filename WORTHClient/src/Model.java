@@ -9,13 +9,44 @@ public class Model {
     private ConcurrentHashMap <String,Boolean> LoginMap;
     public NotifyEventInterface callbackob;
     private String CurrentProject;
-    private int  num;
+    private String [] ProjectBuffer=null;
+    
 
     public Model(RegisterInterface so) {
         this.serverobj = so;
         LoginMap = new ConcurrentHashMap<String,Boolean>();
         
     }
+
+
+
+    public int ContainsProject (String word)
+    {
+        if(ProjectBuffer!=null)
+        {
+        for (String str : ProjectBuffer) {
+            if(str.equals(word))
+            {
+                return 1;
+            }
+            
+        }
+        return 0;
+     }
+     else
+     {
+
+        return 0;
+     }
+
+    }
+
+
+    public void setProjectBuffer (String [] array)
+    {
+        this.ProjectBuffer = array;
+    }
+
 
  public void setcallback (NotifyEventInterface callbackob)
   {

@@ -257,6 +257,41 @@ public class main {
                                         break;
                                     }
                             }
+                            //ENTER PROJECT
+                            else if (nextok.equals("ENTER"))
+                            {
+                                String projectname=""; 
+
+                                if(strtok.hasMoreElements())
+                                {   
+                                    projectname = strtok.nextToken();
+                                    if(strtok.hasMoreTokens())
+                                    projectname = projectname + strtok.nextToken("");
+
+                                    System.out.println(projectname);
+                                    if(LisProject.containsKey(projectname)){
+                                        Progetto pi = LisProject.get(projectname);
+                                            if(pi.ContainsMember( KeysUserMap.get(FilterKey.filter(key.toString())))){
+                                                sendtoclient(205,"Entrato con successo", key);
+                                            }
+                                            else{
+                                                //NOTMEMBER
+                                                sendtoclient(402,"Errore non sei membro del progetto", key);
+                                            }
+                                    }
+                                    else {
+                                        //PROJECT DOESN'T EXIST
+                                        sendtoclient(402,"Errore il progetto non esiste", key);
+                                    }
+                                }
+                                else 
+                                {
+                                    //ERRORE NEI TOKENS
+                                    sendtoclient(401,"Errore nel passaggio dei parametri", key);
+                                }
+
+
+                            }
                             //ShowMembers()
                             else if(nextok.equals("SHOWMEMBERS"))
                             {
@@ -274,7 +309,7 @@ public class main {
                                 }
                               
 
-                                //NON FACIO NESSUN CONTROLLO IL CONTROLLO VIENE FATTO NEL CLIENT
+                                //FACCIO I CONTROLLI OPPORTUNEI
                                 if(LisProject.containsKey(projectname))
                                 {
                                 Progetto p = LisProject.remove(projectname);

@@ -71,6 +71,14 @@ public class GestioneRisposta {
                         model.setProjectBuffer(null);
                         return 1;
                     }
+                    else if (code.equals("205"))
+                    {
+                        //ENTRATO
+                        view.setvisiblepanel4(false);
+                        view.InsideAProject("Successo");
+                        return 1;
+
+                    }
                     else if(code.equals("440"))
                     {
                         view.error(str);

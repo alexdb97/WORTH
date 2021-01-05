@@ -288,70 +288,9 @@ public class Controller {
            String progetto;
 
            progetto = theview.getProgetto();
-           if(themodel.ContainsProject(progetto)==1)
-           {
-                theview.setvisiblepanel4(false);
-                theview.InsideAProject(progetto);
-                themodel.SetProjectName(progetto);
-           }
-           else
-           {
-                //Faccio la richiesta della lista e vedo se c'è
-                String request = "LISTPROJECTS "+progetto;
-                ByteBuffer buffer = ByteBuffer.allocate(1024);
-                buffer.put(request.getBytes());
-                buffer.flip();
-
-                try
-                {
-                    // RICHIESTA
-                    while (buffer.hasRemaining())
-                    client.write(buffer);
-           
-
-                    buffer.clear();
-
-        
-                    // RISPOSTA
-                    ByteBuffer bufferrisposta = ByteBuffer.allocate(1024);
-                    String response = "";           
-       
-
-                    while (( client.read(bufferrisposta))>=0) {
-                   
-                    response = new String(bufferrisposta.array()).trim();
-                    System.out.println(response);
-                    if(!response.equals(""))
-                        break;
-                    }
-
-                    Gson gson = new Gson();
-                    StringTokenizer strtok = new StringTokenizer(response);
-                    strtok.nextToken(" ");
-                    String rest =strtok.nextToken("");
-                    System.out.println(rest);
-                    themodel.setProjectBuffer(gson.fromJson(rest, String[].class));
-                    if(themodel.ContainsProject(progetto)==1)
-                    {
-                        theview.setvisiblepanel4(false);
-                        themodel.SetProjectName(progetto);
-                        theview.InsideAProject(progetto);
-                    }
-                    else
-                    {
-                        theview.error("This Project doesn't exist!");
-                    }
-
-                }
-
-                catch (IOException ex)
-                {
-                    ex.printStackTrace();
-                }
-            
-
-           }
-           
+           String request = "ENTER "+progetto;
+           int code = RequestResponse.requestresponse(client, request, theview, themodel);
+     
         }
 
     }

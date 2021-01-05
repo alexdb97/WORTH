@@ -119,15 +119,22 @@ public class Progetto implements Serializable {
    * @throws IOException.
    * 
    */
-        public synchronized void insertScheda (String Nome, String Descrizione) throws IOException
+        public synchronized void insertScheda (String Nome, String Descrizione) throws IOException, IllegalArgumentException
         {
 
             Scheda newScheda = new Scheda (Nome,Descrizione);
+            if((!ToDo.contains(newScheda)) && (!InProgeress.contains(newScheda)) && (!ToBeRevised.contains(newScheda)) && (!Done.contains(newScheda)))
+            {
             newScheda.AddHistory("TODO");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+Nome;
             System.out.println(schedapath);
             Serializers.write(newScheda,schedapath);
             this.ToDo.add(newScheda);
+            }
+            else 
+            {
+                throw new IllegalArgumentException ();
+            }
         }
 
        

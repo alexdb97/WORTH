@@ -15,7 +15,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.Key;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Iterator; 
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -352,15 +352,57 @@ public class main {
 
                             }
                             //addScheda scheda descrizione
-                           
+                           else if (nextok.equals("ADDCARD"))
+                           {
+                            String cardname=""; 
+                            String descrizione="";
+                            String projectname="";
+                                
+                            if(strtok.hasMoreTokens())
+                            {
+                            cardname = strtok.nextToken();
+                            descrizione = strtok.nextToken();
+                            projectname = strtok.nextToken(" ");
+                            projectname = projectname+strtok.nextToken("");
+                            }
+                            //Inserisco semplicemente la carta 
+                            Progetto pi = LisProject.get(projectname);
+                            try 
+                            {
+                            pi.insertScheda(cardname, descrizione);
+                            }
+                            catch (IllegalArgumentException ex)
+                            {
+                                //Errore scheda gia presente 
+                                sendtoclient(403,"Errore Scheda gia presente", key);
+                            }
+
+
+
+                           }
+                           else if (nextok.equals("SHOWCARDS"))
+                           {
+                                //TODO
+                           }
+                           else if (nextok.equals("SHOCARDHISTORY"))
+                           {
+                                //TODO
+                           }
+                           else if (nextok.equals("CHANGECARD"))
+                           {
+                               //TODO
+                           }
+                           else if (nextok.equals("ADDMEMBER"))
+                           {
+                               //TODO
+                           }
+                           else 
+                           {
+                               //non si puo mandare altro
+                           }
 
                             
-                            //addMember member
-                          
-                            //changeScheda from to
-                            //shocards 
-                            //cardhistory projectname card
-                            //cancelproject name  
+                            
 
                     }
                     //Chiusura improvvisa della connessione nella read restituisce -1

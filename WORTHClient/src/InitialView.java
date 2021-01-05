@@ -335,7 +335,7 @@ public class InitialView {
        panel8.setBounds(0,200,1500,400);
        list3.setListData(lista);
        panel8.setBackground(Color.LIGHT_GRAY);
-       pane2.setBounds(100,300,1000, 200);
+       pane2.setBounds(100,250,1000, 200);
        panel8.add(pane2);
        frame.add(panel8);
        

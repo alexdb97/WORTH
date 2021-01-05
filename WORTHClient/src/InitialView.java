@@ -1,6 +1,6 @@
 import java.awt.event.ActionListener; // seems to be missing.
 
-import java.util.ArrayList;
+
 
 
 import javax.swing.JButton;
@@ -10,15 +10,17 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+
+
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
+
 
 
      
-Signal.handle(new Signal("INT"),  // SIGINT
-    signal -> System.out.println("Interrupted by Ctrl+C"));
 
 
 public class InitialView {
@@ -62,7 +64,37 @@ public class InitialView {
     private JButton ShowCard = new JButton("Show Card");
     private JButton MoveCard = new JButton("Move Card");
     private JButton ShowCardHistory = new JButton ("Show Card History");
+    private JButton ShowMembers = new JButton ("Show Members");
+    private JButton AddMember = new JButton("Add Member");
+    private JButton EnterChat = new JButton("Group Chat");
     private JLabel ProjectName = new JLabel();
+    //Add Card Panel
+    private JPanel panel7 = new JPanel ();
+    private JLabel CardName = new JLabel("Card Name");
+    private JLabel DescriptionLabel = new JLabel("Description");
+    private JTextField NewScheda = new JTextField();
+    private JTextArea Description = new JTextArea();
+    private JButton  AddEffectiveCard = new JButton("Add");
+    //Show Cards
+    private JPanel panel8 = new JPanel ();
+    private JList list3 = new JList ();
+    private JScrollPane pane2 = new JScrollPane(list3);
+   
+    //MoveCard
+    private JPanel panel9 = new JPanel ();
+    private JLabel from = new JLabel("From");
+    private JLabel to = new JLabel("to");
+    private JTextField fromtxt = new JTextField();
+    private JTextField totxt = new JTextField();
+    private JButton changecard = new JButton ();
+
+
+    //Show Card History
+
+    //Show Members
+
+    //EnterChat
+    
 
 
     //Vediamo dopo i vari bottoni
@@ -82,6 +114,8 @@ public class InitialView {
     public InitialView ()
     {
         
+
+
         frame.setResizable(false);
         frame.setSize(300,300);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -118,6 +152,10 @@ public class InitialView {
     }
 
 //GETTING FROM TEXTFIELDS
+    public String getCardName ()
+    {
+        return this.NewScheda.getText();
+    }
 
     public String getUsername ()
     {
@@ -216,10 +254,10 @@ public class InitialView {
 
    public void InsideAProject (String Title)
    {
-        frame.setSize(890, 600);
+        frame.setSize(1500, 600);
         frame.setTitle(Title);
         panel5.setLayout(null);
-        panel5.setBounds(0,0,890,200);
+        panel5.setBounds(0,0,1500,200);
         goBack_prog.setBounds(0, 0,100,70);
         ProjectName.setBounds(200,0,890,70);
         ProjectName.setBackground(Color.BLUE);
@@ -233,7 +271,12 @@ public class InitialView {
         ShowCard.setBounds(360,100,150,50);
         MoveCard.setBounds(530,100,150,50);
         ShowCardHistory.setBounds(700,100,150,50);
-        
+        AddMember.setBounds(870, 100,150, 50);
+        ShowMembers.setBounds(1040,100,150,50);
+        EnterChat.setBounds(1210,100,150,50);
+        panel5.add(AddMember);
+        panel5.add(ShowMembers);
+        panel5.add(EnterChat);
         panel5.add(ProjectName);
         panel5.add(goBack_prog);
         panel5.add(AddCard);
@@ -241,7 +284,7 @@ public class InitialView {
         panel5.add(MoveCard);
         panel5.add(ShowCardHistory);
         panel5.add(CancelProject);
-        panel6.setBounds(0,200,890,400);
+        panel6.setBounds(0,200,1500,400);
       
         panel6.setVisible(true);
         panel5.setVisible(true);
@@ -252,20 +295,66 @@ public class InitialView {
    }
 
 
-   //panel7 CancelProject 
+   public void AddCard ()
+   {
 
-   //panel8  AddCard 
+    panel5.setBackground(Color.WHITE);
+    panel8.setVisible(false);
+    panel6.setVisible(false);
+    panel7.setBounds(0,200,1500,400);
+    panel7.setLayout(null);
+    panel7.setBackground(Color.GRAY);
+    CardName.setBounds(100,220,200,50);
+    CardName.setFont(new Font("Serif", Font.BOLD, 25));
+    DescriptionLabel.setBounds(100,300,200,50);
+    DescriptionLabel.setFont(new Font("Serif", Font.BOLD, 25));
+    NewScheda.setBounds(320,220,200,30);
+    Description.setBounds(320,300,200,200);
+    Description.setLineWrap(true);
+    AddEffectiveCard.setBounds(700,300,100,50);
+    panel7.add(DescriptionLabel);
+    panel7.add(Description);
+    panel7.add(NewScheda);
+    panel7.add(AddEffectiveCard);
+    panel7.add(CardName);
+    panel7.setVisible(true);
+    frame.add(panel7);
+   }
+
+  
     
-   //panel9   ShowCard 
+   //panel8   ShowlIST
+   public void showList ()
+   {
+       panel5.setBackground(Color.GRAY);
+       panel6.setVisible(false);
+       panel7.setVisible(false);
+       panel8.setVisible(true);
+       panel8.setLayout(null);
+       panel8.setBounds(0,200,1500,400);
+       panel8.setBackground(Color.LIGHT_GRAY);
+       pane2.setBounds(100,300,1000, 200);
+       panel8.add(pane2);
+       frame.add(panel8);
+       
 
-   //panel10   MoveCard
+   } 
 
-   //panel11  ShowCardHistory
+
+   //panel9   MoveCard
+
+   void Movecard ()
+   {
+
+   }
+
+   
  
   
+
  
   
-
+   
 
 
    public void setProjectName(String name)
@@ -278,25 +367,57 @@ public class InitialView {
        this.frame.setSize(x,y);
    }
 
-   public void setvisiblepanel5_6(boolean value)
+   public void goback(boolean value)
    {
+        this.panel3.setVisible(value);
+        this.panel4.setVisible(value);
        this.panel5.setVisible(value);
        this.panel6.setVisible(value);
+       this.panel7.setVisible(value);
+       this.panel8.setVisible(value);
    }
 
    public void setvisiblepanel4(boolean value)
    {
        this.panel4.setVisible(value);
    }
-
-   public void setvisiblepanel3( boolean value)
-   {
-       this.panel3.setVisible(value);
-   }
+   
 
 
 
 //ACTIONS HANDLER
+
+   void ShowCardHistory (ActionListener lis)
+   {
+       this.ShowCardHistory.addActionListener(lis);
+   }
+
+   void ShowMembers (ActionListener lis)
+   {
+       this.ShowMembers.addActionListener(lis);
+   }
+
+   void ShowCardEvent (ActionListener lis)
+   {
+       this.ShowCard.addActionListener(lis);
+   }
+
+   void EffectiveAddCard (ActionListener lis)
+   {
+       this.AddEffectiveCard.addActionListener(lis);
+   }
+
+
+   void AddCardview (ActionListener lis)
+   {
+       this.AddCard.addActionListener(lis);
+   }
+
+
+   void CancelProject (ActionListener lis )
+   {
+       this.CancelProject.addActionListener(lis);
+   }
 
 
     void RegisterListner(ActionListener lis)

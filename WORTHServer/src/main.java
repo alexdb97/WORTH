@@ -153,43 +153,23 @@ public class main {
                             //logout() LOGOUT FUNZIONA
                             if(nextok.equals("LOGOUT"))
                             {
-                                ByteBuffer buff = ByteBuffer.allocate(1024);
-                                buff.put("300 Logout".getBytes());
                                 
-                                System.out.print(FilterKey.filter(key.toString()));
+                                
                                 String namelogout = KeysUserMap.get(FilterKey.filter(key.toString()));
                                 KeysUserMap.remove(FilterKey.filter(key.toString()));
-                                
-                                System.out.println();
-                                System.out.println(KeysUserMap);
-                                //System.out.println(LoginMap);
-                                System.out.println(namelogout);
                                 LoginMap.replace(namelogout,true,false);
                                 server1.update(LoginMap);
-                               
-                                key.attach(buff);
-                                key.interestOps(SelectionKey.OP_WRITE);
+                                sendtoclient(300,"Logout",key);
 
                             }
-                            //LA LOGIN DOVREBBE FUNZIONARE IL PROBLEMA E CHE DOBBIAMO  FARE RMI
+                         
                             //login(nickname,password)
                             else if(nextok.equals("LOGIN"))
                             {
                                 if(strtok.countTokens()!=2)
                                 {
                                     //ERRORE NEL PASSAGGIO DEI PARAMETRI dei parametri
-                                    // definire che codive di errore
-                            
-        
-                                        
-                                         //ERRORE NEL LOGIN 
-                                         ByteBuffer buff = ByteBuffer.allocate(1024);
-                                         buff.put("401 Errore ".getBytes());
-                                         System.out.println("401 Errore Parametri");
-                                         key.attach(buff);
-                                         key.interestOps(SelectionKey.OP_WRITE);
-                                        
-                                    
+                                    sendtoclient(401,"Errore Parametri", key);     
                                 }
                                 else
                                 {
@@ -202,69 +182,66 @@ public class main {
                                 {
                                     System.out.println(Userbase.get(name));
 
+                                //controllo che la password e che non abbia gia fatto la login
                                 if(Userbase.get(name).equals(password)&&(LoginMap.get(name).equals(false)))
                                     {
-                                        //LOGIN AVVENUTO CON SUCCESSO 
+                                        //login avvenuta con successo
                                         System.out.println("SEI DENTRO AMICO");
                                         LoginMap.replace(name,false,true);
                                         KeysUserMap.putIfAbsent(FilterKey.filter(key.toString()),name);
-                                        
-                                        System.out.println(KeysUserMap);
-                                        //SEGNALO IL CORRETTO LOGIN
-                                         ByteBuffer buff = ByteBuffer.allocate(1024);
-                                         buff.put("201 Login".getBytes());
-                                         server1.update(LoginMap);
-                                         key.attach(buff);
-                                        key.interestOps(SelectionKey.OP_WRITE);
+                                        server1.update(LoginMap);
+                                        //corretto avvenimento della login
+                                        sendtoclient(201,"Login", key);
 
                                     }
                                 else
                                     {
-                                        //ERRORE NEL LOGIN 
-                                        ByteBuffer buff = ByteBuffer.allocate(1024);
-                                        buff.put("401 Errore Login Password o Utente gia' loggato".getBytes());
-                                        System.out.println("401 Errore Login Password o Utente gia' loggato");
-                                        key.attach(buff);
-                                        key.interestOps(SelectionKey.OP_WRITE);
+                                        //Errore nella login oppure utrntr gia loggato
+                                        sendtoclient(401,"Errore nella password  o Utente gia loggato", key);
                                         
                                     }
                                 }
                                 else 
                                 {
-                                    //UTENTE NON ESISTE
-                                    //ERRORE NEL LOGIN 
-                                    ByteBuffer buff = ByteBuffer.allocate(1024);
-                                    buff.put("401 Errore Login non esisti".getBytes());
-                                    System.out.println("401 Errore Login non esisti");
-                                    key.attach(buff);
-                                    key.interestOps(SelectionKey.OP_WRITE);
-                                
-                                
+                                    //L'utente non esiste
+                                    sendtoclient(401,"Errore, l'utente non esiste ", key);
                                 } 
-                            }      
-
+                             }      
                             }
 
                             //LISTPROJECTS
                             //listprojects()
                             else if (nextok.equals("LISTPROJECTS"))
                             {
+                                //invio della lista dei progetti nel formato JSON tramite la libreria GSON
                                 Gson gson = new Gson();
                                 Set<String> listprog = LisProject.keySet();
-                                ByteBuffer buff = ByteBuffer.allocate(1024);
                                 String send = gson.toJson(listprog);
-                                buff.put( ("202 "+send).getBytes());
-                                System.out.println(("202 "+gson.toJson(listprog)));
-                                key.attach(buff);
-                                key.interestOps(SelectionKey.OP_WRITE);
-                              
+                                sendtoclient(202,send,key);
                             }
                             //createProject()
                             else if(nextok.equals("CREATEPROJECT"))
                             {
-                                
+                                String projectname; 
+                                if(strtok.hasMoreTokens())
+                                {
+                                projectname = strtok.nextToken();
+                                if(strtok.hasMoreTokens())
+                                    projectname = projectname + strtok.nextToken("");
+                                }
+                                else
+                                {
+                                     //ERRORE PARAMETRI
+                                     ByteBuffer buf = ByteBuffer.allocate(1024);
+                                     String str = " 402 ERRORE PASSAGGIO PARAMETRI";
+                                     buf.put(str.getBytes());
+                                     key.attach(buf);
+                                     key.interestOps(SelectionKey.OP_WRITE);
+                                     
+                                     break;
 
-                                String projectname = strtok.nextToken("");
+                                }
+
                                 System.out.println(projectname);
                               
 
@@ -272,7 +249,9 @@ public class main {
                                     {
                                     Progetto p = new Progetto(projectname);
                                     LisProject.put(projectname, p);
-
+                                    //Aggiungo il proprietario come mebro
+                                    String name = KeysUserMap.get(FilterKey.filter(key.toString()));
+                                    p.AddMember(name);
                                     ByteBuffer buf = ByteBuffer.allocate(1024);
                                     String str = " 203 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
                                     buf.put(str.getBytes());
@@ -294,10 +273,60 @@ public class main {
                             {
                                 
                             }
+                            else if(nextok.equals("CANCELPROJECT"))
+                            {
+                                String projectname=""; 
+                                
+                                if(strtok.hasMoreTokens())
+                                {
+                                projectname = strtok.nextToken();
+                                if(strtok.hasMoreTokens())
+                                    projectname = projectname + strtok.nextToken("");
+                                }
+                              
+
+                                //NON FACIO NESSUN CONTROLLO IL CONTROLLO VIENE FATTO NEL CLIENT
+                                if(LisProject.containsKey(projectname))
+                                {
+                                Progetto p = LisProject.remove(projectname);
+                                    
+                                    if(p.ContainsMember(KeysUserMap.get(FilterKey.filter(key.toString()))))
+                                    {
+                                    p.RemoveProgetto();
+                                    ByteBuffer buf = ByteBuffer.allocate(1024);
+                                    String str = " 204 OK OPERAZIONE EFFETTUATA CON SUCCESSO";
+                                    buf.put(str.getBytes());
+                                    key.attach(buf);
+                                    key.interestOps(SelectionKey.OP_WRITE);
+                                    }
+                                    else
+                                    {
+                                        ByteBuffer buf = ByteBuffer.allocate(1024);
+                                        String str = " 407 NON MEMBERO";
+                                        buf.put(str.getBytes());
+                                        key.attach(buf);
+                                        key.interestOps(SelectionKey.OP_WRITE);
+
+                                    }
+                                
+                                }
+                                else
+                                {
+                                    ByteBuffer buf = ByteBuffer.allocate(1024);
+                                    String str = " 440 PROGETTO GIA STATO ELIMINATO";
+                                    buf.put(str.getBytes());
+                                    key.attach(buf);
+                                    key.interestOps(SelectionKey.OP_WRITE);
+
+                                }
+
+                            }
+                            //addScheda scheda descrizione
+                           
 
                             
                             //addMember member
-                            //addScheda scheda descrizione
+                          
                             //changeScheda from to
                             //shocards 
                             //cardhistory projectname card
@@ -346,7 +375,7 @@ public class main {
     }
     
     //FUNZIONE PER IL SETUP INIZIALE DEL SERVER 
-    public static ConcurrentHashMap <String,String>  FirstSetup(ConcurrentHashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase) throws IOException,ClassNotFoundException
+    private static ConcurrentHashMap <String,String>  FirstSetup(ConcurrentHashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase) throws IOException,ClassNotFoundException
     {
         File mainDir = new File(MAIN_DIR_PATH);
         if(mainDir.exists()==false)
@@ -382,6 +411,17 @@ public class main {
    
 
     }
+
+
+    private static void sendtoclient (Integer code, String description, SelectionKey key)
+    {
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        String str = code.toString()+" "+description;
+        buf.put(str.getBytes());
+        key.attach(buf);
+        key.interestOps(SelectionKey.OP_WRITE);
+    }
+
 
 }
 

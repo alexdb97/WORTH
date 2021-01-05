@@ -51,16 +51,33 @@ public class GestioneRisposta {
                     {
                         //Errore Progetto gia esistente
                         view.error(str);
-                        return 1;
+                        return -1;
                     }
                     else if(code.equals("203"))
                     {
                         //Progetto creato con successo
                         System.out.println(str);
                         view.setvisiblepanel4(false);
-                        view.InsideAProject("CIAONE");
+                        view.InsideAProject("ProjectName");
                         return 1;
 
+                    }
+                    else if (code.equals("204")) 
+                    {
+                        //Progetto Rimosso con successo
+                        view.goback(false);
+                        view.setFramedim(300, 300);
+                        view.setvisiblepanel2(true);
+                        model.setProjectBuffer(null);
+                        return 1;
+                    }
+                    else if(code.equals("440"))
+                    {
+                        view.error(str);
+                        view.goback(false);
+                        view.setFramedim(300, 300);
+                        view.setvisiblepanel2(true);
+                        return 1;
                     }
                 }
             

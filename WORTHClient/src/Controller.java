@@ -92,6 +92,11 @@ public class Controller {
         this.theview.PrepareProject(new PrepareProject());
         this.theview.EffectiveCreate(new EffectiveCreate());
         this.theview.EnterProject(new EnterProject());
+        this.theview.CancelProject(new CancelProject());
+        this.theview.AddCardview(new AddCard());
+        this.theview.ShowCardEvent(new ShowCards());
+        this.theview.ShowMembers(new ShowMembers());
+        this.theview.ShowCardHistory(new ShowCardHistory());
 
     }
 
@@ -263,8 +268,12 @@ public class Controller {
 
            progetto = theview.getProgetto();
            String request= "CREATEPROJECT "+progetto;
-
            int code = RequestResponse.requestresponse(client,request, theview, themodel);
+           if(code==1)
+            {
+                themodel.SetProjectName(progetto);
+                theview.setProjectName(progetto);
+            }
           
         }
 
@@ -283,6 +292,7 @@ public class Controller {
            {
                 theview.setvisiblepanel4(false);
                 theview.InsideAProject(progetto);
+                themodel.SetProjectName(progetto);
            }
            else
            {
@@ -324,6 +334,7 @@ public class Controller {
                     if(themodel.ContainsProject(progetto)==1)
                     {
                         theview.setvisiblepanel4(false);
+                        themodel.SetProjectName(progetto);
                         theview.InsideAProject(progetto);
                     }
                     else
@@ -355,9 +366,7 @@ public class Controller {
         public void actionPerformed(ActionEvent evt)
         {
            
-            theview.setvisiblepanel3(false);
-            theview.setvisiblepanel4(false);
-            theview.setvisiblepanel5_6(false);
+            theview.goback(false);
             theview.setFramedim(300, 300);
             theview.setvisiblepanel2(true);
 
@@ -365,5 +374,79 @@ public class Controller {
         }
 
     }
+
+    //evento CancelProject
+    class CancelProject implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+            String name = themodel.getProjectName();
+            String request = "CANCELPROJECT "+name;
+            int code = RequestResponse.requestresponse(client,request, theview, themodel);
+           
+
+           
+            
+        }
+
+    }
+
+     //evento AddCardView
+     class AddCard implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+          theview.AddCard();
+
+        }
+    }
+
+    //Evento showCards
+    class ShowCards implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+          theview.showList();
+
+        }
+    }
+
+    //Evento ShoMembers
+    class ShowMembers implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+          theview.showList();
+
+        }
+    }
+
+    //Evento ShoCardHistory
+    class ShowCardHistory implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+          theview.showList();
+
+        }
+    }
+
+
+
+    //evento EffectiveAddCard
+    class EffectiveAddCard implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+          String cardname = theview.getCardName();
+
+
+        }
+    }
+
+
+
+
+    
     
 }

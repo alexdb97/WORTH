@@ -9,6 +9,7 @@ public class Model {
     private ConcurrentHashMap <String,Boolean> LoginMap;
     public NotifyEventInterface callbackob;
     private String CurrentProject;
+    private String ProjectName;
     private String [] ProjectBuffer=null;
     
 
@@ -18,6 +19,16 @@ public class Model {
         
     }
 
+
+    public void SetProjectName (String name)
+    {
+        this.ProjectName = name;
+    }
+
+    public String getProjectName()
+    {
+        return this.ProjectName;
+    }
 
 
     public int ContainsProject (String word)

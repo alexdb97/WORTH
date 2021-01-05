@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import javax.lang.model.util.ElementScanner14;
+
 import Serializers.Serializers;
 
 
@@ -239,6 +242,17 @@ public class Progetto implements Serializable {
             this.Members.add(Name);
             return 1;
 
+        }
+
+        public synchronized boolean ContainsMember (String Name) throws NullPointerException
+        {
+            if(Name==null)
+                throw new NullPointerException();
+            
+            if(this.Members.contains(Name))
+                return true;
+            else
+                return false;
         }
 
 

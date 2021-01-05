@@ -1,17 +1,20 @@
 import java.awt.event.ActionListener; // seems to be missing.
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
+import com.google.gson.Gson;
 
 import java.awt.event.*;
 
@@ -88,6 +91,7 @@ public class Controller {
         this.theview.ListOnlineUsers(new ListOnlineUsers());
         this.theview.PrepareProject(new PrepareProject());
         this.theview.EffectiveCreate(new EffectiveCreate());
+        this.theview.EnterProject(new EnterProject());
 
     }
 
@@ -277,10 +281,63 @@ public class Controller {
            progetto = theview.getProgetto();
            if(themodel.ContainsProject(progetto)==1)
            {
+                theview.setvisiblepanel4(false);
                 theview.InsideAProject(progetto);
            }
            else
            {
+                //Faccio la richiesta della lista e vedo se c'è
+                String request = "LISTPROJECTS "+progetto;
+                ByteBuffer buffer = ByteBuffer.allocate(1024);
+                buffer.put(request.getBytes());
+                buffer.flip();
+
+                try
+                {
+                    // RICHIESTA
+                    while (buffer.hasRemaining())
+                    client.write(buffer);
+           
+
+                    buffer.clear();
+
+        
+                    // RISPOSTA
+                    ByteBuffer bufferrisposta = ByteBuffer.allocate(1024);
+                    String response = "";           
+       
+
+                    while (( client.read(bufferrisposta))>=0) {
+                   
+                    response = new String(bufferrisposta.array()).trim();
+                    System.out.println(response);
+                    if(!response.equals(""))
+                        break;
+                    }
+
+                    Gson gson = new Gson();
+                    StringTokenizer strtok = new StringTokenizer(response);
+                    strtok.nextToken(" ");
+                    String rest =strtok.nextToken("");
+                    System.out.println(rest);
+                    themodel.setProjectBuffer(gson.fromJson(rest, String[].class));
+                    if(themodel.ContainsProject(progetto)==1)
+                    {
+                        theview.setvisiblepanel4(false);
+                        theview.InsideAProject(progetto);
+                    }
+                    else
+                    {
+                        theview.error("This Project doesn't exist!");
+                    }
+
+                }
+
+                catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
+            
 
            }
            

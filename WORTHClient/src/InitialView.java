@@ -12,11 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.*;
 
 
      
-
+Signal.handle(new Signal("INT"),  // SIGINT
+    signal -> System.out.println("Interrupted by Ctrl+C"));
 
 
 public class InitialView {
@@ -60,6 +62,7 @@ public class InitialView {
     private JButton ShowCard = new JButton("Show Card");
     private JButton MoveCard = new JButton("Move Card");
     private JButton ShowCardHistory = new JButton ("Show Card History");
+    private JLabel ProjectName = new JLabel();
 
 
     //Vediamo dopo i vari bottoni
@@ -91,7 +94,8 @@ public class InitialView {
        
 
         panel.setVisible(true);
-       
+       goBack_prog.setBackground(Color.RED);
+       goBack_prog.setForeground(Color.WHITE);
 
         
 
@@ -172,8 +176,7 @@ public class InitialView {
    public void listProjects (String [] rest, String kindlist )
    {
      
-    for(int i=0;i<rest.length;i++)
-    System.out.println(rest[i]);
+    
    panel2.setVisible(false);
    frame.setTitle(kindlist);
    panel3.setLayout(null);
@@ -214,16 +217,24 @@ public class InitialView {
    public void InsideAProject (String Title)
    {
         frame.setSize(890, 600);
-        frame.setTitle("Project Name");
+        frame.setTitle(Title);
         panel5.setLayout(null);
         panel5.setBounds(0,0,890,200);
-        goBack_prog.setBounds(0, 0, 890,70);
+        goBack_prog.setBounds(0, 0,100,70);
+        ProjectName.setBounds(200,0,890,70);
+        ProjectName.setBackground(Color.BLUE);
+        ProjectName.setFont(new Font("Serif", Font.BOLD, 25));
+        ProjectName.setSize(200,50);
+       
+       
+        this.setProjectName(Title);
         CancelProject.setBounds(20,100,150,50);
         AddCard.setBounds(190,100,150,50);
         ShowCard.setBounds(360,100,150,50);
         MoveCard.setBounds(530,100,150,50);
         ShowCardHistory.setBounds(700,100,150,50);
-        panel5.setBackground(Color.CYAN);
+        
+        panel5.add(ProjectName);
         panel5.add(goBack_prog);
         panel5.add(AddCard);
         panel5.add(ShowCard);
@@ -241,8 +252,26 @@ public class InitialView {
    }
 
 
+   //panel7 CancelProject 
+
+   //panel8  AddCard 
+    
+   //panel9   ShowCard 
+
+   //panel10   MoveCard
+
+   //panel11  ShowCardHistory
+ 
+  
+ 
+  
 
 
+
+   public void setProjectName(String name)
+   {
+       ProjectName.setText(name);
+   }
 
    public void  setFramedim(int x,int y)
    {

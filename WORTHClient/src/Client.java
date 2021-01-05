@@ -3,11 +3,12 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 
+
 public  class Client {
 
     public static void main (String [] args)
     {
-       
+      
 
         
         RegisterInterface serverObject;
@@ -29,8 +30,6 @@ public  class Client {
             Controller ctr = new Controller(nview, mod);
             
             
-            
-
         }
         catch(Exception e)
         {

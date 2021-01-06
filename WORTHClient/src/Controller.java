@@ -98,6 +98,7 @@ public class Controller {
         this.theview.ShowCardProperty(new ShowCardProperty());
         this.theview.EffectiveAddCard(new EffectiveAddCard());
         this.theview.MoveCard(new MoveCard());
+        this.theview.EffectiveMoveCard(new EffectiveMoveCard());
         this.theview.GroupChat(new GroupChat());
         this.theview.AddMember(new AddMember());
 
@@ -384,7 +385,7 @@ public class Controller {
         }
     }
 
-    //Evento ShoCardHistory
+    //Evento move card 
     class MoveCard implements ActionListener {
 
         public void actionPerformed(ActionEvent evt)
@@ -393,6 +394,16 @@ public class Controller {
 
         }
     }
+      //Evento move card 
+      class  EffectiveMoveCard implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+         
+
+        }
+    }
+   
 
     //Evento ShoCardProps
     class ShowCardProperty implements ActionListener {

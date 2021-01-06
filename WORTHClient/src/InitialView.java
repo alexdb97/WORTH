@@ -193,7 +193,21 @@ public class InitialView {
     {
 
         return ps.getText();
+    }
 
+    public String GetMoveCardName ()
+    {
+        return card_nametxt.getText();
+    }
+
+    public String GetFrom ()
+    {
+        return fromtxt.getName();
+    }
+    
+    public String GetTo ()
+    {
+        return totxt.getName();
     }
 
     public String getProgetto ()
@@ -202,7 +216,7 @@ public class InitialView {
     }
 
 
-//NAVIGATION
+    //NAVIGATION
    public void setvisiblepanel1 (boolean value)
    {
        this.panel.setVisible(value);
@@ -550,7 +564,7 @@ public class InitialView {
        this.panel10.setVisible(value);
        this.panel11.setVisible(value);
        panel12.setVisible(value);
-       
+
    }
 
 
@@ -579,6 +593,11 @@ public class InitialView {
    void MoveCard (ActionListener lis)
    {
        this.MoveCard.addActionListener(lis);
+   }
+
+   void EffectiveMoveCard (ActionListener lis)
+   {
+       this.changecard.addActionListener(lis);
    }
 
    void ShowCardProperty (ActionListener lis)

@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.lang.model.util.ElementScanner14;
+
 import Serializers.Serializers;
 import com.google.gson.*;
 
@@ -401,7 +403,7 @@ public class main {
                             sendtoclient(206,response,key);          
                            
                            }
-                           else if (nextok.equals("SHOCARD"))
+                           else if (nextok.equals("SHOWCARD"))
                            {
                             
                             String cardname="";
@@ -410,9 +412,93 @@ public class main {
 
                                 
                            }
-                           else if (nextok.equals("CHANGECARD"))
+                           else if (nextok.equals("MOVECARD"))
                            {
-                               //TODO
+                            String cardname=""; 
+                            String  from="";
+                            String  to="";
+                            String projectname = "";
+                         
+                            if(strtok.hasMoreTokens())
+                            {
+                                cardname = strtok.nextToken("\n");
+                                from = strtok.nextToken("\n");
+                                to = strtok.nextToken("\n");
+                                projectname = strtok.nextToken("\n");
+                            }
+
+                             Progetto pi = LisProject.get(projectname);
+                             
+
+                                    if(from.equals("TODO")&&to.equals("INPROGRESS"))
+                                        {
+                                            try
+                                            {
+                                                pi.Move_ToDo_InProgress(cardname);
+                                            }
+                                            catch(IllegalArgumentException ex)
+                                            {
+                                                //manda errore la scheda non c'è
+                                            }
+
+
+                                        }
+                                    else if (from.equals("INPROGRESS")&&to.equals("DONE"))
+                                    {
+                                        try
+                                            {
+                                                pi.Move_InProgress_Done(cardname);
+                                            }
+                                            catch(IllegalArgumentException ex)
+                                            {
+                                                //manda errore la scheda non c'è
+                                            }
+
+                                    }
+                                    else if(from.equals("INPROGRESS")&&to.equals("TOBEREVISED"))
+                                    {
+                                        try
+                                        {
+                                            pi.Move_InProgress_ToBeRevised(cardname);
+                                        }
+                                        catch(IllegalArgumentException ex)
+                                        {
+                                            //manda errore la scheda non c'è
+                                        }
+
+
+                                    }
+                                    else if (from.equals("TOEREVISED")&&to.equals("INPROGRESS"))
+                                    {
+                                        try
+                                        {
+                                            
+                                        }
+                                        catch(IllegalArgumentException ex)
+                                        {
+                                            //manda errore la scheda non c'è
+                                        }
+
+
+                                    }
+                                    else if (from.equals("TOBEREVISED")&&to.equals("DONE"))
+                                    {
+                                        try
+                                        {
+                                            pi.Move_ToBeRevised_Done(cardname);
+                                        }
+                                        catch(IllegalArgumentException ex)
+                                        {
+                                            //manda errore la scheda non c'è
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        //MANDARE IL CODICE DI ERRORE GENERICO
+                                    }
+
+                               
                            }
                            else if (nextok.equals("ADDMEMBER"))
                            {

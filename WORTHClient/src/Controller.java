@@ -96,6 +96,7 @@ public class Controller {
         this.theview.ShowCardEvent(new ShowCards());
         this.theview.ShowMembers(new ShowMembers());
         this.theview.ShowCardHistory(new ShowCardHistory());
+        this.theview.EffectiveAddCard(new EffectiveAddCard());
 
     }
 
@@ -340,13 +341,30 @@ public class Controller {
         }
     }
 
+    //Add effective card
+    class EffectiveAddCard implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+            if(theview.getCardName().equals("") || theview.getDescription().equals(""))
+                theview.error("Inserire qualcosa");
+            else
+            {
+            String request ="ADDCARD "+ theview.getCardName()+"\n"+ theview.getDescription()+"\n"+theview.getProgetto()+"\n";
+            RequestResponse.requestresponse(client, request, theview, themodel);
+            }
+        }
+    }
+
+
     //Evento showCards
     class ShowCards implements ActionListener {
 
         public void actionPerformed(ActionEvent evt)
         {
         
-          
+            String request = "SHOWCARDS "+themodel.getProjectName();
+            RequestResponse.requestresponse(client, request, theview, themodel);
 
         }
     }
@@ -375,16 +393,7 @@ public class Controller {
 
 
 
-    //evento EffectiveAddCard
-    class EffectiveAddCard implements ActionListener {
-
-        public void actionPerformed(ActionEvent evt)
-        {
-          String cardname = theview.getCardName();
-
-
-        }
-    }
+   
 
 
 

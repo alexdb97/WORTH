@@ -61,9 +61,9 @@ public class InitialView {
     private JPanel panel5 = new JPanel ();
     private JButton CancelProject = new JButton ("Cancel Project");
     private JButton AddCard = new JButton("Add Card");
-    private JButton ShowCard = new JButton("Show Card");
+    private JButton ShowCards = new JButton("Show Cards");
     private JButton MoveCard = new JButton("Move Card");
-    private JButton ShowCardHistory = new JButton ("Show Card History");
+    private JButton ShowCardProperty = new JButton ("Show Card Property");
     private JButton ShowMembers = new JButton ("Show Members");
     private JButton AddMember = new JButton("Add Member");
     private JButton EnterChat = new JButton("Group Chat");
@@ -75,7 +75,7 @@ public class InitialView {
     private JTextField NewScheda = new JTextField();
     private JTextArea Description = new JTextArea();
     private JButton  AddEffectiveCard = new JButton("Add");
-    //Show Cards
+    //Show Lists
     private JPanel panel8 = new JPanel ();
     private JList list3 = new JList ();
     private JScrollPane pane2 = new JScrollPane(list3);
@@ -89,7 +89,20 @@ public class InitialView {
     private JButton changecard = new JButton ();
 
 
-    //Show Card History
+    //Show Card Property
+    private JPanel panel10 = new JPanel ();
+    private JList list4 = new JList ();
+    private JScrollPane pane3 = new JScrollPane(list4);
+    private JLabel name = new JLabel () ; 
+    private JLabel description = new JLabel ();
+    private JLabel State = new JLabel ();
+    private JLabel Historytxt = new JLabel ();
+    private JLabel nametxt = new JLabel () ; 
+    private JLabel descriptiontxt = new JLabel ();
+    private JLabel statetxt = new JLabel ();
+    private JLabel History = new JLabel ();
+    private JButton ShowCardHistory = new JButton ();
+
 
     //Show Members
 
@@ -152,9 +165,15 @@ public class InitialView {
     }
 
 //GETTING FROM TEXTFIELDS
+
     public String getCardName ()
     {
         return this.NewScheda.getText();
+    }
+
+    public String getDescription()
+    {
+        return (this.Description.getText()).replaceAll("\r\n|\r|\n"," ");
     }
 
     public String getUsername ()
@@ -268,7 +287,7 @@ public class InitialView {
         this.setProjectName(Title);
         CancelProject.setBounds(20,100,150,50);
         AddCard.setBounds(190,100,150,50);
-        ShowCard.setBounds(360,100,150,50);
+        ShowCards.setBounds(360,100,150,50);
         MoveCard.setBounds(530,100,150,50);
         ShowCardHistory.setBounds(700,100,150,50);
         AddMember.setBounds(870, 100,150, 50);
@@ -280,7 +299,7 @@ public class InitialView {
         panel5.add(ProjectName);
         panel5.add(goBack_prog);
         panel5.add(AddCard);
-        panel5.add(ShowCard);
+        panel5.add(ShowCards);
         panel5.add(MoveCard);
         panel5.add(ShowCardHistory);
         panel5.add(CancelProject);
@@ -326,18 +345,22 @@ public class InitialView {
    //panel8   ShowlIST
    public void showList (String [] lista)
    {
-      
+       
+       frame.add(panel8);
        panel5.setBackground(Color.GRAY);
        panel6.setVisible(false);
        panel7.setVisible(false);
        panel8.setVisible(true);
        panel8.setLayout(null);
+       pane2.setBounds(100,250,1000, 200);
        panel8.setBounds(0,200,1500,400);
        list3.setListData(lista);
        panel8.setBackground(Color.LIGHT_GRAY);
-       pane2.setBounds(100,250,1000, 200);
        panel8.add(pane2);
-       frame.add(panel8);
+       frame.invalidate();
+       frame.validate();
+       frame.repaint();
+     
        
 
    } 
@@ -394,7 +417,7 @@ public class InitialView {
 
    void ShowCardEvent (ActionListener lis)
    {
-       this.ShowCard.addActionListener(lis);
+       this.ShowCards.addActionListener(lis);
    }
 
    void EffectiveAddCard (ActionListener lis)

@@ -49,7 +49,7 @@ public class GestioneRisposta {
                     }
                     else if (code.equals("402"))
                     {
-                        //Errore Progetto gia esistente
+                        //Errore Generico
                         view.error(str);
                         return -1;
                     }
@@ -73,7 +73,7 @@ public class GestioneRisposta {
                     }
                     else if (code.equals("205"))
                     {
-                        //ENTRATO
+                        //ENTRATO bisogna vedere come fare con il thread
                         view.setvisiblepanel4(false);
                         view.InsideAProject(strtok.nextToken(""));
                         return 1;
@@ -89,12 +89,17 @@ public class GestioneRisposta {
                         return 1;
                        
                     }
+                   
                     else if(code.equals("440"))
                     {
                         view.error(str);
                         view.goback(false);
                         view.setFramedim(300, 300);
                         view.setvisiblepanel2(true);
+                        return 1;
+                    }
+                    else 
+                    {
                         return 1;
                     }
                 }

@@ -56,7 +56,7 @@ public class Scheda  implements Serializable{
     public boolean equals(Object s)
     {
         Scheda sc = (Scheda) s;
-        if(this.Nome == sc.GetName())
+        if(this.Nome.equals(sc.GetName()))
             return true;
         else
            return  false;

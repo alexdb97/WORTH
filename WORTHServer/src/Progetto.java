@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.lang.model.util.ElementScanner14;
 
@@ -31,6 +32,7 @@ public class Progetto implements Serializable {
         private ArrayList <Scheda> Done;
 
         private ArrayList <String> Members;
+        private String ChatGroupIp;
        
 
          /**
@@ -42,7 +44,7 @@ public class Progetto implements Serializable {
    * 
    * 
    */
-     public  Progetto (String name) throws NullPointerException, IllegalArgumentException,IOException,ClassNotFoundException
+     public  Progetto (String name, String groupIP) throws NullPointerException, IllegalArgumentException,IOException,ClassNotFoundException
         {
             if(name==null)
             throw new NullPointerException();
@@ -53,7 +55,7 @@ public class Progetto implements Serializable {
             this.InProgeress = new ArrayList<Scheda>();
             this.ToBeRevised = new ArrayList<Scheda>();
             this.Done= new ArrayList<Scheda>();
-            
+            this.ChatGroupIp = groupIP;
 
       
             String dirpath = this.MAIN_DIR_PATH+"/"+name;
@@ -64,7 +66,13 @@ public class Progetto implements Serializable {
             if(progdir.exists()==false)
             {
                 progdir.mkdir();
+
                 this.Members = new ArrayList<String>();
+                System.out.println(dirpath+"   "+progdir.exists());
+                String path = this.MAIN_DIR_PATH+"/"+name+"/Members";
+                Serializers.write(this.Members,path);
+                
+
             }
             else{
                 //SIGNIFICA CHE GIA ESISTE E QUINDI MI PRENDO I FILE DA DENTRO
@@ -123,6 +131,7 @@ public class Progetto implements Serializable {
         {
 
             Scheda newScheda = new Scheda (Nome,Descrizione);
+            System.out.println(ToDo.contains(newScheda));
             if((!ToDo.contains(newScheda)) && (!InProgeress.contains(newScheda)) && (!ToBeRevised.contains(newScheda)) && (!Done.contains(newScheda)))
             {
             newScheda.AddHistory("TODO");
@@ -244,14 +253,21 @@ public class Progetto implements Serializable {
         }
 
         
-        public int RemoveProgetto()
+        //Nel momento in cui si fa la delete del progetto si recupera l'indirizzo ip multicast
+        public synchronized String  RemoveProgetto()
         {
             String path = this.MAIN_DIR_PATH+"/"+this.NomeProgetto;
             File progfile = new File(path);
             System.out.println(progfile.getAbsolutePath());
             deleteFolder(progfile);
 
-            return 1;
+            return this.ChatGroupIp;
+        }
+
+        //Get IP  address of the group
+        public synchronized String GetIpGroup ()
+        {
+            return this.ChatGroupIp;
         }
 
         
@@ -298,6 +314,39 @@ public class Progetto implements Serializable {
         {
             return this.Members;
         }
+
+
+        //Funzione per prendere tutte le schede
+        public synchronized ArrayList<String> GetSchede ()
+        {
+            ArrayList <String> schede = new ArrayList<String>();
+           Iterator<Scheda>  it1 = ToDo.iterator();
+           while(it1.hasNext())
+           {
+                schede.add(it1.next().GetName());
+           }
+           Iterator<Scheda>  it2 = InProgeress.iterator();
+           while(it2.hasNext())
+           {
+                schede.add(it2.next().GetName());
+           }
+           Iterator<Scheda>  it3 = ToBeRevised.iterator();
+           while(it1.hasNext())
+           {
+                schede.add(it3.next().GetName());
+           }
+           Iterator<Scheda>  it4 = Done.iterator();
+           while(it1.hasNext())
+           {
+                schede.add(it4.next().GetName());
+           }
+
+           return schede;
+
+
+        }
+
+        
 
         
 

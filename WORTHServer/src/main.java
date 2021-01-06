@@ -3,6 +3,9 @@ import java.io.File;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
@@ -42,8 +45,12 @@ public class main {
         ConcurrentHashMap <String,String> Userbase= null;
         ConcurrentHashMap <String,Progetto> LisProject = new ConcurrentHashMap<String,Progetto>();
 
+        //Generatore di IP
+        GeneratorIp ipGenerator = new GeneratorIp();
 
-        Userbase = FirstSetup(LisProject,Userbase);
+        
+        
+        Userbase = FirstSetup(LisProject,Userbase,ipGenerator);
         
 
         //Servizio di callback per client
@@ -240,7 +247,7 @@ public class main {
 
                                 if(LisProject.containsKey(projectname)==false)
                                     {
-                                    Progetto p = new Progetto(projectname);
+                                    Progetto p = new Progetto(projectname,ipGenerator.GetnextIp());
                                     LisProject.put(projectname, p);
                                     //Aggiungo il proprietario come mebro
                                     System.out.println(KeysUserMap);
@@ -287,7 +294,7 @@ public class main {
                                 else 
                                 {
                                     //ERRORE NEI TOKENS
-                                    sendtoclient(401,"Errore nel passaggio dei parametri", key);
+                                    sendtoclient(402,"Errore nel passaggio dei parametri", key);
                                 }
 
 
@@ -330,63 +337,78 @@ public class main {
                                 {
                                 Progetto p = LisProject.remove(projectname);
                                     
-                                    if(p.ContainsMember(KeysUserMap.get(FilterKey.filter(key.toString()))))
-                                    {
-                                    p.RemoveProgetto();
-                                    LisProject.remove(projectname);
-                                    sendtoclient(204,"OK operazione effettuata con successo", key);
-                                    }
-                                    else
-                                    {
-                                        sendtoclient(407,"Non sei membro", key);
-
-                                    }
-                                
+                                    
+                                    //Questo per il riuso degli ip
+                                     String ip = p.RemoveProgetto();
+                                     ipGenerator.pushIp(ip);
+                                     LisProject.remove(projectname);
+                                     sendtoclient(204,"OK operazione effettuata con successo", key);    
                                 }
                                 else
                                 {
                                    
                                     sendtoclient(440,"Il Progetto non esiste", key);
-
                                 }
 
                             }
                             //addScheda scheda descrizione
+                            //da gestire gli errori
                            else if (nextok.equals("ADDCARD"))
                            {
-                            String cardname=""; 
-                            String descrizione="";
-                            String projectname="";
-                                
-                            if(strtok.hasMoreTokens())
-                            {
-                            cardname = strtok.nextToken();
-                            descrizione = strtok.nextToken();
-                            projectname = strtok.nextToken(" ");
-                            projectname = projectname+strtok.nextToken("");
-                            }
+                                String cardname=""; 
+                                String descrizione="";
+                                String projectname="";
+                             
+                                if(strtok.hasMoreTokens())
+                                {
+                                    cardname = strtok.nextToken("\n");
+                                    descrizione = strtok.nextToken("\n");
+                                    projectname = strtok.nextToken("\n");
+                                }
+                              
+                            
                             //Inserisco semplicemente la carta 
                             Progetto pi = LisProject.get(projectname);
                             try 
                             {
-                            pi.insertScheda(cardname, descrizione);
+                                pi.insertScheda(cardname, descrizione);
+                                sendtoclient(500,"OK", key);
                             }
                             catch (IllegalArgumentException ex)
                             {
                                 //Errore scheda gia presente 
-                                sendtoclient(403,"Errore Scheda gia presente", key);
+                                sendtoclient(402,"Errore Scheda gia presente", key);
                             }
 
-
+                            
 
                            }
                            else if (nextok.equals("SHOWCARDS"))
                            {
-                                //TODO
+                               
+                            String projectname=""; 
+                                
+                            if(strtok.hasMoreTokens())
+                            {
+                            projectname = strtok.nextToken();
+                            if(strtok.hasMoreTokens())
+                                projectname = projectname + strtok.nextToken("");
+                            }
+
+                            Progetto pi =LisProject.get(projectname);
+                            Gson gson = new Gson();
+                            String response = gson.toJson(pi.GetSchede());
+                            sendtoclient(206,response,key);          
+                           
                            }
-                           else if (nextok.equals("SHOCARDHISTORY"))
+                           else if (nextok.equals("SHOCARD"))
                            {
-                                //TODO
+                            
+                            String cardname="";
+                            String projectname="";
+
+
+                                
                            }
                            else if (nextok.equals("CHANGECARD"))
                            {
@@ -447,7 +469,7 @@ public class main {
     }
     
     //FUNZIONE PER IL SETUP INIZIALE DEL SERVER 
-    private static ConcurrentHashMap <String,String>  FirstSetup(ConcurrentHashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase) throws IOException,ClassNotFoundException
+    private static ConcurrentHashMap <String,String>  FirstSetup(ConcurrentHashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase, GeneratorIp ipgen) throws IOException,ClassNotFoundException
     {
         File mainDir = new File(MAIN_DIR_PATH);
         if(mainDir.exists()==false)
@@ -460,7 +482,15 @@ public class main {
        String [] list = mainDir.list();
        for (String str : list) {
             System.out.println(str);
-            listp.put(str, new Progetto(str));
+            try
+            {
+            listp.put(str, new Progetto(str,ipgen.GetnextIp()));
+            }
+            catch(OutOfRangeException ex)
+            {
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+            }
         }
 
         //Prendo la UserBase e la carico in memoria
@@ -493,6 +523,26 @@ public class main {
         key.attach(buf);
         key.interestOps(SelectionKey.OP_WRITE);
     }
+
+    private static void sendtoGroup (Integer code, String description, String ipGroup)
+    {
+        try
+        {
+        InetAddress ia = InetAddress.getByName(ipGroup);
+        byte [] buffer = new byte [1024];
+        DatagramSocket ms = new DatagramSocket();
+        DatagramPacket dp = new DatagramPacket(buffer,buffer.length,ia,9898);
+        ms.send(dp);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    
 
 
 }

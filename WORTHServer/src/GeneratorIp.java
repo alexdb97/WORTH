@@ -16,8 +16,8 @@ public class GeneratorIp {
     {
         this.x1 = 239;
         this.x2 = 0;
-        this.x3 = 255;
-        this.x4 = 255;
+        this.x3 = 0;
+        this.x4 = 0;
     }
 
 
@@ -57,7 +57,7 @@ public class GeneratorIp {
                             }
                 }
         else 
-            throw  new OutOfRangeException ();
+            throw  new OutOfRangeException ("OutOfRange");
 
         if(x1==240)
             throw new OutOfRangeException();
@@ -74,29 +74,7 @@ public class GeneratorIp {
     }
 
 
-    public static void main (String [] args)
-    {
-        GeneratorIp ip = new GeneratorIp ();
-        try
-        {
-        System.out.println(ip.GetnextIp());
-        System.out.println(ip.GetnextIp());
-        System.out.println(ip.GetnextIp());
-        String prova = ip.GetnextIp();
-        System.out.println(prova);
-        ip.pushIp(prova);
-        System.out.println(ip.GetnextIp());
-        System.out.println(ip.GetnextIp());
-
-        }
-        catch(OutOfRangeException ex)
-        {
-            //Errrore
-            ex.printStackTrace();
-        }
-
-    }
-
+   
 
     
 }

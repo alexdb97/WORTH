@@ -95,8 +95,11 @@ public class Controller {
         this.theview.AddCardview(new AddCard());
         this.theview.ShowCardEvent(new ShowCards());
         this.theview.ShowMembers(new ShowMembers());
-        this.theview.ShowCardHistory(new ShowCardHistory());
+        this.theview.ShowCardProperty(new ShowCardProperty());
         this.theview.EffectiveAddCard(new EffectiveAddCard());
+        this.theview.MoveCard(new MoveCard());
+        this.theview.GroupChat(new GroupChat());
+        this.theview.AddMember(new AddMember());
 
     }
 
@@ -382,11 +385,46 @@ public class Controller {
     }
 
     //Evento ShoCardHistory
-    class ShowCardHistory implements ActionListener {
+    class MoveCard implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+         theview.Movecard();
+
+        }
+    }
+
+    //Evento ShoCardProps
+    class ShowCardProperty implements ActionListener {
 
         public void actionPerformed(ActionEvent evt)
         {
         
+            theview.ShowcardProps();
+
+        }
+    }
+
+
+     //Evento GroupChat
+     class AddMember implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+        
+           theview.AddMemberPanel();
+        }
+    }
+
+
+
+    //Evento GroupChat
+    class GroupChat implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+        
+           theview.ShowChat();
 
         }
     }

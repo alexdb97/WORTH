@@ -258,7 +258,7 @@ public class main {
                                     String name = KeysUserMap.get(FilterKey.filter(key.toString()));
                                     System.out.println(name);
                                     p.AddMember(name,true);
-                                    sendtoclient(203,projectname,key);
+                                    sendtoclient(203,projectname+"\n"+p.GetIpGroup()+"\n",key);
                                     }
                                 else 
                                     {
@@ -281,7 +281,8 @@ public class main {
                                     if(LisProject.containsKey(projectname)){
                                         Progetto pi = LisProject.get(projectname);
                                             if(pi.ContainsMember( KeysUserMap.get(FilterKey.filter(key.toString())))){
-                                                sendtoclient(205,projectname,key);
+                                                
+                                                sendtoclient(205,projectname+"\n"+pi.GetIpGroup()+"\n",key);
                                             }
                                             else{
                                                 //NOTMEMBER
@@ -552,14 +553,14 @@ public class main {
                                 
                             if(strtok.hasMoreTokens())
                             {
-                                newMember = strtok.nextToken(" ");
+                                newMember = strtok.nextToken();
                                 projectname = strtok.nextToken();
                             
 
                                 System.out.println(newMember);
                                 System.out.println(projectname);
 
-                                if(Userbase.contains(newMember))
+                                if(Userbase.containsKey(newMember))
                                 {
                                     Progetto pi = LisProject.get(projectname);
                                     
@@ -585,11 +586,7 @@ public class main {
 
                             }
 
-
-
-
-
-                           }
+                        }
                            else 
                            {
                                //non si puo mandare altro
@@ -700,7 +697,7 @@ public class main {
     private static void sendtoclient (Integer code, String description, SelectionKey key)
     {
         ByteBuffer buf = ByteBuffer.allocate(1024);
-        String str = code.toString()+" "+description;
+        String str = code.toString()+"\n"+description;
         buf.put(str.getBytes());
         key.attach(buf);
         key.interestOps(SelectionKey.OP_WRITE);

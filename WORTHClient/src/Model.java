@@ -10,6 +10,8 @@ public class Model {
     public NotifyEventInterface callbackob;
     private String CurrentProject;
     private String ProjectName;
+
+    private  String GroupIp;
   
     
 
@@ -18,6 +20,8 @@ public class Model {
         LoginMap = new ConcurrentHashMap<String,Boolean>();
         
     }
+
+    
 
 
     public void SetProjectName (String name)
@@ -30,6 +34,10 @@ public class Model {
         return this.ProjectName;
     }
 
+    public void  setGroupIp ( String gip)
+    {
+        this.GroupIp=gip;
+    }
 
  public void setcallback (NotifyEventInterface callbackob)
   {

@@ -21,7 +21,7 @@ public class Controller {
 
     private InitialView theview;
     private Model themodel;
-    // Thread t;
+    private  Thread t;
     private SocketAddress address = new InetSocketAddress("localhost", 6060);
     SocketChannel client;
     ServerInterface server;
@@ -297,6 +297,9 @@ public class Controller {
            themodel.SetProjectName(progetto);
            String request = "ENTER\n"+progetto+"\n";
            int code = RequestResponse.requestresponse(client, request, theview, themodel);
+
+           //Se il codice = 1  allora posso avviare il thread
+           if(code)
      
         }
 
@@ -435,9 +438,6 @@ public class Controller {
         }
     }
 
-
-
-   
 
 
      //Evento AddMember

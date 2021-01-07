@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import javax.lang.model.util.ElementScanner14;
 
+import com.google.gson.Gson;
+
 import Serializers.Serializers;
 
 
@@ -119,14 +121,43 @@ public class Progetto implements Serializable {
             return this.NomeProgetto;
         }
 
-    public String  GetHistory(String s)
+      
+          /**
+   * Getter method for getting the history of the project
+   * @return String.
+   */
+    public synchronized String GetHistory(String s) throws IllegalArgumentException
     {
         Scheda newscheda = new Scheda (s);
         
-        ToDo.contains(s);
-        return ToDo.get(ToDo.indexOf(s)).GetName();
-        
+        if(ToDo.contains(newscheda))
+        {
+           
+            //semplice prova
+             System.out.println(ToDo.get(ToDo.indexOf(newscheda)).GetHistory().toString());
+             Gson gson = new Gson ();
+             
+             String sossoldi =gson.toJson(ToDo.get(ToDo.indexOf(newscheda)).GetHistory().toString());
+             System.out.println(sossoldi);
+             return sossoldi;
+        }
+        else if (InProgeress.contains(newscheda))
+        {
 
+        }
+        else if(ToBeRevised.contains(newscheda))
+        {
+
+        }
+        else if (Done.contains(newscheda))
+        {
+
+        }
+        else
+        {
+            throw new IllegalArgumentException ();
+        }
+        return "CIAO";
         
     }
 

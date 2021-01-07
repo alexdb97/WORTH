@@ -418,7 +418,18 @@ public class main {
                             }
 
                             Progetto pi = LisProject.get(projectname);
-
+                            System.out.println(cardname);
+                        
+                           
+                            System.out.println(pi.GetSchede().contains(cardname));
+                            try
+                            {
+                            pi.GetHistory(cardname);
+                            }
+                            catch(IllegalArgumentException ex)
+                            {
+                                System.out.println("UNC'E'");
+                            }
                             //DEVO VEDERE COME PASSARE LA DESCRIPTION
                             //ANCHE LA HISTORY
                             //INFINE LO STATO ATTUALE NELLA CLASSE PROGETTO
@@ -427,6 +438,7 @@ public class main {
 
                                 
                            }
+
                            else if (nextok.equals("MOVECARD"))
                            {
                             String cardname=""; 

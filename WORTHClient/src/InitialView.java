@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -27,9 +28,10 @@ public class InitialView {
     private JPanel panel = new JPanel();
     private JLabel UserName = new JLabel("UserName");
     private JLabel Password = new JLabel("Password");
+    
 
     private JTextField un = new JTextField();
-    private JTextField ps = new JTextField();
+    private JPasswordField ps = new JPasswordField();
     private JButton Register = new JButton("Register");
     private JButton Login = new JButton("Login");
     //worthmenu
@@ -134,7 +136,7 @@ public class InitialView {
 
     public InitialView ()
     {
-        
+       
 
 
         frame.setResizable(false);
@@ -173,6 +175,11 @@ public class InitialView {
     }
 
 //GETTING FROM TEXTFIELDS
+
+    public String GetNewMember ()
+    {
+        return this.NameMember.getText();
+    }
 
     public String getCardName ()
     {
@@ -619,6 +626,11 @@ public class InitialView {
    void EffecctiveShowCardProps (ActionListener lis)
    {
        this.ShowCardProps.addActionListener(lis);
+   }
+
+   void AddEffectiveMember (ActionListener lis)
+   {
+       this.AddMembereffective.addActionListener(lis);
    }
 
 

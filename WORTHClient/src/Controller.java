@@ -102,6 +102,7 @@ public class Controller {
         this.theview.EffectiveMoveCard(new EffectiveMoveCard());
         this.theview.GroupChat(new GroupChat());
         this.theview.AddMember(new AddMember());
+        this.theview.AddEffectiveMember(new AddEffectiveMember());
 
     }
 
@@ -153,7 +154,7 @@ public class Controller {
                 stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj, 0);
                 server.registerForCallback(stub);
 
-                String request = "LOGIN "+name+" "+pass;
+                String request = "LOGIN\n"+name+"\n"+pass+"\n";
                 int code = RequestResponse.requestresponse(client, request, theview, themodel);
                 System.out.println(code);
                 if(code == -1)
@@ -181,7 +182,7 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt) {
            
-            int code = RequestResponse.requestresponse(client,"LOGOUT", theview, themodel);
+            int code = RequestResponse.requestresponse(client,"LOGOUT\n", theview, themodel);
             try {
                 server.unregisterForCallback(stub);
             } catch (RemoteException e) {
@@ -198,7 +199,7 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt) {
           
-            int code = RequestResponse.requestresponse(client,"LISTPROJECTS", theview, themodel);
+            int code = RequestResponse.requestresponse(client,"LISTPROJECTS\n", theview, themodel);
             
         }
 
@@ -272,7 +273,7 @@ public class Controller {
            String progetto;
 
            progetto = theview.getProgetto();
-           String request= "CREATEPROJECT "+progetto;
+           String request= "CREATEPROJECT\n"+progetto+"\n";
            int code = RequestResponse.requestresponse(client,request, theview, themodel);
            if(code==1)
             {
@@ -294,7 +295,7 @@ public class Controller {
 
            progetto = theview.getProgetto();
            themodel.SetProjectName(progetto);
-           String request = "ENTER "+progetto;
+           String request = "ENTER\n"+progetto+"\n";
            int code = RequestResponse.requestresponse(client, request, theview, themodel);
      
         }
@@ -326,7 +327,7 @@ public class Controller {
         public void actionPerformed(ActionEvent evt)
         {
             String name = themodel.getProjectName();
-            String request = "CANCELPROJECT "+name;
+            String request = "CANCELPROJECT\n"+name;
             int code = RequestResponse.requestresponse(client,request, theview, themodel);
            
 
@@ -355,7 +356,7 @@ public class Controller {
                 theview.error("Inserire qualcosa");
             else
             {
-            String request ="ADDCARD "+ theview.getCardName()+"\n"+ theview.getDescription()+"\n"+theview.getProgetto()+"\n";
+            String request ="ADDCARD\n"+ theview.getCardName()+"\n"+ theview.getDescription()+"\n"+theview.getProgetto()+"\n";
             RequestResponse.requestresponse(client, request, theview, themodel);
             }
         }
@@ -368,7 +369,7 @@ public class Controller {
         public void actionPerformed(ActionEvent evt)
         {
         
-            String request = "SHOWCARDS "+themodel.getProjectName();
+            String request = "SHOWCARDS\n"+themodel.getProjectName()+"\n";
             RequestResponse.requestresponse(client, request, theview, themodel);
 
         }
@@ -379,7 +380,7 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt)
         {
-            String request = "SHOWMEMBERS "+themodel.getProjectName();
+            String request = "SHOWMEMBERS\n"+themodel.getProjectName()+"\n";
             RequestResponse.requestresponse(client,request, theview, themodel);
            
 
@@ -401,7 +402,7 @@ public class Controller {
         public void actionPerformed(ActionEvent evt)
         {
          
-            String request ="MOVECARD "+theview.GetMoveCardName()+"\n"+ theview.GetFrom()+"\n"+theview.GetTo()+"\n"+themodel.getProjectName();
+            String request ="MOVECARD\n"+theview.GetMoveCardName()+"\n"+ theview.GetFrom()+"\n"+theview.GetTo()+"\n"+themodel.getProjectName()+"\n";
             System.out.println(request);
             RequestResponse.requestresponse(client, request, theview, themodel);
 
@@ -427,7 +428,7 @@ public class Controller {
         public void actionPerformed(ActionEvent evt)
         {
         
-           String request = "SHOWCARD "+theview.getNameProps()+"\n"+themodel.getProjectName();
+           String request = "SHOWCARD\n"+theview.getNameProps()+"\n"+themodel.getProjectName()+"\n";
 
            RequestResponse.requestresponse(client, request, theview, themodel);
 
@@ -439,7 +440,7 @@ public class Controller {
    
 
 
-     //Evento GroupChat
+     //Evento AddMember
      class AddMember implements ActionListener {
 
         public void actionPerformed(ActionEvent evt)
@@ -449,8 +450,23 @@ public class Controller {
         }
     }
 
+    //TODO
+    //Evento AddEffectiveMember
+    class  AddEffectiveMember implements ActionListener {
 
+        public void actionPerformed(ActionEvent evt)
+        {
 
+            String Member = theview.GetNewMember();
+
+            String request = "ADDMEMBER\n"+Member+"\n"+themodel.getProjectName()+"\n";
+            RequestResponse.requestresponse(client, request, theview, themodel);
+          
+        }
+    }
+
+    
+   
     //Evento GroupChat
     class GroupChat implements ActionListener {
 

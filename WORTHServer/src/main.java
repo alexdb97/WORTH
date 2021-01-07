@@ -153,7 +153,7 @@ public class main {
                             String command = new String(buffer.array()).trim();
                             System.out.println(command);
 
-                            StringTokenizer strtok = new StringTokenizer(command," ");
+                            StringTokenizer strtok = new StringTokenizer(command,"\n");
                             String nextok="";
                             
                             if(strtok.hasMoreTokens())
@@ -237,8 +237,7 @@ public class main {
                                 if(strtok.hasMoreTokens())
                                 {
                                 projectname = strtok.nextToken();
-                                if(strtok.hasMoreTokens())
-                                    projectname = projectname + strtok.nextToken("");
+                               
                                 }
                                 else{
                                      //ERRORE PARAMETRI
@@ -276,8 +275,7 @@ public class main {
                                 if(strtok.hasMoreElements())
                                 {   
                                     projectname = strtok.nextToken();
-                                    if(strtok.hasMoreTokens())
-                                    projectname = projectname + strtok.nextToken("");
+                                
 
                                     System.out.println(projectname);
                                     if(LisProject.containsKey(projectname)){
@@ -312,8 +310,7 @@ public class main {
                                 if(strtok.hasMoreElements())
                                 {   
                                     projectname = strtok.nextToken();
-                                    if(strtok.hasMoreTokens())
-                                    projectname = projectname + strtok.nextToken("");
+                                   
                                 }
 
                                 //Gia ho controllato che fosse membro e che il progetto esista quindi vado
@@ -331,22 +328,26 @@ public class main {
                                 if(strtok.hasMoreTokens())
                                 {
                                 projectname = strtok.nextToken();
-                                if(strtok.hasMoreTokens())
-                                    projectname = projectname + strtok.nextToken("");
-                                }
+                              
                               
 
                                 //FACCIO I CONTROLLI OPPORTUNEI
                                 if(LisProject.containsKey(projectname))
                                 {
-                                Progetto p = LisProject.remove(projectname);
+                                Progetto p = LisProject.get(projectname);
                                     
-                                    
+                                    if(p.CheckCardsForDelete())
+                                    {
                                     //Questo per il riuso degli ip
                                      String ip = p.RemoveProgetto();
                                      ipGenerator.pushIp(ip);
                                      LisProject.remove(projectname);
-                                     sendtoclient(204,"OK operazione effettuata con successo", key);    
+                                     sendtoclient(204,"OK operazione effettuata con successo", key);   
+                                    }
+                                    else 
+                                    {
+                                        sendtoclient(402,"Non tutte le schede si trovano nello stato DONE", key);
+                                    } 
                                 }
                                 else
                                 {
@@ -355,6 +356,7 @@ public class main {
                                 }
 
                             }
+                        }
                             //addScheda scheda descrizione
                             //da gestire gli errori
                            else if (nextok.equals("ADDCARD"))
@@ -365,9 +367,9 @@ public class main {
                              
                                 if(strtok.hasMoreTokens())
                                 {
-                                    cardname = strtok.nextToken("\n");
-                                    descrizione = strtok.nextToken("\n");
-                                    projectname = strtok.nextToken("\n");
+                                    cardname = strtok.nextToken();
+                                    descrizione = strtok.nextToken();
+                                    projectname = strtok.nextToken();
                                 }
                               
                             
@@ -396,7 +398,7 @@ public class main {
                             {
                             projectname = strtok.nextToken();
                             if(strtok.hasMoreTokens())
-                                projectname = projectname + strtok.nextToken("");
+                                projectname = projectname + strtok.nextToken();
                             }
 
                             Progetto pi =LisProject.get(projectname);
@@ -413,8 +415,8 @@ public class main {
 
                             if(strtok.hasMoreTokens())
                             {
-                                cardname = strtok.nextToken("\n");
-                                projectname = strtok.nextToken("\n");
+                                cardname = strtok.nextToken();
+                                projectname = strtok.nextToken();
                             }
 
                             Progetto pi = LisProject.get(projectname);
@@ -432,7 +434,7 @@ public class main {
                             }
                             catch(IllegalArgumentException ex)
                             {
-                                System.out.println("UNC'E'");
+                                sendtoclient(402,"Questa scheda non è pesente!", key);
                             }
                             //DEVO VEDERE COME PASSARE LA DESCRIPTION
                             //ANCHE LA HISTORY
@@ -452,10 +454,10 @@ public class main {
                          
                             if(strtok.hasMoreTokens())
                             {
-                                cardname = strtok.nextToken("\n");
-                                from = strtok.nextToken("\n");
-                                to = strtok.nextToken("\n");
-                                projectname = strtok.nextToken("\n");
+                                cardname = strtok.nextToken();
+                                from = strtok.nextToken();
+                                to = strtok.nextToken();
+                                projectname = strtok.nextToken();
                             }
 
                          
@@ -511,7 +513,7 @@ public class main {
                                     {
                                         try
                                         {
-                                            pi.Move_InProgress_ToBeRevised(cardname);
+                                            pi.Move_ToBeRevised_InProgress(cardname);
                                             sendtoclient(210,"Carta spostata correttamente", key);
                                             
                                         }
@@ -545,7 +547,48 @@ public class main {
                            }
                            else if (nextok.equals("ADDMEMBER"))
                            {
-                               //TODO
+                                String projectname="";
+                                String newMember = "";
+                                
+                            if(strtok.hasMoreTokens())
+                            {
+                                newMember = strtok.nextToken(" ");
+                                projectname = strtok.nextToken();
+                            
+
+                                System.out.println(newMember);
+                                System.out.println(projectname);
+
+                                if(Userbase.contains(newMember))
+                                {
+                                    Progetto pi = LisProject.get(projectname);
+                                    
+                                    if(!pi.ContainsMember(newMember))
+                                    {
+
+                                        pi.AddMember(newMember,false);
+                                        sendtoclient(210,"OK Cliente Aggiunto", key);
+
+                                    }
+                                    else
+                                    {
+                                        sendtoclient(402,"Utente gia presente nel gruppo", key);
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    sendtoclient(402,"Utente non registrato", key);
+                                }
+                               
+
+                            }
+
+
+
+
+
                            }
                            else 
                            {

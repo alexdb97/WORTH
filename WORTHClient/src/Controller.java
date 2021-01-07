@@ -96,6 +96,7 @@ public class Controller {
         this.theview.ShowCardEvent(new ShowCards());
         this.theview.ShowMembers(new ShowMembers());
         this.theview.ShowCardProperty(new ShowCardProperty());
+        this.theview.EffecctiveShowCardProps(new EffecctiveShowCardProps());
         this.theview.EffectiveAddCard(new EffectiveAddCard());
         this.theview.MoveCard(new MoveCard());
         this.theview.EffectiveMoveCard(new EffectiveMoveCard());
@@ -400,6 +401,10 @@ public class Controller {
         public void actionPerformed(ActionEvent evt)
         {
          
+            String request ="MOVECARD "+theview.GetMoveCardName()+"\n"+ theview.GetFrom()+"\n"+theview.GetTo()+"\n"+themodel.getProjectName();
+            System.out.println(request);
+            RequestResponse.requestresponse(client, request, theview, themodel);
+
 
         }
     }
@@ -415,6 +420,23 @@ public class Controller {
 
         }
     }
+
+    //Evento ShoCardProps
+    class  EffecctiveShowCardProps  implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt)
+        {
+        
+           String request = "SHOWCARD "+theview.getNameProps()+"\n"+themodel.getProjectName();
+
+           RequestResponse.requestresponse(client, request, theview, themodel);
+
+        }
+    }
+
+
+
+   
 
 
      //Evento GroupChat

@@ -13,6 +13,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.rmi.AlreadyBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -24,6 +25,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.lang.model.util.ElementScanner14;
+import javax.naming.NameNotFoundException;
 
 import Serializers.Serializers;
 import com.google.gson.*;
@@ -409,6 +411,19 @@ public class main {
                             String cardname="";
                             String projectname="";
 
+                            if(strtok.hasMoreTokens())
+                            {
+                                cardname = strtok.nextToken("\n");
+                                projectname = strtok.nextToken("\n");
+                            }
+
+                            Progetto pi = LisProject.get(projectname);
+
+                            //DEVO VEDERE COME PASSARE LA DESCRIPTION
+                            //ANCHE LA HISTORY
+                            //INFINE LO STATO ATTUALE NELLA CLASSE PROGETTO
+                            
+
 
                                 
                            }
@@ -427,18 +442,23 @@ public class main {
                                 projectname = strtok.nextToken("\n");
                             }
 
-                             Progetto pi = LisProject.get(projectname);
-                             
+                         
 
-                                    if(from.equals("TODO")&&to.equals("INPROGRESS"))
+
+                             Progetto pi = LisProject.get(projectname);
+                       
+
+                                    if((from.equals("TODO"))&&(to.equals("INPROGRESS")))
                                         {
                                             try
                                             {
+                                               
                                                 pi.Move_ToDo_InProgress(cardname);
+                                                sendtoclient(210,"Carta spostata correttamente", key);
                                             }
                                             catch(IllegalArgumentException ex)
                                             {
-                                                //manda errore la scheda non c'è
+                                                sendtoclient(402,"La scheda non è presente", key);
                                             }
 
 
@@ -448,10 +468,11 @@ public class main {
                                         try
                                             {
                                                 pi.Move_InProgress_Done(cardname);
+                                                sendtoclient(210,"Carta spostata correttamente", key);
                                             }
                                             catch(IllegalArgumentException ex)
                                             {
-                                                //manda errore la scheda non c'è
+                                                sendtoclient(402,"La scheda non è presente", key);
                                             }
 
                                     }
@@ -460,10 +481,12 @@ public class main {
                                         try
                                         {
                                             pi.Move_InProgress_ToBeRevised(cardname);
+                                            sendtoclient(210,"Carta spostata correttamente", key);
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
-                                            //manda errore la scheda non c'è
+                                            sendtoclient(402,"La scheda non è presente", key);
+                                            
                                         }
 
 
@@ -472,11 +495,14 @@ public class main {
                                     {
                                         try
                                         {
+                                            pi.Move_InProgress_ToBeRevised(cardname);
+                                            sendtoclient(210,"Carta spostata correttamente", key);
                                             
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
-                                            //manda errore la scheda non c'è
+                                            sendtoclient(402,"La scheda non è presente ", key);
+                                            
                                         }
 
 
@@ -486,16 +512,17 @@ public class main {
                                         try
                                         {
                                             pi.Move_ToBeRevised_Done(cardname);
+                                            sendtoclient(210,"Carta spostata correttamente", key);
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
-                                            //manda errore la scheda non c'è
+                                            sendtoclient(402,"La scheda non è presente", key);
                                         }
 
                                     }
                                     else
                                     {
-                                        //MANDARE IL CODICE DI ERRORE GENERICO
+                                        sendtoclient(402,"Errore negli argomenti passati", key);
                                     }
 
                                
@@ -547,10 +574,20 @@ public class main {
         {
             e.printStackTrace();
         }
-        catch(Exception e)
+        catch(ClassNotFoundException ex)
         {
-            e.printStackTrace();
+            ex.printStackTrace();
         }
+        catch(OutOfRangeException ex)
+        {
+            ex.printStackTrace();
+        }
+        catch(AlreadyBoundException ex)
+        {
+            ex.printStackTrace();
+        }
+
+       
 
     }
     

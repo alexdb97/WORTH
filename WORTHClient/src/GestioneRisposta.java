@@ -10,6 +10,7 @@ public class GestioneRisposta {
     {
         StringTokenizer strtok = new StringTokenizer(str," ");
         
+        //I codici di errori devono essere ben visti
            
                  if(strtok.hasMoreElements())
                  {

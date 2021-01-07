@@ -119,6 +119,17 @@ public class Progetto implements Serializable {
             return this.NomeProgetto;
         }
 
+    public String  GetHistory(String s)
+    {
+        Scheda newscheda = new Scheda (s);
+        
+        ToDo.contains(s);
+        return ToDo.get(ToDo.indexOf(s)).GetName();
+        
+
+        
+    }
+
         
            /**
    * Method for inserting a new istance of Scheda inside the TODO list, it's a 
@@ -162,7 +173,7 @@ public class Progetto implements Serializable {
                 throw new NullPointerException();
 
             Scheda scheda = new Scheda(s);
-            
+            System.out.println(ToDo.contains(scheda));
             if(ToDo.contains(scheda))
             { 
             Scheda current = ToDo.remove(ToDo.indexOf(scheda));
@@ -170,9 +181,13 @@ public class Progetto implements Serializable {
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
             Serializers.write(current,schedapath);
             InProgeress.add(current);
+            System.out.println(ToDo);
+            System.out.println(InProgeress);
             }
             else
+            {
                 throw new IllegalArgumentException();
+            }
         }
 
     /**
@@ -224,6 +239,32 @@ public class Progetto implements Serializable {
             throw new IllegalArgumentException();
 
         }
+
+
+          /**
+   * Method for moving one "Scheda" from ToBeRevised list to InProgress list.it's a syncronized method for garantee security
+   * in multithread case.
+   * @throws IOException,IllegalArgumentException,NullPointerException.
+   * 
+   */
+  public synchronized  void Move_ToBeRevised_InProgress(String s) throws NullPointerException,IllegalArgumentException,IOException
+  {
+      if(s==null)
+      throw new NullPointerException();
+
+      Scheda scheda = new Scheda (s);
+
+      if(ToBeRevised.contains(scheda))
+      { 
+      Scheda current = ToBeRevised.remove(ToBeRevised.indexOf(scheda));
+      current.AddHistory("INPROGRESS");
+      String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
+      Serializers.write(current,schedapath);
+      InProgeress.add(current);
+      }
+      else
+      throw new IllegalArgumentException();
+  }
 
 
 

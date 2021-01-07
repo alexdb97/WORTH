@@ -77,7 +77,7 @@ public class InitialView {
     private JList list3 = new JList ();
     private JScrollPane pane2 = new JScrollPane(list3);
    
-    //SOLOGUI
+    
     //MoveCard
     private JPanel panel9 = new JPanel ();
     private JLabel from = new JLabel("From");
@@ -188,6 +188,10 @@ public class InitialView {
     {
         return un.getText();
     }
+    public String getNameProps ()
+    {
+        return this.nametxt.getText();
+    }
 
     public String getPassword ()
     {
@@ -202,12 +206,12 @@ public class InitialView {
 
     public String GetFrom ()
     {
-        return fromtxt.getName();
+        return fromtxt.getText();
     }
     
     public String GetTo ()
     {
-        return totxt.getName();
+        return totxt.getText();
     }
 
     public String getProgetto ()
@@ -599,6 +603,12 @@ public class InitialView {
    {
        this.changecard.addActionListener(lis);
    }
+
+   void EffecctiveShowCardProps (ActionListener lis)
+   {
+       this.ShowCardProps.addActionListener(lis);
+   }
+
 
    void ShowCardProperty (ActionListener lis)
    {

@@ -421,10 +421,14 @@ public class main {
                             System.out.println(cardname);
                         
                            
-                            System.out.println(pi.GetSchede().contains(cardname));
+                          
                             try
                             {
-                            pi.GetHistory(cardname);
+                                
+                                Gson gson = new Gson ();
+                                String send= gson.toJson(pi.GetHistory(cardname));
+                                sendtoclient(220,send,key);
+                                
                             }
                             catch(IllegalArgumentException ex)
                             {
@@ -503,7 +507,7 @@ public class main {
 
 
                                     }
-                                    else if (from.equals("TOEREVISED")&&to.equals("INPROGRESS"))
+                                    else if (from.equals("TOBEREVISED")&&to.equals("INPROGRESS"))
                                     {
                                         try
                                         {

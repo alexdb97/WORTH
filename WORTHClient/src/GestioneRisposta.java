@@ -90,6 +90,17 @@ public class GestioneRisposta {
                         return 1;
                        
                     }
+                    else if (code.equals("220"))
+                    {
+                        //prendi la stringa e dovrò farla vedere
+                        String rest = strtok.nextToken("");
+                        System.out.println(rest);
+                        Gson gson = new Gson();
+                        String [] History = gson.fromJson(rest, String[].class);
+                        view.show_card_property(History,"State",History[(History.length)-1]);
+                        return 1;
+
+                    }
                    
                     else if(code.equals("440"))
                     {

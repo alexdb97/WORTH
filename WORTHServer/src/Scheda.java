@@ -48,6 +48,7 @@ public class Scheda  implements Serializable{
 
     public Stack <String> GetHistory ()
     {
+      
         return this.Storia;
     }
 

@@ -508,6 +508,18 @@ public class InitialView {
     frame.repaint();
 }
 
+//Show effectiveCardProprety
+ void show_card_property (String [] rest,String description, String state)
+ {
+     list4.setListData(rest);
+     descriptiontxt.setText(description);
+     statetxt.setText(state);
+     frame.invalidate();
+     frame.validate();
+     frame.repaint();
+
+ }
+
 
     //Add member Panel
     void AddMemberPanel ()

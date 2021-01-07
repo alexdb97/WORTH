@@ -126,40 +126,54 @@ public class Progetto implements Serializable {
    * Getter method for getting the history of the project
    * @return String.
    */
-    public synchronized String GetHistory(String s) throws IllegalArgumentException
+    public synchronized Object [] GetHistory(String s) throws IllegalArgumentException
     {
         Scheda newscheda = new Scheda (s);
         
         if(ToDo.contains(newscheda))
         {
-           
-            //semplice prova
-             System.out.println(ToDo.get(ToDo.indexOf(newscheda)).GetHistory().toString());
-             Gson gson = new Gson ();
-             
-             String sossoldi =gson.toJson(ToDo.get(ToDo.indexOf(newscheda)).GetHistory().toString());
-             System.out.println(sossoldi);
-             return sossoldi;
+             Object [] stro =  ToDo.get(ToDo.indexOf(newscheda)).GetHistory().toArray();
+          
+             return stro ;
         }
+        
         else if (InProgeress.contains(newscheda))
         {
+
+            Object [] stro =  InProgeress.get(InProgeress.indexOf(newscheda)).GetHistory().toArray();
+          
+            return stro ;
 
         }
         else if(ToBeRevised.contains(newscheda))
         {
 
+            Object [] stro =  ToBeRevised.get(ToBeRevised.indexOf(newscheda)).GetHistory().toArray();
+          
+            return stro ;
+
         }
         else if (Done.contains(newscheda))
         {
+
+            Object [] stro =  Done.get(Done.indexOf(newscheda)).GetHistory().toArray();
+          
+            return stro ;
 
         }
         else
         {
             throw new IllegalArgumentException ();
-        }
-        return "CIAO";
+        } 
         
     }
+
+          /**
+   * Getter method for getting the Description of the project
+   * @return String.
+   */
+
+
 
         
            /**
@@ -237,9 +251,10 @@ public class Progetto implements Serializable {
             { 
             Scheda current = InProgeress.remove(InProgeress.indexOf(scheda));
             current.AddHistory("DONE");
+            Done.add(current);
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
             Serializers.write(current,schedapath);
-            Done.add(current);
+          
             }
             else
             throw new IllegalArgumentException();
@@ -397,21 +412,26 @@ public class Progetto implements Serializable {
            {
                 schede.add(it1.next().GetName());
            }
+
            Iterator<Scheda>  it2 = InProgeress.iterator();
            while(it2.hasNext())
            {
                 schede.add(it2.next().GetName());
            }
+
            Iterator<Scheda>  it3 = ToBeRevised.iterator();
-           while(it1.hasNext())
+           while(it3.hasNext())
            {
                 schede.add(it3.next().GetName());
            }
+
            Iterator<Scheda>  it4 = Done.iterator();
-           while(it1.hasNext())
+           while(it4.hasNext())
            {
                 schede.add(it4.next().GetName());
            }
+
+        
 
            return schede;
 

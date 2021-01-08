@@ -177,6 +177,12 @@ public class InitialView {
 
 //GETTING FROM TEXTFIELDS
 
+
+    public String GetSendBox()
+    {
+        return this.sendBox.getText();
+    }
+
     public String GetNewMember ()
     {
         return this.NameMember.getText();

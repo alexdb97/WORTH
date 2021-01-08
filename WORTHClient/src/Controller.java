@@ -1,8 +1,12 @@
 import java.awt.event.ActionListener; // seems to be missing.
-
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -14,15 +18,13 @@ import java.util.concurrent.FutureTask;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
-
 import java.awt.event.*;
 
 public class Controller {
 
     private InitialView theview;
     private Model themodel;
-    private  Thread t;
+    private Thread t;
     private SocketAddress address = new InetSocketAddress("localhost", 6060);
     SocketChannel client;
     ServerInterface server;
@@ -33,15 +35,9 @@ public class Controller {
     NotifyEventInterface callbackObj;
     NotifyEventInterface stub;
 
-
-
     public Controller(InitialView view, Model mod) {
         this.themodel = mod;
         this.theview = view;
-       
-
-
-
 
         // Routine per chiudere bene la connessione
         theview.frame.addWindowListener(new WindowAdapter() {
@@ -54,34 +50,28 @@ public class Controller {
 
                 if (result == JOptionPane.YES_OPTION) {
 
-                if(client!=null)
-                    if (client.isConnected())
-                    {
-                       RequestResponse.requestresponse(client,"LOGOUT", theview, themodel);
+                    if (client != null)
+                        if (client.isConnected()) {
+                            RequestResponse.requestresponse(client, "LOGOUT", theview, themodel);
                             try {
                                 server.unregisterForCallback(stub);
                             } catch (RemoteException e1) {
                                 // TODO Auto-generated catch block
                                 e1.printStackTrace();
                             }
+                        }
+
+                    try {
+                        // Aspetto 1/2 secondo per dare il tempo di mandare il messaggio di QUI
+                        Thread.currentThread().sleep(1000);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    } catch (InterruptedException ex) {
+
                     }
-                            
-                      
-                     try
-                     {
-                     //Aspetto 1/2 secondo per dare il tempo di mandare il messaggio di QUI
-                     Thread.currentThread().sleep(1000);
-                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                     }
-                     catch(InterruptedException ex)
-                     {
+                }
+            }
+        });
 
-                     }
-                     }
-             }
-         });
-
-         
         this.theview.RegisterListner(new RegisterLis());
         this.theview.LoginListener(new LoginListener());
         this.theview.ListProjects(new ListProjects());
@@ -145,7 +135,6 @@ public class Controller {
                 if (name != null || pass != null)
                     themodel.setName(name);
 
-              
                 registry = LocateRegistry.getRegistry(7070);
                 server = (ServerInterface) registry.lookup(name1);
                 System.out.println("Registering For Callback");
@@ -157,20 +146,18 @@ public class Controller {
                 stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj, 0);
                 server.registerForCallback(stub);
 
-                String request = "LOGIN\n"+name+"\n"+pass+"\n";
+                String request = "LOGIN\n" + name + "\n" + pass + "\n";
                 int code = RequestResponse.requestresponse(client, request, theview, themodel);
-                System.out.println(code);
-                if(code == -1)
-                {
-                    //Errore allora mi disconnetto e mi deregistro
-                    server.unregisterForCallback(stub);               
+               
+                if (code == -1) {
+                    // Errore allora mi disconnetto e mi deregistro
+                    server.unregisterForCallback(stub);
                 }
-                
+
                 // spawno un thread per gestire la connessione
                 themodel.setName(theview.getUsername());
                 themodel.setInsideProject(false);
                 theview.setlabel(theview.getUsername());
-
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -181,19 +168,19 @@ public class Controller {
     }
 
     // evento logout
-  
+
     class Logout implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-           
-            int code = RequestResponse.requestresponse(client,"LOGOUT\n", theview, themodel);
+
+            int code = RequestResponse.requestresponse(client, "LOGOUT\n", theview, themodel);
             try {
                 server.unregisterForCallback(stub);
             } catch (RemoteException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
- 
+
         }
 
     }
@@ -202,9 +189,9 @@ public class Controller {
     class ListProjects implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-          
-            int code = RequestResponse.requestresponse(client,"LISTPROJECTS\n", theview, themodel);
-            
+
+            int code = RequestResponse.requestresponse(client, "LISTPROJECTS\n", theview, themodel);
+
         }
 
     }
@@ -213,299 +200,280 @@ public class Controller {
     class ListUsers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-         
-          
-           
-            String[] rest={};
-           try {
-              
-            rest = new String[themodel.callbackob.listUsers().size()];
-            rest = themodel.callbackob.listUsers().toArray(rest);
+
+            String[] rest = {};
+            try {
+
+                rest = new String[themodel.callbackob.listUsers().size()];
+                rest = themodel.callbackob.listUsers().toArray(rest);
             } catch (RemoteException e) {
-                
+
                 e.printStackTrace();
             }
             theview.listProjects(rest, "LISTUSERS");
-            
-               
-            
+
         }
 
     }
 
-      // evento list online users
-      class ListOnlineUsers implements ActionListener {
+    // evento list online users
+    class ListOnlineUsers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-         
-          
-           
-            String[] rest={};
-           try {
-              
-            rest = new String[themodel.callbackob.listOnlineUsers().size()];
-            rest = themodel.callbackob.listOnlineUsers().toArray(rest);
+
+            String[] rest = {};
+            try {
+
+                rest = new String[themodel.callbackob.listOnlineUsers().size()];
+                rest = themodel.callbackob.listOnlineUsers().toArray(rest);
             } catch (RemoteException e) {
-                
+
                 e.printStackTrace();
             }
             theview.listProjects(rest, "LISTONLINEUSERS");
-            
-               
-            
+
         }
 
     }
 
-    //Prepara alla creazione del Progetto
+    // Prepara alla creazione del Progetto
     class PrepareProject implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
-           
+
             theview.CreateProject();
 
         }
 
     }
 
-    //Evento creazione effettiva del progetto
+    // Evento creazione effettiva del progetto
     class EffectiveCreate implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-           
-           String progetto;
+        public void actionPerformed(ActionEvent evt) {
 
-           progetto = theview.getProgetto();
-           String request= "CREATEPROJECT\n"+progetto+"\n";
-           int code = RequestResponse.requestresponse(client,request, theview, themodel);
-           if(code==1)
-            {
+            String progetto;
+
+            progetto = theview.getProgetto();
+            String request = "CREATEPROJECT\n" + progetto + "\n";
+            int code = RequestResponse.requestresponse(client, request, theview, themodel);
+            if (code == 1) {
                 themodel.SetProjectName(progetto);
                 theview.setProjectName(progetto);
-                t = new Thread(new ChatTask(themodel.Getip(),theview));
+                t = new Thread(new ChatTask(themodel.Getip(), theview));
                 t.start();
                 themodel.setInsideProject(true);
             }
-          
+
         }
 
     }
 
-      //Evento creazione effettiva del progetto
-      class EnterProject implements ActionListener {
+    // Evento creazione effettiva del progetto
+    class EnterProject implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-           
-           String progetto;
+        public void actionPerformed(ActionEvent evt) {
 
-           progetto = theview.getProgetto();
-           themodel.SetProjectName(progetto);
-           String request = "ENTER\n"+progetto+"\n";
-           int code = RequestResponse.requestresponse(client, request, theview, themodel);
+            String progetto;
 
-           //Se il codice = 1  allora posso avviare il thread
-           if(code==1)
-           {
-               themodel.setInsideProject(true);
-                t = new Thread(new ChatTask(themodel.Getip(),theview));
+            progetto = theview.getProgetto();
+            themodel.SetProjectName(progetto);
+            String request = "ENTER\n" + progetto + "\n";
+            int code = RequestResponse.requestresponse(client, request, theview, themodel);
+
+            // Se il codice = 1 allora posso avviare il thread
+            if (code == 1) {
+                themodel.setInsideProject(true);
+                t = new Thread(new ChatTask(themodel.Getip(), theview));
                 t.start();
-           }
-     
+            }
+
         }
 
     }
-    
-    
-    
 
-
-    //evento vai indietro
+    // evento vai indietro
     class goBack_prog implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-           
+        public void actionPerformed(ActionEvent evt) {
+
             theview.goback(false);
             theview.setFramedim(300, 300);
             theview.setvisiblepanel2(true);
-           
 
-            //Interrompo il Thread
-            if(themodel.getInsideProject())
-                {
+            // Interrompo il Thread
+            if (themodel.getInsideProject()) {
                 t.interrupt();
-                }
-
+            }
 
         }
 
     }
 
-    //evento CancelProject
+    // evento CancelProject
     class CancelProject implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
+        public void actionPerformed(ActionEvent evt) {
             String name = themodel.getProjectName();
-            String request = "CANCELPROJECT\n"+name;
-            int code = RequestResponse.requestresponse(client,request, theview, themodel);
-            if(themodel.getInsideProject())
+            String request = "CANCELPROJECT\n" + name;
+            int code = RequestResponse.requestresponse(client, request, theview, themodel);
+            if (themodel.getInsideProject())
                 t.interrupt();
 
-           
-            
         }
 
     }
 
-     //evento AddCardView
-     class AddCard implements ActionListener {
+    // evento AddCardView
+    class AddCard implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-          theview.AddCard();
+        public void actionPerformed(ActionEvent evt) {
+            theview.AddCard();
 
         }
     }
 
-    //Add effective card
+    // Add effective card
     class EffectiveAddCard implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-            if(theview.getCardName().equals("") || theview.getDescription().equals(""))
+        public void actionPerformed(ActionEvent evt) {
+            if (theview.getCardName().equals("") || theview.getDescription().equals(""))
                 theview.error("Inserire qualcosa");
-            else
-            {
-            String request ="ADDCARD\n"+ theview.getCardName()+"\n"+ theview.getDescription()+"\n"+theview.getProgetto()+"\n";
-            RequestResponse.requestresponse(client, request, theview, themodel);
+            else {
+                String request = "ADDCARD\n" + theview.getCardName() + "\n" + theview.getDescription() + "\n"
+                        + theview.getProgetto() + "\n";
+                RequestResponse.requestresponse(client, request, theview, themodel);
             }
         }
     }
 
-
-    //Evento showCards
+    // Evento showCards
     class ShowCards implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-        
-            String request = "SHOWCARDS\n"+themodel.getProjectName()+"\n";
+        public void actionPerformed(ActionEvent evt) {
+
+            String request = "SHOWCARDS\n" + themodel.getProjectName() + "\n";
             RequestResponse.requestresponse(client, request, theview, themodel);
 
         }
     }
 
-    //Evento ShoMembers
+    // Evento ShoMembers
     class ShowMembers implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-            String request = "SHOWMEMBERS\n"+themodel.getProjectName()+"\n";
-            RequestResponse.requestresponse(client,request, theview, themodel);
-           
+        public void actionPerformed(ActionEvent evt) {
+            String request = "SHOWMEMBERS\n" + themodel.getProjectName() + "\n";
+            RequestResponse.requestresponse(client, request, theview, themodel);
 
         }
     }
 
-    //Evento move card 
+    // Evento move card
     class MoveCard implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-         theview.Movecard();
+        public void actionPerformed(ActionEvent evt) {
+            theview.Movecard();
 
         }
     }
-      //Evento move card 
-      class  EffectiveMoveCard implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-         
-            String request ="MOVECARD\n"+theview.GetMoveCardName()+"\n"+ theview.GetFrom()+"\n"+theview.GetTo()+"\n"+themodel.getProjectName()+"\n";
+    // Evento move card
+    class EffectiveMoveCard implements ActionListener {
+
+        public void actionPerformed(ActionEvent evt) {
+
+            String request = "MOVECARD\n" + theview.GetMoveCardName() + "\n" + theview.GetFrom() + "\n"
+                    + theview.GetTo() + "\n" + themodel.getProjectName() + "\n";
             System.out.println(request);
             RequestResponse.requestresponse(client, request, theview, themodel);
 
-
         }
     }
-   
 
-    //Evento ShoCardProps
+    // Evento ShoCardProps
     class ShowCardProperty implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-        
+        public void actionPerformed(ActionEvent evt) {
+
             theview.ShowcardProps();
 
         }
     }
 
-    //Evento ShoCardProps
-    class  EffecctiveShowCardProps  implements ActionListener {
+    // Evento ShoCardProps
+    class EffecctiveShowCardProps implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-        
-           String request = "SHOWCARD\n"+theview.getNameProps()+"\n"+themodel.getProjectName()+"\n";
+        public void actionPerformed(ActionEvent evt) {
 
-           RequestResponse.requestresponse(client, request, theview, themodel);
+            String request = "SHOWCARD\n" + theview.getNameProps() + "\n" + themodel.getProjectName() + "\n";
+
+            RequestResponse.requestresponse(client, request, theview, themodel);
 
         }
     }
 
+    // Evento AddMember
+    class AddMember implements ActionListener {
 
+        public void actionPerformed(ActionEvent evt) {
 
-     //Evento AddMember
-     class AddMember implements ActionListener {
-
-        public void actionPerformed(ActionEvent evt)
-        {
-        
-           theview.AddMemberPanel();
+            theview.AddMemberPanel();
         }
     }
 
-    //TODO
-    //Evento AddEffectiveMember
-    class  AddEffectiveMember implements ActionListener {
+    // TODO
+    // Evento AddEffectiveMember
+    class AddEffectiveMember implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
+        public void actionPerformed(ActionEvent evt) {
 
             String Member = theview.GetNewMember();
 
-            String request = "ADDMEMBER\n"+Member+"\n"+themodel.getProjectName()+"\n";
+            String request = "ADDMEMBER\n" + Member + "\n" + themodel.getProjectName() + "\n";
             RequestResponse.requestresponse(client, request, theview, themodel);
-          
+
         }
     }
 
-    
-   
-    //Evento GroupChat
+    // Evento GroupChat
     class GroupChat implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-        
-           theview.ShowChat();
+        public void actionPerformed(ActionEvent evt) {
+
+            theview.ShowChat();
 
         }
     }
 
-        //Evento GroupChat
-        class SendMessage implements ActionListener {
+    // Evento GroupChat
+    class SendMessage implements ActionListener {
 
-        public void actionPerformed(ActionEvent evt)
-        {
-        
-           System.out.println("ECCOMI QUA");
+        public void actionPerformed(ActionEvent evt) {
 
+            System.out.println("ECCOMI QUA");
+            String sendmess = theview.GetSendBox();
+            try{
+            
+          
+            InetAddress ia = InetAddress.getByName(themodel.Getip());
+            byte [] Buffer = new byte [1024];
+            Buffer = sendmess.getBytes();
+            DatagramSocket sc = new DatagramSocket();
+            DatagramPacket dp = new DatagramPacket(Buffer,Buffer.length,ia,6767);
+            sc.send(dp);
+            }
+            catch (UnknownHostException e) {
+                
+                e.printStackTrace();
+            }
+            catch (SocketException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
         }
     }
 

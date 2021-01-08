@@ -82,7 +82,7 @@ public class GestioneRisposta {
                      
                         return 1;
                     }
-                    else if (code.equals("205"))
+                    else if (code.equals("208"))
                     {
                         //ENTRATO 
                         view.setvisiblepanel4(false);

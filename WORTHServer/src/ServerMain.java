@@ -281,7 +281,7 @@ public class ServerMain {
                                         Progetto pi = LisProject.get(projectname);
                                             if(pi.ContainsMember( KeysUserMap.get(FilterKey.filter(key.toString())))){
                                                 
-                                                sendtoclient(205,projectname+"\n"+pi.GetIpGroup()+"\n",key);
+                                                sendtoclient(208,projectname+"\n"+pi.GetIpGroup()+"\n",key);
                                             }
                                             else{
                                                 //NOTMEMBER

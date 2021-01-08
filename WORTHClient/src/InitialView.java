@@ -801,6 +801,12 @@ public class InitialView {
         JOptionPane.showMessageDialog(frame, err, "ErrorMessage",JOptionPane.ERROR_MESSAGE);
     }
 
+    void OkMessage (String err)
+    {
+        JOptionPane.showMessageDialog(frame, err, "OK",JOptionPane.OK_CANCEL_OPTION);
+    }
+
+
 
 
     //SETTER METHODS

@@ -31,6 +31,7 @@ public class GestioneRisposta {
                         return 1;
                         
                     }
+                    //LISTPROJECTS
                     else if(code.equals("202"))
                     {
                         String rest = strtok.nextToken("\n");
@@ -41,6 +42,7 @@ public class GestioneRisposta {
 
                         
                     }
+                    //LOGOUT
                     else if(code.equals("300"))
                     {
                         view.setvisiblepanel1(true);
@@ -48,11 +50,19 @@ public class GestioneRisposta {
                         so.close();
                         return -1;
                     }
-                    else if (code.equals("402"))
+                    //ERROR GENERIC AND error panel show
+                    else if (code.equals("404"))
                     {
                         //Errore Generico
                         view.error(str);
                         return -1;
+                    }
+                    else if (code.equals("204"))
+                    {
+                        //OK message
+                        //Used only for notify something
+                        view.OkMessage(str);
+                        return 1;
                     }
                     else if(code.equals("203"))
                     {
@@ -63,7 +73,7 @@ public class GestioneRisposta {
                         return 1;
 
                     }
-                    else if (code.equals("204")) 
+                    else if (code.equals("205")) 
                     {
                         //Progetto Rimosso con successo
                         view.goback(false);
@@ -74,7 +84,7 @@ public class GestioneRisposta {
                     }
                     else if (code.equals("205"))
                     {
-                        //ENTRATO bisogna vedere come fare con il thread
+                        //ENTRATO 
                         view.setvisiblepanel4(false);
                         view.InsideAProject(strtok.nextToken("\n"));
                         model.setGroupIp(strtok.nextToken("\n"));
@@ -91,7 +101,7 @@ public class GestioneRisposta {
                         return 1;
                        
                     }
-                    else if (code.equals("220"))
+                    else if (code.equals("207"))
                     {
                         //prendi la stringa e dovrò farla vedere
                         String rest = strtok.nextToken("\n");
@@ -102,8 +112,8 @@ public class GestioneRisposta {
                         return 1;
 
                     }
-                   
-                    else if(code.equals("440"))
+                   //the project doesn't exist
+                    else if(code.equals("403"))
                     {
                         view.error(str);
                         view.goback(false);

@@ -1,4 +1,4 @@
-import java.net.Inet4Address;
+
 import java.util.Stack;
 
 public class GeneratorIp {
@@ -22,14 +22,14 @@ public class GeneratorIp {
 
 
 
-    //Forse bisognerebbe fare dei controlli
+   
     public void pushIp (String ip)
     {
         this.IpReuse.push(ip);
     }
 
 
-    //Genera il prossimo ip
+  
     public String GetnextIp () throws OutOfRangeException
     {
         String nextip;

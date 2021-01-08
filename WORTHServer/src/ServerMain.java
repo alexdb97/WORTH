@@ -95,12 +95,12 @@ public class ServerMain {
         r.rebind("REGISTER", stub);
         r.bind(namereg,stub2);
 
-        System.out.println("Servizio di registrazione Attivo!");
+        System.out.println("Register service Active!");
 
      
 
 
-        //Punto di accesso del server Selettore con
+        //selector
 
         ServerSocketChannel ss = ServerSocketChannel.open();
         SocketAddress socadd = new InetSocketAddress(6060);
@@ -124,8 +124,8 @@ public class ServerMain {
             {
                 SelectionKey key = iterator.next();
                 iterator.remove();
-                //rimuovi la chiave dal selected set, ma non dal registered set
-                //si accettano nuove connessioni e si registrano sul selettore
+               
+                
                 if(key.isAcceptable())
                 {
                     
@@ -142,7 +142,7 @@ public class ServerMain {
                 else if(key.isReadable())
                 {
                     
-                    //operazioni di lettura
+                   
                     SocketChannel client = (SocketChannel) key.channel();
                     ByteBuffer buffer =  (ByteBuffer) key.attachment();
 
@@ -161,7 +161,7 @@ public class ServerMain {
                             
 
 
-                            //logout() LOGOUT FUNZIONA
+                            //logout() 
                             if(nextok.equals("LOGOUT"))
                             {
                                 
@@ -179,8 +179,8 @@ public class ServerMain {
                             {
                                 if(strtok.countTokens()!=2)
                                 {
-                                    //ERRORE NEL PASSAGGIO DEI PARAMETRI dei parametri
-                                    sendtoclient(401,"Errore Parametri", key);     
+                                    
+                                    sendtoclient(401,"Error, Arguments are wrong", key);     
                                 }
                                 else
                                 {
@@ -193,29 +193,28 @@ public class ServerMain {
                                 {
                                     System.out.println(Userbase.get(name));
 
-                                //controllo che la password e che non abbia gia fatto la login
+                                //checking of the password and login 
                                 if(Userbase.get(name).equals(password)&&(LoginMap.get(name).equals(false)))
                                     {
-                                        //login avvenuta con successo
+                                        
                                       
                                         LoginMap.replace(name,false,true);
                                         KeysUserMap.putIfAbsent(FilterKey.filter(key.toString()),name);
                                         server1.update(LoginMap);
-                                        //corretto avvenimento della login
                                         sendtoclient(201,"Login", key);
 
                                     }
                                 else
                                     {
-                                        //Errore nella login oppure utrntr gia loggato
-                                        sendtoclient(401,"Errore nella password  o Utente gia loggato", key);
+                                        //Wrong password or The User is already logged
+                                        sendtoclient(401,"Wrong password or The User is already logged", key);
                                         
                                     }
                                 }
                                 else 
                                 {
-                                    //L'utente non esiste
-                                    sendtoclient(401,"Errore, l'utente non esiste ", key);
+                                    //The User does not exist
+                                    sendtoclient(401,"The User does not exist ", key);
                                 } 
                              }      
                             }
@@ -224,7 +223,7 @@ public class ServerMain {
                             //listprojects()
                             else if (nextok.equals("LISTPROJECTS"))
                             {
-                                //invio della lista dei progetti nel formato JSON tramite la libreria GSON
+                                //sending through GSON
                                 Gson gson = new Gson();
                                 Set<String> listprog = LisProject.keySet();
                                 String send = gson.toJson(listprog);
@@ -240,8 +239,8 @@ public class ServerMain {
                                
                                 }
                                 else{
-                                     //ERRORE PARAMETRI
-                                     sendtoclient(402,"Errore nel passaggio dei parametri", key);
+                                    
+                                     sendtoclient(404,"Error, Arguments are wrong", key);
                                      break;
                                 }
 
@@ -263,7 +262,7 @@ public class ServerMain {
                                 else 
                                     {
                                         //ERRORE PROGETTO GIA ESISTENTE
-                                        sendtoclient(402,"Errore Progetto gia' esistente ", key);
+                                        sendtoclient(404,"Errore Progetto gia' esistente ", key);
                                         break;
                                     }
                             }
@@ -286,18 +285,18 @@ public class ServerMain {
                                             }
                                             else{
                                                 //NOTMEMBER
-                                                sendtoclient(402,"Errore non sei membro del progetto", key);
+                                                sendtoclient(404,"Errore non sei membro del progetto", key);
                                             }
                                     }
                                     else {
                                         //PROJECT DOESN'T EXIST
-                                        sendtoclient(402,"Errore il progetto non esiste", key);
+                                        sendtoclient(404,"Errore il progetto non esiste", key);
                                     }
                                 }
                                 else 
                                 {
                                     //ERRORE NEI TOKENS
-                                    sendtoclient(402,"Errore nel passaggio dei parametri", key);
+                                    sendtoclient(404,"Errore nel passaggio dei parametri", key);
                                 }
 
 
@@ -343,20 +342,20 @@ public class ServerMain {
                                      String ip = p.RemoveProgetto();
                                      ipGenerator.pushIp(ip);
                                      LisProject.remove(projectname);
-                                     sendtoclient(204,"OK operazione effettuata con successo", key);
+                                     sendtoclient(205,"OK ", key);
                                      sendtoGroup("CANCELLED",p.GetIpGroup());
                                      System.out.println(ip);
                                       
                                     }
                                     else 
                                     {
-                                        sendtoclient(402,"Non tutte le schede si trovano nello stato DONE", key);
+                                        sendtoclient(404,"Not all cards are in  DONE State ", key);
                                     } 
                                 }
                                 else
                                 {
                                    
-                                    sendtoclient(440,"Il Progetto non esiste", key);
+                                    sendtoclient(403,"The Project Does not exist", key);
                                 }
 
                             }
@@ -382,13 +381,13 @@ public class ServerMain {
                             try 
                             {
                                 pi.insertScheda(cardname, descrizione);
-                                sendtoclient(500,"OK", key);
+                                sendtoclient(204,"OK card added", key);
                                 sendtoGroup("SYSTEM: card \""+cardname+"\" was added to the TODO list",pi.GetIpGroup());
                             }
                             catch (IllegalArgumentException ex)
                             {
-                                //Errore scheda gia presente 
-                                sendtoclient(402,"Errore Scheda gia presente", key);
+                              
+                                sendtoclient(404,"The card is already inside the project", key);
                             }
 
                             
@@ -436,22 +435,14 @@ public class ServerMain {
                                 String desc = pi.GetDescription(cardname);
                                 String send= gson.toJson(pi.GetHistory(cardname));
                                  
-                                sendtoclient(220,(send+"\n"+desc+"\n"),key);
+                                sendtoclient(207,(send+"\n"+desc+"\n"),key);
                                 
                             }
                             catch(IllegalArgumentException ex)
                             {
-                                sendtoclient(402,"Questa scheda non è pesente!", key);
+                                sendtoclient(404,"Questa scheda non è pesente!", key);    
                             }
-                            //DEVO VEDERE COME PASSARE LA DESCRIPTION
-                            //ANCHE LA HISTORY
-                            //INFINE LO STATO ATTUALE NELLA CLASSE PROGETTO
-                            
-
-
-                                
-                           }
-
+                        }
                            else if (nextok.equals("MOVECARD"))
                            {
                             String cardname=""; 
@@ -479,12 +470,12 @@ public class ServerMain {
                                             {
                                                
                                                 pi.Move_ToDo_InProgress(cardname);
-                                                sendtoclient(210,"Carta spostata correttamente", key);
+                                                sendtoclient(204,"OK Card Moved", key);
                                                 sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from TODO list to INPROGRESS list",pi.GetIpGroup());
                                             }
                                             catch(IllegalArgumentException ex)
                                             {
-                                                sendtoclient(402,"La scheda non è presente", key);
+                                                sendtoclient(404,"This card is not present", key);
                                             }
 
 
@@ -494,12 +485,12 @@ public class ServerMain {
                                         try
                                             {
                                                 pi.Move_InProgress_Done(cardname);
-                                                sendtoclient(210,"Carta spostata correttamente", key);
+                                                sendtoclient(204,"OK Card Moved", key);
                                                 sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from INPROGRESS list to DONE list",pi.GetIpGroup());
                                             }
                                             catch(IllegalArgumentException ex)
                                             {
-                                                sendtoclient(402,"La scheda non è presente", key);
+                                                sendtoclient(404,"This card is not present", key);
                                             }
 
                                     }
@@ -508,12 +499,12 @@ public class ServerMain {
                                         try
                                         {
                                             pi.Move_InProgress_ToBeRevised(cardname);
-                                            sendtoclient(210,"Carta spostata correttamente", key);
+                                            sendtoclient(204,"OK Card Moved", key);
                                             sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from INPROGRESS list to TOBEREVISED list",pi.GetIpGroup());
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
-                                            sendtoclient(402,"La scheda non è presente", key);
+                                            sendtoclient(404,"This card is not present", key);
                                             
                                         }
 
@@ -524,13 +515,13 @@ public class ServerMain {
                                         try
                                         {
                                             pi.Move_ToBeRevised_InProgress(cardname);
-                                            sendtoclient(210,"Carta spostata correttamente", key);
+                                            sendtoclient(204,"OK Card Moved", key);
                                             sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from TOBEREVISED list to INPROGRESS list",pi.GetIpGroup());
                                             
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
-                                            sendtoclient(402,"La scheda non è presente ", key);
+                                            sendtoclient(404,"This card is not present", key);
                                             
                                         }
 
@@ -541,18 +532,18 @@ public class ServerMain {
                                         try
                                         {
                                             pi.Move_ToBeRevised_Done(cardname);
-                                            sendtoclient(210,"Carta spostata correttamente", key);
+                                            sendtoclient(204,"OK Card Moved", key);
                                             sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from TOBEREVISED list to DONE list",pi.GetIpGroup());
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
-                                            sendtoclient(402,"La scheda non è presente", key);
+                                            sendtoclient(404,"This card is not present", key);
                                         }
 
                                     }
                                     else
                                     {
-                                        sendtoclient(402,"Errore negli argomenti passati", key);
+                                        sendtoclient(404,"Error, Arguments are wrong", key);
                                     }
 
                                
@@ -579,21 +570,21 @@ public class ServerMain {
                                     {
 
                                         pi.AddMember(newMember,false);
-                                        sendtoclient(210,"OK Cliente Aggiunto", key);
+                                        sendtoclient(204,"OK Client Added", key);
                                         sendtoGroup("SYSTEM:  \""+newMember+"\" joined ",pi.GetIpGroup());
                                         
 
                                     }
                                     else
                                     {
-                                        sendtoclient(402,"Utente gia presente nel gruppo", key);
+                                        sendtoclient(404,"User is already in the group", key);
                                     }
 
 
                                 }
                                 else
                                 {
-                                    sendtoclient(402,"Utente non registrato", key);
+                                    sendtoclient(404,"Not registered User", key);
                                 }
                                
 
@@ -660,7 +651,7 @@ public class ServerMain {
 
     }
     
-    //FUNZIONE PER IL SETUP INIZIALE DEL SERVER 
+    //Setup Server
     private static ConcurrentHashMap <String,String>  FirstSetup(ConcurrentHashMap <String,Progetto> listp,ConcurrentHashMap <String,String> Ubase, GeneratorIp ipgen) throws IOException,ClassNotFoundException
     {
         File mainDir = new File(MAIN_DIR_PATH);
@@ -670,7 +661,7 @@ public class ServerMain {
            
         }
 
-        //Prendo tutti i progetti e li carico in memoria
+        //All Projects are loaded on the memory
        String [] list = mainDir.list();
        for (String str : list) {
             System.out.println(str);
@@ -685,7 +676,7 @@ public class ServerMain {
             }
         }
 
-        //Prendo la UserBase e la carico in memoria
+        //UserBase is loaded on the memory 
         String path = "./UserBase";
         File  filebase = new File(path);
         if(filebase.exists())
@@ -706,7 +697,7 @@ public class ServerMain {
 
     }
 
-
+    //Utility Function for sending to client
     private static void sendtoclient (Integer code, String description, SelectionKey key)
     {
         ByteBuffer buf = ByteBuffer.allocate(1024);
@@ -716,6 +707,7 @@ public class ServerMain {
         key.interestOps(SelectionKey.OP_WRITE);
     }
 
+    //Utility Function for Multcasting 
     private static void sendtoGroup(String description, String ipGroup)
     {
         try

@@ -24,10 +24,11 @@ public class ChatTask implements Runnable {
     @Override
     public void run() {
 
-        // Metodo Run
+       
 
         try {
         
+            //Initializing Multicast Socket
             MulticastSocket ms = new MulticastSocket(6767);
             InetAddress ia = InetAddress.getByName(groupip);
             System.out.println(groupip);
@@ -35,7 +36,7 @@ public class ChatTask implements Runnable {
             
 
             
-            System.out.println("CiaoCORE");
+           
 
            
             while(!Thread.currentThread().isInterrupted()) 
@@ -51,7 +52,9 @@ public class ChatTask implements Runnable {
                byte [] data= new byte[dp.getLength()];
                System.arraycopy(dp.getData(), dp.getOffset(), data, 0, dp.getLength());
                String s = new String (data,StandardCharsets.UTF_8);
-               //Rountine per uscire in maniera safe
+
+               //Safe Routine for  terminating the Thread operation if
+               // someone cancel the project
                if(s.equals("CANCELLED"))
                     {
                         view.goback(false);
@@ -72,7 +75,7 @@ public class ChatTask implements Runnable {
         
       
             ms.close();
-            System.out.println(" MARIA IO ESCO");
+           
          
 
 

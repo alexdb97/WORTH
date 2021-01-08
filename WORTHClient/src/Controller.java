@@ -1,6 +1,5 @@
-import java.awt.event.ActionListener; // seems to be missing.
+import java.awt.event.ActionListener; 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -13,12 +12,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 import java.awt.event.*;
+
+
 
 public class Controller {
 
@@ -40,7 +38,7 @@ public class Controller {
         this.themodel = mod;
         this.theview = view;
 
-        // Routine per chiudere bene la connessione
+        // Routine for closing the connection throught the exit button
         theview.frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
 
@@ -63,7 +61,8 @@ public class Controller {
                         }
 
                     try {
-                        // Aspetto 1/2 secondo per dare il tempo di mandare il messaggio di QUI
+                        //Waiting an half second for sending LOGOUT to server
+                        // and close safely the connection
                         Thread.currentThread().sleep(1000);
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     } catch (InterruptedException ex) {
@@ -100,7 +99,7 @@ public class Controller {
 
     }
 
-    // Evento che interagisce con la registrazione
+    // Register Event
     class RegisterLis implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -113,7 +112,7 @@ public class Controller {
                 if (name != null || pass != null)
 
                     if (themodel.sendData(name, pass) == 400)
-                        theview.error("400 Utente già registrato");
+                        theview.error("400 Registered User");
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -123,7 +122,7 @@ public class Controller {
 
     }
 
-    // evento che interagisce con il longin
+    // Login Event
     class LoginListener implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -151,11 +150,11 @@ public class Controller {
                 int code = RequestResponse.requestresponse(client, request, theview, themodel);
                
                 if (code == -1) {
-                    // Errore allora mi disconnetto e mi deregistro
+                    // If code = -1 Error occur then unregister
                     server.unregisterForCallback(stub);
                 }
 
-                // spawno un thread per gestire la connessione
+                //New Thread for handling the chat
                 themodel.setName(theview.getUsername());
                 themodel.setInsideProject(false);
                 theview.setlabel(theview.getUsername());
@@ -168,8 +167,7 @@ public class Controller {
 
     }
 
-    // evento logout
-
+    //Logout Event
     class Logout implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -178,7 +176,7 @@ public class Controller {
             try {
                 server.unregisterForCallback(stub);
             } catch (RemoteException e) {
-                // TODO Auto-generated catch block
+               
                 e.printStackTrace();
             }
 
@@ -186,7 +184,7 @@ public class Controller {
 
     }
 
-    // evento lista progetti
+    //ListProjects Event
     class ListProjects implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -197,7 +195,7 @@ public class Controller {
 
     }
 
-    // evento list users
+    //ListUsers Event
     class ListUsers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -217,7 +215,7 @@ public class Controller {
 
     }
 
-    // evento list online users
+    //ListOnlineUsers Event
     class ListOnlineUsers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -237,7 +235,7 @@ public class Controller {
 
     }
 
-    // Prepara alla creazione del Progetto
+    
     class PrepareProject implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -248,7 +246,7 @@ public class Controller {
 
     }
 
-    // Evento creazione effettiva del progetto
+    //EffectiveCreate Event
     class EffectiveCreate implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -270,7 +268,7 @@ public class Controller {
 
     }
 
-    // Evento creazione effettiva del progetto
+    //EnterProject Event 
     class EnterProject implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -293,7 +291,7 @@ public class Controller {
 
     }
 
-    // evento vai indietro
+    //GoBack Event
     class goBack_prog implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -311,7 +309,7 @@ public class Controller {
 
     }
 
-    // evento CancelProject
+    //Cancel Project
     class CancelProject implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -324,7 +322,7 @@ public class Controller {
 
     }
 
-    // evento AddCardView
+    //AddCardView Event
     class AddCard implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -333,7 +331,7 @@ public class Controller {
         }
     }
 
-    // Add effective card
+    // Add effective card Event
     class EffectiveAddCard implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -347,7 +345,7 @@ public class Controller {
         }
     }
 
-    // Evento showCards
+    //showCards Event
     class ShowCards implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -358,7 +356,7 @@ public class Controller {
         }
     }
 
-    // Evento ShoMembers
+    //ShoMembers Event 
     class ShowMembers implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -368,7 +366,7 @@ public class Controller {
         }
     }
 
-    // Evento move card
+    //Move Card Event
     class MoveCard implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {
@@ -377,7 +375,7 @@ public class Controller {
         }
     }
 
-    // Evento move card
+    //MoveCrad Effect
     class EffectiveMoveCard implements ActionListener {
 
         public void actionPerformed(ActionEvent evt) {

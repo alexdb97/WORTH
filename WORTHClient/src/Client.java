@@ -1,5 +1,4 @@
 import java.rmi.ConnectException;
-
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

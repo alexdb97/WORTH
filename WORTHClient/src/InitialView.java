@@ -1,4 +1,4 @@
-import java.awt.event.ActionListener; // seems to be missing.
+import java.awt.event.ActionListener; 
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,8 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.Border;
-
 import java.awt.Color;
 import java.awt.Font;
 
@@ -50,14 +48,14 @@ public class InitialView {
     private JList list = new JList();
     private JScrollPane scrollPane = new JScrollPane(list);
 
-    //Pannello crea Progetti
+    //Create/Enter Components
     private JPanel panel4 = new JPanel();
     private JTextField progetto = new JTextField ();
     private JButton create = new JButton("create");
     private JButton enter = new JButton("enter");
     private JLabel desc = new JLabel("Insert project name");
 
-    //Pannello InsideProject Comand Bar
+    //InsideProject Comand Components
     private JPanel panel5 = new JPanel ();
     private JButton CancelProject = new JButton ("Cancel Project");
     private JButton AddCard = new JButton("Add Card");
@@ -68,7 +66,7 @@ public class InitialView {
     private JButton AddMember = new JButton("Add Member");
     private JButton EnterChat = new JButton("Group Chat");
     private JLabel ProjectName = new JLabel();
-    //Add Card Panel
+    //Add Card Components
     private JPanel panel7 = new JPanel ();
     private JLabel CardName = new JLabel("Card Name");
     private JLabel DescriptionLabel = new JLabel("Description");
@@ -81,7 +79,7 @@ public class InitialView {
     private JScrollPane pane2 = new JScrollPane(list3);
    
     
-    //MoveCard
+    //MoveCard Components
     private JPanel panel9 = new JPanel ();
     private JLabel from = new JLabel("From");
     private JLabel to = new JLabel("to");
@@ -91,8 +89,8 @@ public class InitialView {
     private JLabel card_name  = new JLabel ("Card Name");
     private JTextField card_nametxt = new JTextField ();
 
-    //GUI
-    //Show Card Property
+    
+    //Show Card Property Components
     private JPanel panel10 = new JPanel ();
     private JList list4 = new JList  ();
     private JScrollPane pane3 = new JScrollPane(list4);
@@ -106,23 +104,17 @@ public class InitialView {
     private JTextField Historytxt = new JTextField();
     private JButton ShowCardProps = new JButton ("Show Card Proprety");
     
-    //ADD MEMBER |TO DO
+    //Add Member Componets
     private JLabel Nameof = new JLabel ("New Member name");
     private JButton AddMembereffective = new JButton ("Add");
     private JTextField NameMember = new JTextField ();
     private JPanel panel11 = new JPanel ();
-    //GROUP CHAT 
+    //Group Chat Components
     private JTextArea  receiveBox = new JTextArea ();
     private JScrollPane panescroll = new JScrollPane(receiveBox);
     private JPanel panel12 = new JPanel ();
     private JTextArea sendBox = new JTextArea ();
     private JButton sendbutton = new JButton("Send");
-    
-
-   
-
-
-    //Vediamo dopo i vari bottoni
     private JPanel panel6 = new JPanel ();
     
     
@@ -130,8 +122,6 @@ public class InitialView {
    
     
 
-
-    
 
 
 
@@ -176,8 +166,7 @@ public class InitialView {
         frame.setVisible(true);
     }
 
-//GETTING FROM TEXTFIELDS
-
+//GETTER METHODS
 
     public String GetSendBox()
     {
@@ -235,7 +224,8 @@ public class InitialView {
     }
 
 
-    //NAVIGATION
+    //NAVIGATION-METHODS
+
    public void setvisiblepanel1 (boolean value)
    {
        this.panel.setVisible(value);
@@ -243,7 +233,7 @@ public class InitialView {
    }
 
 
-   //WORTHMENU
+   //WorthMenu
    public void setvisiblepanel2 (boolean value)
    {
     
@@ -279,11 +269,10 @@ public class InitialView {
 
    }
 
-   //LISTPROJECTS
+   //Listprojects
    public void listProjects (String [] rest, String kindlist )
    {
      
-    
    panel2.setVisible(false);
    frame.setTitle(kindlist);
    panel3.setLayout(null);
@@ -300,6 +289,7 @@ public class InitialView {
    
    }
 
+   //Create Project view
    public void CreateProject ()
    {
        panel2.setVisible(false);
@@ -323,7 +313,7 @@ public class InitialView {
        panel4.setVisible(true);    
    }
 
-   //INSIDE PROJECT
+   //Inside Project
    public void InsideAProject (String Title)
    {
         frame.setSize(1500, 600);
@@ -396,7 +386,7 @@ public class InitialView {
    }
 
 
-   //ADD CARD
+   //Add Card View 
    public void AddCard ()
    {
 
@@ -458,7 +448,6 @@ public class InitialView {
 
 
    //panel9   MoveCard
-
    void Movecard ()
    {
        panel6.setVisible(false);
@@ -478,7 +467,6 @@ public class InitialView {
        fromtxt.setBounds(720,300,200,30);
        totxt.setBounds(720,400,200,30);
        changecard.setBounds(600,500,150,50);
-     
        changecard.setBackground(Color.GRAY);
        changecard.setForeground(Color.WHITE);
        changecard.setFont(new Font("Serif", Font.BOLD, 15));
@@ -605,7 +593,6 @@ public class InitialView {
         panel12.setLayout(null);
         panel12.setBackground(Color.WHITE);
         receiveBox.setBounds(200,220,1000,200);
-       
         receiveBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         receiveBox.setEditable(false);
         sendBox.setFont(new Font("Serif", Font.BOLD, 15));
@@ -620,7 +607,7 @@ public class InitialView {
         sendbutton.setFont(new Font("Serif", Font.BOLD, 15));
         panescroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         panescroll.setVisible(true);
-        
+
         panel12.add(panescroll);
         panel12.add(sendbutton);
         panel12.add(sendBox);
@@ -634,47 +621,34 @@ public class InitialView {
     }
    
 
-   public void setProjectName(String name)
-   {
-       ProjectName.setText(name);
-   }
-
-
-   public void  setFramedim(int x,int y)
-   {
-       this.frame.setSize(x,y);
-   }
-
-
-
-
+  
    public void goback(boolean value)
    {
-        this.panel3.setVisible(value);
-        this.panel4.setVisible(value);
-       this.panel5.setVisible(value);
-       this.panel6.setVisible(value);
-       this.panel7.setVisible(value);
-       this.panel8.setVisible(value);
-       this.panel9.setVisible(value);
-       this.panel10.setVisible(value);
-       this.panel11.setVisible(value);
-       this.panel12.setVisible(value);
-       this.panel12.setVisible(value);
-       NewScheda.setText("");
-       Description.setText("");
-       fromtxt.setText("");
-       totxt.setText("");
-       card_nametxt.setText("");
-       nametxt.setText("");
-       descriptiontxt.setText("");
-       statetxt.setText("");
-       Historytxt.setText("");
-       NameMember.setText("");
-       receiveBox.setText("");
-       sendBox.setText("");
-       list3.removeAll();
-       list4.removeAll();
+    this.panel3.setVisible(value);
+    this.panel4.setVisible(value);
+    this.panel5.setVisible(value);
+    this.panel6.setVisible(value);
+    this.panel7.setVisible(value);
+    this.panel8.setVisible(value);
+    this.panel9.setVisible(value);
+    this.panel10.setVisible(value);
+    this.panel11.setVisible(value);
+    this.panel12.setVisible(value);
+    this.panel12.setVisible(value);
+    NewScheda.setText("");
+    Description.setText("");
+    fromtxt.setText("");
+    totxt.setText("");
+    card_nametxt.setText("");
+    nametxt.setText("");
+    descriptiontxt.setText("");
+    statetxt.setText("");
+    Historytxt.setText("");
+    NameMember.setText("");
+    receiveBox.setText("");
+    sendBox.setText("");
+    list3.removeAll();
+    list4.removeAll();
    }
 
 
@@ -689,7 +663,6 @@ public class InitialView {
 
 
 //ACTIONS HANDLER
-
 
    void SendMessage (ActionListener lis)
    {
@@ -828,6 +801,10 @@ public class InitialView {
         JOptionPane.showMessageDialog(frame, err, "ErrorMessage",JOptionPane.ERROR_MESSAGE);
     }
 
+
+
+    //SETTER METHODS
+
     void setlabel(String name)
     {
         String text = "Welcome   "+name;
@@ -843,6 +820,19 @@ public class InitialView {
     {
         this.sendBox.setText("");
     }
+
+    public void setProjectName(String name)
+    {
+        ProjectName.setText(name);
+    }
+ 
+ 
+    public void  setFramedim(int x,int y)
+    {
+        this.frame.setSize(x,y);
+    }
+ 
+    
 
 
     

@@ -14,7 +14,7 @@ public class GeneratorIp {
 
     public GeneratorIp ()
     {
-        this.x1 = 239;
+        this.x1 = 224;
         this.x2 = 0;
         this.x3 = 0;
         this.x4 = 0;

@@ -115,6 +115,7 @@ public class InitialView {
     private JScrollPane panescroll = new JScrollPane(receiveBox);
     private JPanel panel12 = new JPanel ();
     private JTextArea sendBox = new JTextArea ();
+    private JButton sendbutton = new JButton("Send");
     
 
    
@@ -243,14 +244,23 @@ public class InitialView {
         frame.setTitle("WORTH MENU");
         //set layout to null
         panel2.setLayout(null);
+        panel2.setBackground(Color.WHITE);
         frame.add(this.panel2);
         welcome.setBounds(50,20,200,100);
         panel2.add(welcome);
         createproject.setBounds(40, 90, 220, 20);
+        createproject.setBackground(Color.GRAY);
+        createproject.setForeground(Color.WHITE);
         listUsers.setBounds(40,120,220, 20);
+        listUsers.setBackground(Color.GRAY);
+        listUsers.setForeground(Color.WHITE);
         listOnlineUsers.setBounds(40, 150, 220,20);
+        listOnlineUsers.setBackground(Color.GRAY);
+        listOnlineUsers.setForeground(Color.WHITE);
         listProjects.setBounds(40,180,220,20);
-        logout.setBackground(Color.BLUE);
+        listProjects.setBackground(Color.GRAY);
+        listProjects.setForeground(Color.WHITE);
+        logout.setBackground(Color.DARK_GRAY);
         logout.setForeground(Color.WHITE);
         logout.setBounds(40,10,220,20);
         panel2.add(logout);
@@ -292,7 +302,11 @@ public class InitialView {
        panel4.setLayout(null);
        progetto.setBounds(20,120,100,20);
        create.setBounds(150,100,80, 20);
+       create.setBackground(Color.GRAY);
+       create.setForeground(Color.WHITE);
        enter.setBounds(150,140,80,20);
+       enter.setBackground(Color.GRAY);
+       enter.setForeground(Color.WHITE);
        desc.setBounds(100,70,150,20);
        goBack_prog.setBounds(0, 0,300,50);
        panel4.add(desc);
@@ -400,6 +414,9 @@ public class InitialView {
     Description.setLineWrap(true);
     Description.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     AddEffectiveCard.setBounds(920,300,100,50);
+    AddEffectiveCard.setBackground(Color.GRAY);
+    AddEffectiveCard.setForeground(Color.WHITE);
+    AddEffectiveCard.setFont(new Font("Serif", Font.BOLD, 15));
     panel7.add(DescriptionLabel);
     panel7.add(Description);
     panel7.add(NewScheda);
@@ -425,7 +442,7 @@ public class InitialView {
        panel10.setVisible(false);
        panel8.setVisible(true);
        panel8.setLayout(null);
-       pane2.setBounds(100,250,1000, 200);
+       pane2.setBounds(200,220,1000,200);
        panel8.setBounds(0,200,1500,400);
        list3.setListData(lista);
        panel8.add(pane2);
@@ -456,6 +473,10 @@ public class InitialView {
        fromtxt.setBounds(720,300,200,30);
        totxt.setBounds(720,400,200,30);
        changecard.setBounds(600,500,150,50);
+     
+       changecard.setBackground(Color.GRAY);
+       changecard.setForeground(Color.WHITE);
+       changecard.setFont(new Font("Serif", Font.BOLD, 15));
        card_name.setBounds(480,200,200,50);
        card_name.setFont(new Font("Serif", Font.BOLD, 25));
        card_nametxt.setBounds(720,220,200,30);
@@ -500,6 +521,9 @@ public class InitialView {
     descriptiontxt.setBounds(500,340,200,50);
     statetxt.setBounds(500,440,200,50);
     ShowCardProps.setBounds(760,340,150,50);
+    ShowCardProps.setBackground(Color.GRAY);
+    ShowCardProps.setForeground(Color.WHITE);
+    ShowCardProps.setFont(new Font("Serif", Font.BOLD, 15));
     panel10.add(ShowCardProps);
     panel10.add(name);
     panel10.add(description);
@@ -545,6 +569,9 @@ public class InitialView {
         Nameof.setFont(new Font("Serif", Font.BOLD, 25));
         NameMember.setBounds(830,240,200,50);
         AddMembereffective.setBounds(700,400,150,50);
+        AddMembereffective.setBackground(Color.GRAY);
+        AddMembereffective.setForeground(Color.WHITE);
+        AddMembereffective.setFont(new Font("Serif", Font.BOLD, 15));
         panel11.add(Nameof);
         panel11.add(NameMember);
         panel11.add(AddMembereffective);
@@ -555,10 +582,43 @@ public class InitialView {
 
     }
 
+   
+
 
     //ShowChat 
     void ShowChat()
     {
+        panel6.setVisible(false);
+        panel8.setVisible(false);
+        panel7.setVisible(false);
+        panel9.setVisible(false);
+        panel10.setVisible(false);
+        panel12.setVisible(false);
+        panel11.setVisible(false);
+        panel12.setVisible(true);
+        panel12.setBounds(0,200,1500,400);
+        panel12.setLayout(null);
+        panel12.setBackground(Color.WHITE);
+        receiveBox.setBounds(200,220,1000,200);
+        receiveBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        receiveBox.setEditable(false);
+        sendBox.setFont(new Font("Serif", Font.BOLD, 15));
+        sendBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        sendBox.setLineWrap(true);
+        panel12.add(receiveBox);
+        sendBox.setBounds(200,450,1000,100);
+        sendbutton.setBounds(1250,470,150,50);
+        sendbutton.setBackground(Color.GRAY);
+        sendbutton.setForeground(Color.WHITE);
+        sendbutton.setFont(new Font("Serif", Font.BOLD, 15));
+        panel12.add(sendbutton);
+        panel12.add(sendBox);
+        frame.add(panel12);
+        frame.invalidate();
+        frame.validate();
+        frame.repaint();
+
+        
 
     }
    
@@ -575,6 +635,8 @@ public class InitialView {
    }
 
 
+
+
    public void goback(boolean value)
    {
         this.panel3.setVisible(value);
@@ -586,9 +648,25 @@ public class InitialView {
        this.panel9.setVisible(value);
        this.panel10.setVisible(value);
        this.panel11.setVisible(value);
-       panel12.setVisible(value);
-
+       this.panel12.setVisible(value);
+       this.panel12.setVisible(value);
+       NewScheda.setText("");
+       Description.setText("");
+       fromtxt.setText("");
+       totxt.setText("");
+       card_nametxt.setText("");
+       nametxt.setText("");
+       descriptiontxt.setText("");
+       statetxt.setText("");
+       Historytxt.setText("");
+       NameMember.setText("");
+       receiveBox.setText("");
+       sendBox.setText("");
+       list3.removeAll();
+       list4.removeAll();
    }
+
+
 
 
    public void setvisiblepanel4(boolean value)
@@ -601,6 +679,18 @@ public class InitialView {
 
 //ACTIONS HANDLER
 
+
+   void SendMessage (ActionListener lis)
+   {
+    this.sendbutton.addActionListener(lis);
+   }
+
+
+
+   void ShowChatListener (ActionListener lis)
+   {
+       this.EnterChat.addActionListener(lis);
+   }
 
     void AddMember (ActionListener lis)
    {

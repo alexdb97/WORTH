@@ -8,7 +8,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -103,6 +104,8 @@ public class Controller {
         this.theview.GroupChat(new GroupChat());
         this.theview.AddMember(new AddMember());
         this.theview.AddEffectiveMember(new AddEffectiveMember());
+        this.theview.ShowChatListener(new GroupChat());
+        this.theview.SendMessage(new SendMessage());
 
     }
 
@@ -165,6 +168,7 @@ public class Controller {
                 
                 // spawno un thread per gestire la connessione
                 themodel.setName(theview.getUsername());
+                themodel.setInsideProject(false);
                 theview.setlabel(theview.getUsername());
 
 
@@ -279,6 +283,9 @@ public class Controller {
             {
                 themodel.SetProjectName(progetto);
                 theview.setProjectName(progetto);
+                t = new Thread(new ChatTask(themodel.Getip(),theview));
+                t.start();
+                themodel.setInsideProject(true);
             }
           
         }
@@ -299,7 +306,12 @@ public class Controller {
            int code = RequestResponse.requestresponse(client, request, theview, themodel);
 
            //Se il codice = 1  allora posso avviare il thread
-           if(code)
+           if(code==1)
+           {
+               themodel.setInsideProject(true);
+                t = new Thread(new ChatTask(themodel.Getip(),theview));
+                t.start();
+           }
      
         }
 
@@ -318,6 +330,13 @@ public class Controller {
             theview.goback(false);
             theview.setFramedim(300, 300);
             theview.setvisiblepanel2(true);
+           
+
+            //Interrompo il Thread
+            if(themodel.getInsideProject())
+                {
+                t.interrupt();
+                }
 
 
         }
@@ -332,7 +351,8 @@ public class Controller {
             String name = themodel.getProjectName();
             String request = "CANCELPROJECT\n"+name;
             int code = RequestResponse.requestresponse(client,request, theview, themodel);
-           
+            if(themodel.getInsideProject())
+                t.interrupt();
 
            
             
@@ -478,13 +498,25 @@ public class Controller {
         }
     }
 
+        //Evento GroupChat
+        class SendMessage implements ActionListener {
 
+        public void actionPerformed(ActionEvent evt)
+        {
+        
+           System.out.println("ECCOMI QUA");
 
-   
+        }
+    }
 
+      
 
 
 
     
+
+
+
+   
     
 }

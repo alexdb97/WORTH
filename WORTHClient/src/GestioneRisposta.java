@@ -78,6 +78,7 @@ public class GestioneRisposta {
                         //ENTRATO bisogna vedere come fare con il thread
                         view.setvisiblepanel4(false);
                         view.InsideAProject(strtok.nextToken("\n"));
+                        model.setGroupIp(strtok.nextToken("\n"));
                         
                         return 1;
 

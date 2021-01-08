@@ -12,6 +12,7 @@ public class Model {
     private String ProjectName;
 
     private  String GroupIp;
+    private boolean InsideProject;
   
     
 
@@ -21,7 +22,15 @@ public class Model {
         
     }
 
-    
+    public void setInsideProject(boolean value)
+    {
+        this.InsideProject = value;
+    }
+
+    public boolean getInsideProject()
+    {
+        return this.InsideProject;
+    }
 
 
     public void SetProjectName (String name)
@@ -34,9 +43,14 @@ public class Model {
         return this.ProjectName;
     }
 
-    public void  setGroupIp ( String gip)
+    public void setGroupIp ( String gip)
     {
         this.GroupIp=gip;
+    }
+
+    public String Getip ()
+    {
+        return this.GroupIp;
     }
 
  public void setcallback (NotifyEventInterface callbackob)

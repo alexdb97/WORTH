@@ -1,5 +1,6 @@
 import java.awt.event.ActionListener; // seems to be missing.
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,8 +13,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -35,7 +35,8 @@ public class Controller {
     NotifyEventInterface callbackObj;
     NotifyEventInterface stub;
 
-    public Controller(InitialView view, Model mod) {
+    public Controller(InitialView view, Model mod) 
+    {
         this.themodel = mod;
         this.theview = view;
 
@@ -146,7 +147,7 @@ public class Controller {
                 stub = (NotifyEventInterface) UnicastRemoteObject.exportObject(callbackObj, 0);
                 server.registerForCallback(stub);
 
-                String request = "LOGIN\n" + name + "\n" + pass + "\n";
+                String request = "LOGIN\n"+name+"\n"+pass+"\n";
                 int code = RequestResponse.requestresponse(client, request, theview, themodel);
                
                 if (code == -1) {
@@ -284,7 +285,7 @@ public class Controller {
             // Se il codice = 1 allora posso avviare il thread
             if (code == 1) {
                 themodel.setInsideProject(true);
-                t = new Thread(new ChatTask(themodel.Getip(), theview));
+                t = new Thread(new ChatTask(themodel.Getip(),theview));
                 t.start();
             }
 
@@ -317,8 +318,7 @@ public class Controller {
             String name = themodel.getProjectName();
             String request = "CANCELPROJECT\n" + name;
             int code = RequestResponse.requestresponse(client, request, theview, themodel);
-            if (themodel.getInsideProject())
-                t.interrupt();
+         
 
         }
 
@@ -450,17 +450,18 @@ public class Controller {
 
         public void actionPerformed(ActionEvent evt) {
 
-            System.out.println("ECCOMI QUA");
-            String sendmess = theview.GetSendBox();
-            try{
-            
           
+            String sendmess = themodel.getName()+": "+theview.GetSendBox();
+            try{
+                  
             InetAddress ia = InetAddress.getByName(themodel.Getip());
             byte [] Buffer = new byte [1024];
             Buffer = sendmess.getBytes();
             DatagramSocket sc = new DatagramSocket();
             DatagramPacket dp = new DatagramPacket(Buffer,Buffer.length,ia,6767);
             sc.send(dp);
+            theview.RefreshSendBox();
+
             }
             catch (UnknownHostException e) {
                 

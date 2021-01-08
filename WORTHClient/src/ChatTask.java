@@ -7,14 +7,17 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 
 
 public class ChatTask implements Runnable {
 
     String groupip;
+    InitialView view;
 
     public ChatTask(String ip, InitialView theview){
         this.groupip = ip;
+        view = theview;
 
     }
 
@@ -43,10 +46,21 @@ public class ChatTask implements Runnable {
                byte [] buffer = new byte [1024];
                DatagramPacket dp = new DatagramPacket(buffer,buffer.length);
                //Timeout should set non blocking
-               ms.setSoTimeout(200);
+               ms.setSoTimeout(1000);
                ms.receive(dp);
-               String s = new String (dp.getData());
-               System.out.println(s);
+               byte [] data= new byte[dp.getLength()];
+               System.arraycopy(dp.getData(), dp.getOffset(), data, 0, dp.getLength());
+               String s = new String (data,StandardCharsets.UTF_8);
+               //Rountine per uscire in maniera safe
+               if(s.equals("CANCELLED"))
+                    {
+                        view.goback(false);
+                        view.setFramedim(300, 300);
+                        view.setvisiblepanel2(true);
+                        break;
+                    }
+               System.out.print(s);
+               view.SetReceiveBox(s);
               }
               catch(SocketTimeoutException ex)
               {

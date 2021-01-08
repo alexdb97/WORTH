@@ -34,7 +34,7 @@ import com.google.gson.*;
 
 
 
-public class main {
+public class ServerMain {
 
      static String MAIN_DIR_PATH =  "./MainDir";
 
@@ -197,7 +197,7 @@ public class main {
                                 if(Userbase.get(name).equals(password)&&(LoginMap.get(name).equals(false)))
                                     {
                                         //login avvenuta con successo
-                                        System.out.println("SEI DENTRO AMICO");
+                                      
                                         LoginMap.replace(name,false,true);
                                         KeysUserMap.putIfAbsent(FilterKey.filter(key.toString()),name);
                                         server1.update(LoginMap);
@@ -343,7 +343,10 @@ public class main {
                                      String ip = p.RemoveProgetto();
                                      ipGenerator.pushIp(ip);
                                      LisProject.remove(projectname);
-                                     sendtoclient(204,"OK operazione effettuata con successo", key);   
+                                     sendtoclient(204,"OK operazione effettuata con successo", key);
+                                     sendtoGroup("CANCELLED",p.GetIpGroup());
+                                     System.out.println(ip);
+                                      
                                     }
                                     else 
                                     {
@@ -380,6 +383,7 @@ public class main {
                             {
                                 pi.insertScheda(cardname, descrizione);
                                 sendtoclient(500,"OK", key);
+                                sendtoGroup("SYSTEM: card \""+cardname+"\" was added to the TODO list",pi.GetIpGroup());
                             }
                             catch (IllegalArgumentException ex)
                             {
@@ -429,8 +433,10 @@ public class main {
                             {
                                 
                                 Gson gson = new Gson ();
+                                String desc = pi.GetDescription(cardname);
                                 String send= gson.toJson(pi.GetHistory(cardname));
-                                sendtoclient(220,send,key);
+                                 
+                                sendtoclient(220,(send+"\n"+desc+"\n"),key);
                                 
                             }
                             catch(IllegalArgumentException ex)
@@ -474,6 +480,7 @@ public class main {
                                                
                                                 pi.Move_ToDo_InProgress(cardname);
                                                 sendtoclient(210,"Carta spostata correttamente", key);
+                                                sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from TODO list to INPROGRESS list",pi.GetIpGroup());
                                             }
                                             catch(IllegalArgumentException ex)
                                             {
@@ -488,6 +495,7 @@ public class main {
                                             {
                                                 pi.Move_InProgress_Done(cardname);
                                                 sendtoclient(210,"Carta spostata correttamente", key);
+                                                sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from INPROGRESS list to DONE list",pi.GetIpGroup());
                                             }
                                             catch(IllegalArgumentException ex)
                                             {
@@ -501,6 +509,7 @@ public class main {
                                         {
                                             pi.Move_InProgress_ToBeRevised(cardname);
                                             sendtoclient(210,"Carta spostata correttamente", key);
+                                            sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from INPROGRESS list to TOBEREVISED list",pi.GetIpGroup());
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
@@ -516,6 +525,7 @@ public class main {
                                         {
                                             pi.Move_ToBeRevised_InProgress(cardname);
                                             sendtoclient(210,"Carta spostata correttamente", key);
+                                            sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from TOBEREVISED list to INPROGRESS list",pi.GetIpGroup());
                                             
                                         }
                                         catch(IllegalArgumentException ex)
@@ -532,6 +542,7 @@ public class main {
                                         {
                                             pi.Move_ToBeRevised_Done(cardname);
                                             sendtoclient(210,"Carta spostata correttamente", key);
+                                            sendtoGroup("SYSTEM: card \""+cardname+"\" was moved from TOBEREVISED list to DONE list",pi.GetIpGroup());
                                         }
                                         catch(IllegalArgumentException ex)
                                         {
@@ -569,6 +580,8 @@ public class main {
 
                                         pi.AddMember(newMember,false);
                                         sendtoclient(210,"OK Cliente Aggiunto", key);
+                                        sendtoGroup("SYSTEM:  \""+newMember+"\" joined ",pi.GetIpGroup());
+                                        
 
                                     }
                                     else
@@ -697,21 +710,23 @@ public class main {
     private static void sendtoclient (Integer code, String description, SelectionKey key)
     {
         ByteBuffer buf = ByteBuffer.allocate(1024);
-        String str = code.toString()+"\n"+description;
+        String str = code.toString()+"\n"+description+"\n";
         buf.put(str.getBytes());
         key.attach(buf);
         key.interestOps(SelectionKey.OP_WRITE);
     }
 
-    private static void sendtoGroup (Integer code, String description, String ipGroup)
+    private static void sendtoGroup(String description, String ipGroup)
     {
         try
         {
         InetAddress ia = InetAddress.getByName(ipGroup);
         byte [] buffer = new byte [1024];
+        buffer = description.getBytes();
         DatagramSocket ms = new DatagramSocket();
-        DatagramPacket dp = new DatagramPacket(buffer,buffer.length,ia,9898);
+        DatagramPacket dp = new DatagramPacket(buffer,buffer.length,ia,6767);
         ms.send(dp);
+
         }
         catch(Exception e)
         {

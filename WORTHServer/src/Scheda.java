@@ -45,6 +45,11 @@ public class Scheda  implements Serializable{
        this.Storia.push(transfer);
     }
 
+    public String getDescription ()
+    {
+        return this.Descrizione;
+    }
+
 
     public Stack <String> GetHistory ()
     {

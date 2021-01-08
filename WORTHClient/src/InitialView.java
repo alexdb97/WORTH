@@ -11,6 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 
 import java.awt.Color;
@@ -76,7 +77,7 @@ public class InitialView {
     private JButton  AddEffectiveCard = new JButton("Add");
     //Show Lists
     private JPanel panel8 = new JPanel ();
-    private JList list3 = new JList ();
+    private JList  list3 = new JList  ();
     private JScrollPane pane2 = new JScrollPane(list3);
    
     
@@ -93,7 +94,7 @@ public class InitialView {
     //GUI
     //Show Card Property
     private JPanel panel10 = new JPanel ();
-    private JList list4 = new JList ();
+    private JList list4 = new JList  ();
     private JScrollPane pane3 = new JScrollPane(list4);
     private JLabel name = new JLabel ("Insert Name of the card") ; 
     private JLabel description = new JLabel ("Description");
@@ -290,13 +291,11 @@ public class InitialView {
    list.setListData(rest);
    scrollPane.setBounds(0,50,285,210);
    scrollPane.setVisible(true);
-  
    goBack_prog.setBounds(0, 0,300,50);
    panel3.add(goBack_prog);
    panel3.add(scrollPane);
    panel3.setVisible(true);
    frame.add(panel3);
- 
    frame.setVisible(true);
    
    }
@@ -606,10 +605,12 @@ public class InitialView {
         panel12.setLayout(null);
         panel12.setBackground(Color.WHITE);
         receiveBox.setBounds(200,220,1000,200);
+       
         receiveBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         receiveBox.setEditable(false);
         sendBox.setFont(new Font("Serif", Font.BOLD, 15));
         sendBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        receiveBox.setFont(new Font("Serif", Font.BOLD, 15));
         sendBox.setLineWrap(true);
         panel12.add(receiveBox);
         sendBox.setBounds(200,450,1000,100);
@@ -617,6 +618,10 @@ public class InitialView {
         sendbutton.setBackground(Color.GRAY);
         sendbutton.setForeground(Color.WHITE);
         sendbutton.setFont(new Font("Serif", Font.BOLD, 15));
+        panescroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        panescroll.setVisible(true);
+        
+        panel12.add(panescroll);
         panel12.add(sendbutton);
         panel12.add(sendBox);
         frame.add(panel12);
@@ -829,7 +834,15 @@ public class InitialView {
         welcome.setText(text);
     }
     
+    void SetReceiveBox (String receive)
+    {
+        this.receiveBox.append(" "+receive+"\n\n");
+    }
 
+    void RefreshSendBox ()
+    {
+        this.sendBox.setText("");
+    }
 
 
     

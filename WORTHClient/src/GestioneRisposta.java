@@ -10,6 +10,7 @@ public class GestioneRisposta {
     {
         StringTokenizer strtok = new StringTokenizer(str,"\n");
         
+        System.out.println(str);
         //I codici di errori devono essere ben visti
            
                  if(strtok.hasMoreElements())
@@ -34,7 +35,6 @@ public class GestioneRisposta {
                     {
                         String rest = strtok.nextToken("\n");
                         Gson gson = new Gson();
-                        System.out.println(rest);
                         view.listProjects(gson.fromJson(rest, String[].class) , "LISTPROJECTS");
                    
                         return 1;
@@ -57,7 +57,6 @@ public class GestioneRisposta {
                     else if(code.equals("203"))
                     {
                         //Progetto creato con successo
-                        System.out.println(str);
                         view.setvisiblepanel4(false);
                         view.InsideAProject(strtok.nextToken("\n"));
                         model.setGroupIp(strtok.nextToken("\n"));
@@ -88,7 +87,6 @@ public class GestioneRisposta {
                         //Lista Membri
                         String rest = strtok.nextToken("\n");
                         Gson gson = new Gson();
-                        System.out.println(rest);
                         view.showList(gson.fromJson(rest, String[].class));
                         return 1;
                        
@@ -97,10 +95,10 @@ public class GestioneRisposta {
                     {
                         //prendi la stringa e dovrò farla vedere
                         String rest = strtok.nextToken("\n");
-                        System.out.println(rest);
                         Gson gson = new Gson();
                         String [] History = gson.fromJson(rest, String[].class);
-                        view.show_card_property(History,"State",History[(History.length)-1]);
+                        String desc = strtok.nextToken();
+                        view.show_card_property(History,desc,History[(History.length)-1]);
                         return 1;
 
                     }

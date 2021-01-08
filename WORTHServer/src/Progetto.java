@@ -358,6 +358,7 @@ public class Progetto implements Serializable {
         }
 
         
+        
         public  synchronized int AddMember (String Name,boolean fondatore) throws NullPointerException, IllegalArgumentException,
                 IOException
         {
@@ -400,6 +401,38 @@ public class Progetto implements Serializable {
         public synchronized ArrayList <String>  GetMembers ()
         {
             return this.Members;
+        }
+
+
+        //Get Description
+        public synchronized String GetDescription(String s) throws IllegalArgumentException,NullPointerException
+        {
+            if(s==null)
+                throw new NullPointerException();
+
+            Scheda  newScheda = new Scheda (s);
+
+            if(ToDo.contains(newScheda))
+            {
+                return  ToDo.get(ToDo.indexOf(newScheda)).getDescription();
+            }
+            else if (InProgeress.contains(newScheda))
+            {
+                return InProgeress.get(InProgeress.indexOf(newScheda)).getDescription();
+            }
+            else if (ToBeRevised.contains(newScheda))
+            {
+                return ToBeRevised.get(ToBeRevised.indexOf(newScheda)).getDescription();
+            }
+            else if(Done.contains(newScheda))
+            {
+                return  Done.get(Done.indexOf(newScheda)).getDescription();
+            }
+            else 
+            {
+                throw new IllegalArgumentException();
+            }
+ 
         }
 
 

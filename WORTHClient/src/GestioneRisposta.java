@@ -66,7 +66,7 @@ public class GestioneRisposta {
                     }
                     else if(code.equals("203"))
                     {
-                        //Progetto creato con successo
+                        //Project created
                         view.setvisiblepanel4(false);
                         view.InsideAProject(strtok.nextToken("\n"));
                         model.setGroupIp(strtok.nextToken("\n"));
@@ -75,7 +75,7 @@ public class GestioneRisposta {
                     }
                     else if (code.equals("205")) 
                     {
-                        //Progetto Rimosso con successo
+                        //Project removed
                         view.goback(false);
                         view.setFramedim(300, 300);
                         view.setvisiblepanel2(true);
@@ -84,7 +84,7 @@ public class GestioneRisposta {
                     }
                     else if (code.equals("208"))
                     {
-                        //ENTRATO 
+                        //Enter
                         view.setvisiblepanel4(false);
                         view.InsideAProject(strtok.nextToken("\n"));
                         model.setGroupIp(strtok.nextToken("\n"));

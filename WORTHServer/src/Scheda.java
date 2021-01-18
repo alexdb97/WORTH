@@ -6,6 +6,7 @@ import java.util.Stack;
 
 
 
+
 public class Scheda  implements Serializable{
     
     private static final long serialVersionUID = 1L;
@@ -56,6 +57,16 @@ public class Scheda  implements Serializable{
       
         return this.Storia;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((Nome== null) ? 0 : Nome.hashCode());
+        return result;
+    }
+
 
     //Overriding the equality ()
     @Override

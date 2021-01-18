@@ -1,4 +1,4 @@
-javac -d ./bin -cp ".;./lib/gson-2.8.6.jar;./lib/Serializers.jar;" ./src/*.java
+javac -d ./bin -Xlint  -cp ".;./lib/gson-2.8.6.jar;./lib/Utility.jar;" ./src/*.java
 cd bin
-java -cp ".;../lib/gson-2.8.6.jar;../lib/Serializers.jar;" ServerMain
+java -cp ".;../lib/gson-2.8.6.jar;../lib/Utility.jar;" ServerMain
 

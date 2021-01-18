@@ -8,8 +8,7 @@ import java.util.Iterator;
 
 
 
-import Serializers.Serializers;
-
+import Utility.Utility;
 
 
 /**
@@ -20,6 +19,7 @@ import Serializers.Serializers;
 * @since   2020-12-19
 */
 
+@SuppressWarnings("unchecked")
 public class Progetto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,7 +72,7 @@ public class Progetto implements Serializable {
                 this.Members = new ArrayList<String>();
                 System.out.println(dirpath+"   "+progdir.exists());
                 String path = this.MAIN_DIR_PATH+"/"+name+"/Members";
-                Serializers.write(this.Members,path);
+                Utility.write(this.Members,path);
                 
 
             }
@@ -86,7 +86,7 @@ public class Progetto implements Serializable {
                      if(!path.equals(dirpath+"/Members"))
                      {
                      
-                   Scheda s = (Scheda) Serializers.read(path);
+                   Scheda s = (Scheda) Utility.read(path);
                    String cases = s.GetHistory().peek();
 
                    if(cases.equals("TODO"))
@@ -105,7 +105,8 @@ public class Progetto implements Serializable {
                 }
 
             String path1 = this.MAIN_DIR_PATH+"/"+name+"/Members";
-            this.Members= (ArrayList <String>) Serializers.read(path1);     
+       
+            this.Members= (ArrayList <String>) Utility.read(path1);     
             }
 
           
@@ -193,7 +194,7 @@ public class Progetto implements Serializable {
             newScheda.AddHistory("TODO");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+Nome;
             System.out.println(schedapath);
-            Serializers.write(newScheda,schedapath);
+            Utility.write(newScheda,schedapath);
             this.ToDo.add(newScheda);
             }
             else 
@@ -224,7 +225,7 @@ public class Progetto implements Serializable {
             Scheda current = ToDo.remove(ToDo.indexOf(scheda));
             current.AddHistory("INPROGRESS");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializers.write(current,schedapath);
+            Utility.write(current,schedapath);
             InProgeress.add(current);
             System.out.println(ToDo);
             System.out.println(InProgeress);
@@ -253,7 +254,7 @@ public class Progetto implements Serializable {
             current.AddHistory("DONE");
             Done.add(current);
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializers.write(current,schedapath);
+            Utility.write(current,schedapath);
           
             }
             else
@@ -278,7 +279,7 @@ public class Progetto implements Serializable {
             Scheda current = InProgeress.remove(InProgeress.indexOf(scheda));
             current.AddHistory("TOBEREVISED");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializers.write(current,schedapath);
+            Utility.write(current,schedapath);
             ToBeRevised.add(current);
             }
             else
@@ -305,7 +306,7 @@ public class Progetto implements Serializable {
       Scheda current = ToBeRevised.remove(ToBeRevised.indexOf(scheda));
       current.AddHistory("INPROGRESS");
       String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-      Serializers.write(current,schedapath);
+      Utility.write(current,schedapath);
       InProgeress.add(current);
       }
       else
@@ -332,7 +333,7 @@ public class Progetto implements Serializable {
             Scheda current = ToBeRevised.remove(ToBeRevised.indexOf(scheda));
             current.AddHistory("DONE");
             String schedapath = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/"+s;
-            Serializers.write(current,schedapath);
+            Utility.write(current,schedapath);
             Done.add(current);
             }
             else
@@ -371,7 +372,7 @@ public class Progetto implements Serializable {
             
             this.Members.add(Name);
             String path = this.MAIN_DIR_PATH+"/"+this.NomeProgetto+"/Members";
-            Serializers.write(this.Members,path);
+            Utility.write(this.Members,path);
 
             return 1;
 

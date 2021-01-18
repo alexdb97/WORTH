@@ -47,10 +47,10 @@ public class ServerImpl extends RemoteObject implements ServerInterface {
     public void update (ConcurrentHashMap <String,Boolean> value) throws RemoteException {
 
         System.out.println("String callbacks");
-        Iterator i = clients.iterator();
+        Iterator<NotifyEventInterface> i = clients.iterator();
         while(i.hasNext())
         {
-            NotifyEventInterface client = (NotifyEventInterface) i.next();
+            NotifyEventInterface client =  i.next();
             client.notifyEvent(value);
         }
         System.out.println("Callback complete");

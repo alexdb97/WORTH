@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.RemoteServer;
 import java.util.concurrent.ConcurrentHashMap;
 
-import Serializers.Serializers;
+import Utility.Utility;
 
 
 public class RegisterImpl extends RemoteServer implements RegisterInterface{
@@ -41,7 +41,7 @@ public class RegisterImpl extends RemoteServer implements RegisterInterface{
             this.Ubase.putIfAbsent(Nickname, Password);
             Logmap.putIfAbsent(Nickname,false);
             server1.update(Logmap);
-            Serializers.write(Ubase,path);
+            Utility.write(Ubase,path);
             return 200;
             }
         else

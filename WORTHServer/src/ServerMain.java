@@ -671,7 +671,7 @@ public class ServerMain {
             System.out.println(str);
             try
             {
-            listp.put(str, new Progetto(str,ipgen.GetnextIp()));
+            listp.putIfAbsent(str, new Progetto(str,ipgen.GetnextIp()));
             }
             catch(OutOfRangeException ex)
             {

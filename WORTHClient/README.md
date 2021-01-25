@@ -1,14 +1,19 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
-
+Welcome to WORTHClient
 ## Folder Structure
 
-The workspace contains two folders by default, where:
+The workspace contains many folders by default, where:
 
 - `src`: the folder to maintain sources
 - `lib`: the folder to maintain dependencies
+- `bin`: the folder to contain all binary files as .Class files
 
-## Dependency Management
+## Compile and Execute
 
-The `JAVA DEPENDENCIES` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-pack/blob/master/release-notes/v0.9.0.md#work-with-jar-files-directly).
+You must launch the WorthServer process before launching the client, otherwise
+ConnectionException will be thrown.
+You can compile the project with two odifferent Operating System:
+	-Windows
+	-Linux
+ 

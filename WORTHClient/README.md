@@ -15,10 +15,10 @@ You must launch the WorthServer process before launching the client, otherwise
 ConnectionException will be thrown.
 You can compile the project with two different Operating Systems:
 
-	- `Windows` : Open a Powershell and change your current position to WORTHClient then
+- `Windows` : Open a Powershell and change your current position to WORTHClient then
 		      execute this script : ./Compile.ps1
 
-	- `Linux` : Open a Terminale and change your current position to WORTHlient then 
+- `Linux` : Open a Terminale and change your current position to WORTHlient then 
  		      execute this script: bash Compile.sh
 For executing you should do the same procedure, however you have to substitute in both operating system the script Compile with Execute.
 	 

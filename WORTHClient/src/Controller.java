@@ -61,9 +61,10 @@ public class Controller {
                         }
 
                     try {
-                        //Waiting an half second for sending LOGOUT to server
+                        Thread.currentThread();
+                        // Waiting an half second for sending LOGOUT to server
                         // and close safely the connection
-                        Thread.currentThread().sleep(1000);
+                        Thread.sleep(1000);
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     } catch (InterruptedException ex) {
 

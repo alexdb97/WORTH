@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 
-
+@SuppressWarnings( "deprecation" )
 public class ChatTask implements Runnable {
 
     String groupip;

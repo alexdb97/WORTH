@@ -19,7 +19,7 @@ import java.awt.Font;
 
      
 
-
+@SuppressWarnings( "deprecation" )
 public class InitialView {
 
     //INITIALVIEW
@@ -45,7 +45,7 @@ public class InitialView {
     //Pannello lista 
     private JPanel panel3 = new JPanel();
     private JButton goBack_prog = new JButton ("Go Back");
-    private JList list = new JList();
+    private JList <String> list =  new JList <String> ();
     private JScrollPane scrollPane = new JScrollPane(list);
 
     //Create/Enter Components
@@ -75,7 +75,7 @@ public class InitialView {
     private JButton  AddEffectiveCard = new JButton("Add");
     //Show Lists
     private JPanel panel8 = new JPanel ();
-    private JList  list3 = new JList  ();
+    private JList <String> list3 = new JList <String> ();
     private JScrollPane pane2 = new JScrollPane(list3);
    
     
@@ -92,7 +92,7 @@ public class InitialView {
     
     //Show Card Property Components
     private JPanel panel10 = new JPanel ();
-    private JList list4 = new JList  ();
+    private JList <String> list4 = new JList <String>();
     private JScrollPane pane3 = new JScrollPane(list4);
     private JLabel name = new JLabel ("Insert Name of the card") ; 
     private JLabel description = new JLabel ("Description");
@@ -123,9 +123,9 @@ public class InitialView {
     
 
 
-
-
-
+    
+  
+   
     public InitialView ()
     {
        

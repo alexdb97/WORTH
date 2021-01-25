@@ -1,17 +1,22 @@
 
-
 import java.rmi.RemoteException;
 import java.rmi.server.RemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NotifyImpl extends RemoteObject implements NotifyEventInterface{
 
 
   
-    ConcurrentHashMap<String,Boolean> usermap;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    ConcurrentHashMap<String, Boolean> usermap;
 
 
     // crea una nuova callback client
@@ -32,13 +37,13 @@ public class NotifyImpl extends RemoteObject implements NotifyEventInterface{
     
     {   
         ArrayList <String> list = new ArrayList<String>();
-        Iterator it = this.usermap.entrySet().iterator();
+        Iterator <Entry<String,Boolean>> it = this.usermap.entrySet().iterator();
         while(it.hasNext())
         {
-            Map.Entry pair = (Map.Entry) it.next();
-            Boolean b = (Boolean) pair.getValue();
+            Map.Entry <String,Boolean> pair = (Map.Entry<String,Boolean> )  it.next();
+            Boolean b =  pair.getValue();
             if(b.equals(true))
-                list.add( (String) pair.getKey());
+                list.add( pair.getKey());
             
         }
         return list;
@@ -48,11 +53,11 @@ public class NotifyImpl extends RemoteObject implements NotifyEventInterface{
     {
         
         ArrayList <String> list = new ArrayList<String>();
-        Iterator it = this.usermap.entrySet().iterator();
+        Iterator  <Entry<String,Boolean>>  it = this.usermap.entrySet().iterator();
         while(it.hasNext())
         {
-            Map.Entry pair = (Map.Entry) it.next();
-            list.add( (String) pair.getKey());
+            Map.Entry <String,Boolean> pair = (Map.Entry <String,Boolean> ) it.next();
+            list.add(  pair.getKey());
             
         }
         return list;

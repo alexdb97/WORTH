@@ -1,4 +1,5 @@
-import java.awt.event.ActionListener; 
+import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -591,23 +592,20 @@ public class InitialView {
         panel12.setVisible(true);
         panel12.setBounds(0,200,1500,400);
         panel12.setLayout(null);
-        panel12.setBackground(Color.WHITE);
-        receiveBox.setBounds(200,220,1000,200);
+        panel12.setBackground(Color.WHITE);   
         receiveBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         receiveBox.setEditable(false);
         sendBox.setFont(new Font("Serif", Font.BOLD, 15));
         sendBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         receiveBox.setFont(new Font("Serif", Font.BOLD, 15));
         sendBox.setLineWrap(true);
-        panel12.add(receiveBox);
+        panescroll.setBounds(200,220,1000,200);
         sendBox.setBounds(200,450,1000,100);
         sendbutton.setBounds(1250,470,150,50);
         sendbutton.setBackground(Color.GRAY);
         sendbutton.setForeground(Color.WHITE);
         sendbutton.setFont(new Font("Serif", Font.BOLD, 15));
-        panescroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        panescroll.setVisible(true);
-
+        panescroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         panel12.add(panescroll);
         panel12.add(sendbutton);
         panel12.add(sendBox);

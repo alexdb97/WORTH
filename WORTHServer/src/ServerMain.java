@@ -68,9 +68,9 @@ public class ServerMain {
              LoginMap.put(objt,false);
                 
          }
-        //faccio una semplice stampa per vedere se l'ho caricato
+        //faccio una semplice stampa 
 
-        //DA ELIMINARE 
+       
         System.out.println(LoginMap.toString());
 
 
@@ -83,7 +83,7 @@ public class ServerMain {
         
        
 
-        //dovro metterlo anche qua il servizio di callback
+       
 
         //Servizio RMI
         //Creazione del servizio 
